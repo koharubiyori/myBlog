@@ -8,7 +8,7 @@ export interface ConnectedState {
   age: number
 }
 
-export const reducer: ReduxReducer<ConnectedState> = (state = {
+const reducer: ReduxReducer<ConnectedState> = (state = {
   name: 'lee',
   age: 19
 }, action) =>{
@@ -32,3 +32,5 @@ export const reducer: ReduxReducer<ConnectedState> = (state = {
     }
   }
 }
+
+export default reducer

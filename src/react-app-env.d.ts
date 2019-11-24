@@ -3,8 +3,6 @@
 /// <reference types="react-dom" />
 /// <reference types="react-redux" />
 
-import { connect } from 'http2';
-
 declare namespace NodeJS {
   interface ProcessEnv {
     readonly NODE_ENV: 'development' | 'production' | 'test';
@@ -66,6 +64,7 @@ declare module '*.module.sass' {
   export default classes;
 }
 
+
 // 解决react-redux connect函数返回的高阶组件装饰器报错问题
 declare module 'react-redux' {
   // Add removed inferrable type to support connect as decorator
@@ -87,4 +86,7 @@ declare module 'react-redux' {
   }
 
   export const connect: Connect
+  export const Provider: React.Component<{ store: object }> & { new (...args: any[]): any }
 }
+
+declare function c(...args: string[]): { className: string }

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import AppBar from './AppBar'
+import AppBar from './MyAppBar'
 import testHOC, { ConnectedProps } from '~/redux/test/HOC'
 
 interface ConnectedProps2 {

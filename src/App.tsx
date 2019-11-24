@@ -2,6 +2,8 @@ import React from 'react'
 import './styles/main.scss'
 import { ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
+import { Provider } from 'react-redux'
+import store from './redux'
 import Routes from './routes'
 
 
@@ -19,7 +21,9 @@ const theme = createMuiTheme({
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Routes />
+      <Provider store={store}>
+        <Routes />
+      </Provider>
     </ThemeProvider>
   )
 }

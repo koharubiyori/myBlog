@@ -21,9 +21,8 @@ export type ConnectedProps = ConnectedDispatch & {
   state: { test: ConnectedState }
 }
 
-
 export default connect(
-  state => ({ state }),
+  (state: object) => ({ state }),
   (): ConnectedDispatch => ({
     test: { set, clear }
   })

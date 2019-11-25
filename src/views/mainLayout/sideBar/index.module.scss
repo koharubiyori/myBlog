@@ -1,0 +1,17 @@
+.drawer{
+  width: 220px;
+}
+
+.avatar{
+  margin: 30px auto;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #eee;
+  transition: all 0.2s;
+
+  &:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 5px #eee;
+  }
+}

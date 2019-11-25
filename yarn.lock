@@ -1147,6 +1147,13 @@
     prop-types "^15.7.2"
     react-transition-group "^4.3.0"
 
+"@material-ui/icons@^4.5.1":
+  version "4.5.1"
+  resolved "https://registry.npm.taobao.org/@material-ui/icons/download/@material-ui/icons-4.5.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40material-ui%2Ficons%2Fdownload%2F%40material-ui%2Ficons-4.5.1.tgz#6963bad139e938702ece85ca43067688018f04f8"
+  integrity sha1-aWO60TnpOHAuzoXKQwZ2iAGPBPg=
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+
 "@material-ui/styles@^4.6.0":
   version "4.6.0"
   resolved "https://registry.npm.taobao.org/@material-ui/styles/download/@material-ui/styles-4.6.0.tgz#15679fab6dcbe0cc2416f01a22966f3ea26607c5"

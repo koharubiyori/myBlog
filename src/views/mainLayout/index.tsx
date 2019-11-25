@@ -1,37 +1,34 @@
-import React, { PropsWithChildren } from 'react'
-import AppBar from './MyAppBar'
-import testHOC, { ConnectedProps } from '~/redux/test/HOC'
+import React, { Component, PropsWithChildren } from 'react'
+// import classes from './MainLayout.module.scss'
+import { withTheme } from '@material-ui/core'
+import MyAppBar from './myAppBar'
+import SideBar from './sideBar'
 
-interface ConnectedProps2 {
-  state: {
-    aaa: {
-      bbb: string
-    }
-  },
-
-  aaa: {
-    get (): void
-  }
+export interface Props {
+  
 }
 
-@testHOC
-export default class MainLayout extends React.Component<PropsWithChildren<{}>, {}, ConnectedProps & ConnectedProps2>{
-  constructor (props: PropsWithChildren<{}> & ConnectedProps & ConnectedProps2){
+class MainLayout extends Component<PropsWithChildren<Props>> {
+  state = {
+    
+  }
+
+  constructor (props: PropsWithChildren<Props>){
     super(props)
     this.state = {
       
     }
-
-    props.test.set('haha', 20)
   }
-
 
   render (){
     return (
       <div>
-        <AppBar />
+        <MyAppBar />
+        <SideBar />
         {this.props.children}
       </div>
     )
   }
 }
+
+export default withTheme(MainLayout)

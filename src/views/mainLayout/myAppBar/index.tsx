@@ -10,6 +10,7 @@ export interface Props {
 }
 
 export default function MyAppBar(props: PropsWithChildren<Props>){
+  
   return (
     <AppBar {...c(classes.appBar)}>
       <Toolbar>

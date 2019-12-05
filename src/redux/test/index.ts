@@ -1,4 +1,4 @@
-import { ReduxReducer } from '~/types'
+import { ReduxReducer } from '~/@types/types'
 
 export const SET = Symbol()
 export const CLEAR = Symbol()

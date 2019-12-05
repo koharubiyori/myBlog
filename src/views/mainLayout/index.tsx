@@ -3,6 +3,7 @@ import React, { Component, PropsWithChildren } from 'react'
 import { withTheme } from '@material-ui/core'
 import MyAppBar from './myAppBar'
 import SideBar from './sideBar'
+import user from '~/api/user'
 
 export interface Props {
   

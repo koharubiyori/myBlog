@@ -1,0 +1,15 @@
+.contentContainer{
+  position: relative;
+  top: 90px;
+  margin: 0 235px 0 250px;
+
+  @media screen and (max-width: $sideBarRightHideLimit){
+    margin-right: 25px;
+  }
+
+  :global .content{
+    max-width: 800px;
+    min-width: 400px;
+    margin: 0 auto;
+  }
+}

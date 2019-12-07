@@ -1,3 +1,14 @@
 @import './common.scss',
-        './flex.scss'
+        './flex.scss';
 
+$minWidth: 720px;
+
+html, body{
+  min-width: $minWidth;
+  margin: 0;
+}
+
+.MuiAppBar-positionFixed:not(foo){
+  left: 0;
+  min-width: $minWidth;
+}

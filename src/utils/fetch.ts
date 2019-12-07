@@ -4,10 +4,10 @@ import request from './request'
 type CreateRequester = 
   (method: AxiosRequestConfig['method']) => 
     <RequestParams, ApiData = {}>(url: string) => 
-      (params: RequestParams) => Promise<ApiData | ResponseData<ApiData> | undefined>
+      (params?: RequestParams) => Promise<ApiData>
 
 const createRequester: CreateRequester = (method) => <RequestParams, ApiData = {}>(url: string) =>{
-  return (params: RequestParams) => new Promise((resolve: (val: ApiData) => void, reject: (val?: ResponseData<ApiData>) => void) =>{
+  return (params?: RequestParams): Promise<ApiData> => new Promise((resolve, reject) =>{
     request({ method, url, params })
     .then(({ data }: { data: ResponseData<ApiData> }) =>{
       data.result ? resolve(data.data as ApiData) : reject(data)

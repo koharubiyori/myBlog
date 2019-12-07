@@ -24,7 +24,7 @@ declare module 'react-redux' {
 
 declare function c(...args: string[]): { className: string }
 
-type SnackbarPosition = ['top' | 'bottom', 'left' | 'center' | 'right']
+// type SnackbarPosition = ['top' | 'bottom', 'left' | 'center' | 'right']
 declare interface Window {
   $snackbar: {
     (message: string): void

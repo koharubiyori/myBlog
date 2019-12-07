@@ -8,6 +8,8 @@ $colors: (
   light: $light
 );
 
+$sideBarRightHideLimit: 880px;
+
 @each $name, $color in $colors{
   .color-#{$name}{
     color: $color;

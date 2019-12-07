@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import MainLayout from '~/views/mainLayout'
-// import Login from '~/views/login'
+import Register from '~/views/register'
 
 export default class Routes extends React.Component{
   constructor (props: Object){
@@ -16,7 +16,7 @@ export default class Routes extends React.Component{
       <BrowserRouter>
         <Route path="/">
           <MainLayout>
-            {/* <Route component={Login} /> */}
+            <Route path="/register" component={Register} />
           </MainLayout>
         </Route>
       </BrowserRouter>

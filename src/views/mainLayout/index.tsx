@@ -1,35 +1,41 @@
 import React, { Component, PropsWithChildren } from 'react'
-// import classes from './MainLayout.module.scss'
-import { withTheme } from '@material-ui/core'
+import classes from './index.module.scss'
 import MyAppBar from './myAppBar'
 import SideBar from './sideBar'
-import user from '~/api/user'
+import common from '~/api/common'
+import SideBarRight from './sideBarRight'
+import { Box } from '@material-ui/core'
 
 export interface Props {
   
 }
 
-class MainLayout extends Component<PropsWithChildren<Props>> {
-  state = {
-    
-  }
+export interface State {
+  theme: ApiData.Theme
+}
 
+class MainLayout extends Component<PropsWithChildren<Props>, State> {
   constructor (props: PropsWithChildren<Props>){
     super(props)
     this.state = {
-      
+      theme: {} as any
     }
+
+    common.getTheme().then(theme => this.setState({ theme }))
   }
 
   render (){
     return (
       <div>
         <MyAppBar />
-        <SideBar />
-        {this.props.children}
+        <SideBar theme={this.state.theme} />
+        <SideBarRight />
+        <div {...c(classes.contentContainer)}>
+          <div className="content">{this.props.children}</div>
+        </div>
       </div>
     )
   }
 }
 
-export default withTheme(MainLayout)
+export default MainLayout

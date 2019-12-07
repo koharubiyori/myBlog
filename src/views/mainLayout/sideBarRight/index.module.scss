@@ -1,0 +1,5 @@
+.drawerContainer {  
+  @media screen and (max-width: $sideBarRightHideLimit){
+    display: none;
+  }
+}

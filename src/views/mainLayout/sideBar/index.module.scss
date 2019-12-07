@@ -9,9 +9,10 @@
   border-radius: 50%;
   background-color: #eee;
   transition: all 0.2s;
+  border: 1px #ccc solid;
 
   &:hover{
     transform: scale(1.05);
-    box-shadow: 0 0 5px #eee;
+    box-shadow: 0 0 5px #ccc;
   }
 }

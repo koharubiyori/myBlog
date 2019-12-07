@@ -5,7 +5,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { Provider } from 'react-redux'
 import store from './redux'
 import Routes from './routes'
-import { SnackbarProvider } from 'notistack'
+import { SnackbarProvider, WithSnackbarProps } from 'notistack'
 
 
 const theme = createMuiTheme({
@@ -20,23 +20,34 @@ const theme = createMuiTheme({
 })
 
 export default class App extends React.Component {
-
+  _refs = {
+    snackbar: React.createRef()
+  }
+  
   componentDidMount (){
-    // const snackbarShow = (this.refs.snackbar as InstanceType<typeof Snackbar>).show
-    // let snackbar: any = (message: string) => snackbarShow({ message, type: 'default', position: ['top', 'center'] })
-    // snackbar.info = (message: any, position: any) => snackbarShow({ message, type: 'info', position })
-    // snackbar.success = (message: any, position: any) => snackbarShow({ message, type: 'success', position })
-    // snackbar.warning = (message: any, position: any) => snackbarShow({ message, type: 'warning', position })
-    // snackbar.danger = (message: any, position: any) => snackbarShow({ message, type: 'danger', position })
-    
-    // window.$snackbar = snackbar as Window['$snackbar']
+    const msg: WithSnackbarProps['enqueueSnackbar'] = (this._refs.snackbar.current as any).enqueueSnackbar
+    const createOptions = (
+      type: 'default' | 'info' | 'success' | 'warning' | 'error' = 'default', 
+      position: ['top' | 'bottom', 'left' | 'center' | 'right', ] = ['top', 'center']
+    ) => ({ 
+      variant: type, 
+      anchorOrigin: { vertical: position[0], horizontal: position[1] },
+      autoHideDuration: 3000 
+    })
+
+    let snackbar: any = (message: any, position?: any) => msg(message, createOptions('default', position))
+    snackbar.info = (message: any, position?: any) => msg(message, createOptions('info', position))
+    snackbar.success = (message: any, position?: any) => msg(message, createOptions('success', position))
+    snackbar.warning = (message: any, position?: any) => msg(message, createOptions('warning', position))
+    snackbar.error = (message: any, position?: any) => msg(message, createOptions('error', position))
+    window.$snackbar = snackbar
   }
 
   render (){
     return (
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <SnackbarProvider maxSnack={3}>
+          <SnackbarProvider maxSnack={3} ref={this._refs.snackbar}>
             <Routes />
           </SnackbarProvider>
         </Provider>

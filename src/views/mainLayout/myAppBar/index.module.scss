@@ -1,5 +1,6 @@
 .appBar{
   z-index: 1201 !important;    // sideBar的z-index为1200
+  min-width: 1350px;
 
   :global [class*="root"]:not(foo){
     color: white;
@@ -12,6 +13,7 @@
   height: 35px;
   border-radius: 5px;
   padding-left: 10px;
+  padding-right: 10px;
   margin-right: 20px;
   transition: all 0.2s;
 

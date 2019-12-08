@@ -32,15 +32,15 @@ export default class App extends React.Component {
     ) => ({ 
       variant: type, 
       anchorOrigin: { vertical: position[0], horizontal: position[1] },
-      autoHideDuration: 3000 
+      autoHideDuration: 4000 
     })
 
-    let snackbar: any = (message: any, position?: any) => msg(message, createOptions('default', position))
-    snackbar.info = (message: any, position?: any) => msg(message, createOptions('info', position))
-    snackbar.success = (message: any, position?: any) => msg(message, createOptions('success', position))
-    snackbar.warning = (message: any, position?: any) => msg(message, createOptions('warning', position))
-    snackbar.error = (message: any, position?: any) => msg(message, createOptions('error', position))
-    window.$snackbar = snackbar
+    let notify: any = (message: any, position?: any) => msg(message, createOptions('default', position))
+    notify.info = (message: any, position?: any) => msg(message, createOptions('info', position))
+    notify.success = (message: any, position?: any) => msg(message, createOptions('success', position))
+    notify.warning = (message: any, position?: any) => msg(message, createOptions('warning', position))
+    notify.error = (message: any, position?: any) => msg(message, createOptions('error', position))
+    window.$notify = notify
   }
 
   render (){

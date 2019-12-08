@@ -26,19 +26,20 @@ declare function c(...args: string[]): { className: string }
 
 // type SnackbarPosition = ['top' | 'bottom', 'left' | 'center' | 'right']
 declare interface Window {
-  $snackbar: {
-    (message: string): void
+  $notify: {
+    (message: string, position?: SnackbarPosition): void
     success (message: string, position?: SnackbarPosition): void
     info (message: string, position?: SnackbarPosition): void
     warning (message: string, position?: SnackbarPosition): void
-    danger (message: string, position?: SnackbarPosition): void
+    error (message: string, position?: SnackbarPosition): void
   }
 }
 
-declare let $snackbar: Window['$snackbar']
+declare let $notify: Window['$notify']
 
 declare interface ResponseData<ApiData = {}> {
   status: number
   result: boolean
+  message: string
   data: ApiData
 }

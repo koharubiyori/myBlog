@@ -12,3 +12,18 @@ html, body{
   left: 0;
   min-width: $minWidth;
 }
+
+#nprogress:not(foo){
+  $color: #F9CD36;
+
+  .bar{
+    z-index: 10000;
+    background-color: $color;
+    height: 4px;
+    border-radius: 10px;
+  }
+
+  .peg{
+    box-shadow: 0 0 15px $color, 0 0 10px $color, 0 0 5px $color;
+  }
+}

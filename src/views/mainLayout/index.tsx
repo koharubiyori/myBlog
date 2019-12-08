@@ -26,14 +26,14 @@ class MainLayout extends Component<PropsWithChildren<Props>, State> {
 
   render (){
     return (
-      <div>
+      <>
         <MyAppBar />
         <SideBar theme={this.state.theme} />
         <SideBarRight />
         <div {...c(classes.contentContainer)}>
           <div className="content">{this.props.children}</div>
         </div>
-      </div>
+      </>
     )
   }
 }

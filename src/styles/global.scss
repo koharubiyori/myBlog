@@ -1,11 +1,13 @@
 $main: #6B69D6;
 $dark: #504FA0;
 $light: #9796E3;
+$subtext: #ABABAB;
 
 $colors: (
   main: $main,
   dark: $dark,
-  light: $light
+  light: $light,
+  subtext: $subtext
 );
 
 $sideBarRightHideLimit: 880px;

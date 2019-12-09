@@ -36,6 +36,7 @@ declare interface Window {
 }
 
 declare let $notify: Window['$notify']
+declare const __REDUX_DEVTOOLS_EXTENSION__: any
 
 declare interface ResponseData<ApiData = {}> {
   status: number

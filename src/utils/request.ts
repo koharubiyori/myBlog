@@ -2,8 +2,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export const prodApi = ''
 
-const config = {
-  baseURL: process.env.NODE_ENV === 'production' ? prodApi : '',
+const config: AxiosRequestConfig = {
+  baseURL: process.env.NODE_ENV === 'production' ? prodApi : '/',
   timeout: 7000,
 }
 
@@ -18,6 +18,15 @@ function requestDataHandler(req: AxiosRequestConfig){
   if(req.method === 'post'){
     req.data = req.params
     delete req.params
+  }
+
+  if(req.headers.upload === 1){
+    let formData = new FormData
+    for(let key in req.data){
+      formData.append(key, req.data[key])
+    }
+
+    req.data = formData
   }
 
   return req

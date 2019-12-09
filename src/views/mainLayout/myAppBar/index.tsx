@@ -4,13 +4,21 @@ import classes from './index.module.scss'
 import SearchIcon from '@material-ui/icons/Search'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import { MyRouter } from '~/utils/createRouter'
+import { default as userHOC, UserConnectedProps } from '~/redux/user/HOC'
+import resetComponentProps from '~/utils/resetComponentProps'
 
 export interface Props {
-  
+  router: MyRouter
 }
 
-export default function MyAppBar(props: PropsWithChildren<Props>){
-  
+type FinalProps = Props & UserConnectedProps
+
+function MyAppBar({
+  children,
+  router,
+  state
+}: PropsWithChildren<FinalProps>){
   return (
     <AppBar {...c(classes.appBar)}>
       <Toolbar>
@@ -29,10 +37,20 @@ export default function MyAppBar(props: PropsWithChildren<Props>){
           <NotificationsIcon />
         </IconButton>
 
-        <IconButton>
-          <AccountCircleIcon />
-        </IconButton>
+        {state.user.account ? 
+          <IconButton onClick={() => router.search('/account/info')}>
+            <img src={state.user.avatar || require('~/images/sub/akari.jpg')} alt="icon" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+          </IconButton>
+        :
+          <IconButton onClick={() => router.search('/account/login')}>
+            <AccountCircleIcon />
+          </IconButton>
+        }
       </Toolbar>
     </AppBar>
   )
 }
+
+export default resetComponentProps<Props>(
+  userHOC(MyAppBar)
+) 

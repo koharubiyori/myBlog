@@ -1,8 +1,8 @@
 import { createStore, combineReducers } from '~/../node_modules/redux'
 
-import test from './test'
+import user from './user'
 
-const reducers = combineReducers({ test })
-const store = createStore(reducers)
+const reducers = combineReducers({ user })
+const store = createStore(reducers, __REDUX_DEVTOOLS_EXTENSION__ && __REDUX_DEVTOOLS_EXTENSION__())
 
 export default store

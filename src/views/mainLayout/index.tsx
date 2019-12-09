@@ -5,6 +5,8 @@ import SideBar from './sideBar'
 import common from '~/api/common'
 import SideBarRight from './sideBarRight'
 import { Box } from '@material-ui/core'
+import { RouteChildrenProps, withRouter } from 'react-router'
+import createRouter from '~/utils/createRouter'
 
 export interface Props {
   
@@ -14,8 +16,12 @@ export interface State {
   theme: ApiData.Theme
 }
 
-class MainLayout extends Component<PropsWithChildren<Props>, State> {
-  constructor (props: PropsWithChildren<Props>){
+type FinalProps = Props & RouteChildrenProps
+
+class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
+  router = createRouter(this.props)
+  
+  constructor (props: PropsWithChildren<FinalProps>){
     super(props)
     this.state = {
       theme: {} as any
@@ -24,12 +30,13 @@ class MainLayout extends Component<PropsWithChildren<Props>, State> {
     common.getTheme().then(theme => this.setState({ theme }))
   }
 
+
   render (){
     return (
       <>
-        <MyAppBar />
-        <SideBar theme={this.state.theme} />
-        <SideBarRight />
+        <MyAppBar router={this.router} />
+        <SideBar theme={this.state.theme} router={this.router} />
+        <SideBarRight router={this.router} />
         <div {...c(classes.contentContainer)}>
           <div className="content">{this.props.children}</div>
         </div>
@@ -38,4 +45,4 @@ class MainLayout extends Component<PropsWithChildren<Props>, State> {
   }
 }
 
-export default MainLayout
+export default withRouter(MainLayout as any)

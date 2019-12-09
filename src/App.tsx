@@ -5,7 +5,9 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { Provider } from 'react-redux'
 import store from './redux'
 import Routes from './routes'
-import { SnackbarProvider, WithSnackbarProps } from 'notistack'
+import { SnackbarProvider } from 'notistack'
+import mountNotifyMethod from './utils/mountNotifyMethod'
+import init from './init'
 
 
 const theme = createMuiTheme({
@@ -25,22 +27,8 @@ export default class App extends React.Component {
   }
   
   componentDidMount (){
-    const msg: WithSnackbarProps['enqueueSnackbar'] = (this._refs.snackbar.current as any).enqueueSnackbar
-    const createOptions = (
-      type: 'default' | 'info' | 'success' | 'warning' | 'error' = 'default', 
-      position: ['top' | 'bottom', 'left' | 'center' | 'right', ] = ['top', 'center']
-    ) => ({ 
-      variant: type, 
-      anchorOrigin: { vertical: position[0], horizontal: position[1] },
-      autoHideDuration: 4000 
-    })
-
-    let notify: any = (message: any, position?: any) => msg(message, createOptions('default', position))
-    notify.info = (message: any, position?: any) => msg(message, createOptions('info', position))
-    notify.success = (message: any, position?: any) => msg(message, createOptions('success', position))
-    notify.warning = (message: any, position?: any) => msg(message, createOptions('warning', position))
-    notify.error = (message: any, position?: any) => msg(message, createOptions('error', position))
-    window.$notify = notify
+    mountNotifyMethod((this._refs.snackbar.current as any).enqueueSnackbar)
+    init()
   }
 
   render (){

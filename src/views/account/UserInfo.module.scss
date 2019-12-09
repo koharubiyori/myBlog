@@ -1,0 +1,59 @@
+.avatar{
+  $transition: all 0.25s;
+
+  display: block;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 3px $main solid;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  transition: $transition;
+  margin: 50px auto;
+
+  > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: $transition;
+  }
+
+  &::before{
+    content: '更换头像';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: $transition;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  &:hover{
+    border-color: #ccc;
+
+    > img{
+      transform: scale(1.15);
+    }
+
+    &::before{
+      opacity: 1
+    }
+  }
+
+  .uploading{
+    &::before{
+      opacity: 1;
+      content: '上传中'
+    }
+  }
+}

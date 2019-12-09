@@ -1,12 +1,18 @@
 import React, { PropsWithChildren } from 'react'
 import { Drawer } from '@material-ui/core'
 import classes from './index.module.scss'
+import { MyRouter } from '~/utils/createRouter'
 
 export interface Props {
-  
+  router: MyRouter
 }
 
-export default function SideBarRight(props: PropsWithChildren<Props>){
+type FinalProps = Props
+
+function SideBarRight({
+  children,
+  router
+}: PropsWithChildren<FinalProps>){
   return (
     <Drawer
       variant="permanent"
@@ -19,3 +25,5 @@ export default function SideBarRight(props: PropsWithChildren<Props>){
     </Drawer>
   )
 }
+
+export default SideBarRight

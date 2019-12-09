@@ -3,22 +3,20 @@ import qs from 'qs'
 
 export interface MyRouter {
   params: {
-    search: object
-    state: object
+    search: { [key: string]: any }
+    state: { [key: string]: any }
   }
 
-  search (path: string, params?: object, action?: 'push' | 'replace'): void
-  state (path: string, params?: object, action?: 'push' | 'replace'): void 
+  search (path: string, params?: { [key: string]: any }, action?: 'push' | 'replace'): void
+  state (path: string, params?: { [key: string]: any }, action?: 'push' | 'replace'): void 
 }
 
 export default function(
-  routeComponent: { 
-    props: { 
-      history: RouteChildrenProps['history'] 
-    }
+  props: { 
+    history: RouteChildrenProps['history'] 
   }
-): MyRouter{
-  let {history} = routeComponent.props
+): Readonly<MyRouter>{
+  let {history} = props
   
   return {
     params: {

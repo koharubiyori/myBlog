@@ -1,5 +1,5 @@
 import React, { Component, PropsWithChildren } from 'react'
-import classes from './index.module.scss'
+import classes from './Register.module.scss'
 import { TextField, ButtonBase, Button } from '@material-ui/core'
 import user from '~/api/user'
 import resetComponentProps from '~/utils/resetComponentProps'
@@ -20,12 +20,13 @@ export interface State {
   registerStatus: number
   RSCodeSvg: string
   RSCodeGetCount: number
-  isLogin: boolean
 }
 
 type FinalProps = Props & RouteChildrenProps
 
 class Register extends Component<PropsWithChildren<FinalProps>, State> {
+  router = createRouter(this.props)
+  
   constructor (props: PropsWithChildren<FinalProps>){
     super(props)
     this.state = {
@@ -37,20 +38,13 @@ class Register extends Component<PropsWithChildren<FinalProps>, State> {
       
       RSCodeSvg: '',
       RSCodeGetCount: 0,
-
-      isLogin: false
     }
 
     this.getRegisterSecurityCode()
   }
 
-  router = createRouter(this)
-
   getRegisterSecurityCode = () =>{
-    if(this.state.RSCodeGetCount >= 3){
-      $notify('点了这么多下，来喝点什么休息一下吧。')
-      return setTimeout(() => $notify('サー(伝統芸能)... 只有冰红茶了可以吗'), 2000)
-    }
+    if(this.state.RSCodeGetCount >= 3) return $notify('点的这么快，人家都忙不过来啦  >_<')
     user.getRegisterSecurityCode().then(data => this.setState({ RSCodeSvg: data.svg }))
     this.setState({ RSCodeGetCount: this.state.RSCodeGetCount + 1 })
     setTimeout(() => this.setState({ RSCodeGetCount: this.state.RSCodeGetCount - 1 }), 10000)
@@ -68,9 +62,16 @@ class Register extends Component<PropsWithChildren<FinalProps>, State> {
     if(!textChecker.password(password)) return $notify('密码中包含非法字符')
 
     password = md5(password)
+    this.setState({ registerStatus: 2 })
     user.register({ account, name, password, code })
       .then(() =>{
-        $notify.success('注册成功')
+        this.setState({ registerStatus: 3 })
+        $notify.success('注册成功，即将前往登录')
+        setTimeout(() => this.router.search('/account/login'), 1500)
+      })
+      .catch(e =>{
+        console.log(e)
+        this.setState({ registerStatus: 0 })
       })
   }
 
@@ -132,7 +133,7 @@ class Register extends Component<PropsWithChildren<FinalProps>, State> {
           >注册</Button>
           
           <Button color="primary" 
-            onClick={() => this.router.search('/account', { type: 'login' })}
+            onClick={() => this.router.search('/account/login')}
           >已有帐号？前往登录</Button>
         </div>
       </div>

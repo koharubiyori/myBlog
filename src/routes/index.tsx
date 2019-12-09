@@ -17,7 +17,7 @@ export default class Routes extends React.Component{
 
   render(): JSX.Element{
     return (
-      <BrowserRouter>
+      <BrowserRouter basename="/view">
         <Route path="/">
           <MainLayout>
             <Route path="/account/register" component={Register} />

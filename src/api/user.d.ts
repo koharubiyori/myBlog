@@ -10,4 +10,9 @@ export namespace Api {
     accountOrName: string
     password: string
   }
+
+  interface SetUserInfo {
+    name?: string
+    avatar?: string
+  }
 }

@@ -4,6 +4,7 @@ import { default as userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { TextField, Button } from '@material-ui/core'
 import user from '~/api/user'
+import textChecker from '~/utils/textChecker'
 
 export interface Props {
   
@@ -12,6 +13,7 @@ export interface Props {
 export interface State {
   name: string
   avatar: string
+  imgUploadStatus: number
   saveStatus: number
 }
 
@@ -23,19 +25,46 @@ class UserInfo extends Component<PropsWithChildren<FinalProps>, State> {
     this.state = {
       name: props.state.user.name,
       avatar: props.state.user.avatar,
+      imgUploadStatus: 1,
       saveStatus: 1
     }
   }
 
-  uploadAvatar (e: ChangeEvent<HTMLInputElement>){
+  uploadAvatar = (e: ChangeEvent<HTMLInputElement>) =>{
+    if((e.target.files as FileList).length === 0){ return }
     let file = (e.target.files as FileList).item(0) as File
-    user.uploadAvatar({ file }).then(data =>{
-      console.log(data)
-    })
+    this.setState({ imgUploadStatus: 2 })
+    user.uploadAvatar({ file })
+      .then(data =>{
+        this.setState({ imgUploadStatus: 3, avatar: data.fileUrl })
+      }).catch(e =>{
+        console.log(e)
+        this.setState({ imgUploadStatus: 0 })
+        $notify.error('图片上传失败，请再试一次')
+      })
   }
 
   save = () =>{
-    
+    const {name, avatar} = this.state
+    if(!name) return $notify('昵称不能为空')
+    if(!textChecker.name(name)) return $notify('昵称包含非法字符')
+
+    if(name === this.props.state.user.name && avatar === this.props.state.user.avatar) return $notify('信息没有变化')
+
+    this.setState({ saveStatus: 2 })
+    user.setUserInfo({
+      ...(name ? { name } : {}),
+      ...(avatar ? { avatar }: {})
+    })
+      .then(() =>{
+        this.setState({ saveStatus: 3 })
+        this.props.user.set({ name, avatar })
+        $notify.success('信息已保存')
+      })
+      .catch(e =>{
+        console.log(e)
+        this.setState({ saveStatus: 0 })
+      })
   }
 
   render (){
@@ -43,7 +72,7 @@ class UserInfo extends Component<PropsWithChildren<FinalProps>, State> {
       <div>
         <h2 {...c('com-mainTitle')}>编辑个人信息</h2>
 
-        <label {...c(classes.avatar)}>
+        <label {...c(classes.avatar)} data-status={this.state.imgUploadStatus}>
           <img src={this.state.avatar || require('~/images/sub/akari.jpg')} />
           <input type="file" style={{ position: 'fixed', left: -9999 }} onChange={this.uploadAvatar} />
         </label>

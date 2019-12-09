@@ -36,6 +36,7 @@
     transition: $transition;
     z-index: 1;
     cursor: pointer;
+    border-radius: 50%;
   }
 
   &:hover{
@@ -50,7 +51,7 @@
     }
   }
 
-  .uploading{
+  &[data-status="2"]{
     &::before{
       opacity: 1;
       content: '上传中'

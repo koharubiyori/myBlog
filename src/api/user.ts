@@ -11,5 +11,7 @@ export default {
   
   getUserInfo: get<undefined, ApiData.User>('user/getUserInfo'),
 
-  uploadAvatar: post<{ file: File }, { fileUrl: string }>('user/uploadAvatar', { upload: true })
+  uploadAvatar: post<{ file: File }, { fileUrl: string }>('user/uploadAvatar', { upload: true }),
+
+  setUserInfo: post<Api.SetUserInfo>('user/setUserInfo', { loading: true, fail: true })
 }

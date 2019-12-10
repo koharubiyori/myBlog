@@ -1,6 +1,6 @@
 import React, { Component, PropsWithChildren, ChangeEvent } from 'react'
 import classes from './UserInfo.module.scss'
-import { default as userHOC, UserConnectedProps } from '~/redux/user/HOC'
+import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { TextField, Button } from '@material-ui/core'
 import user from '~/api/user'
@@ -31,8 +31,8 @@ class UserInfo extends Component<PropsWithChildren<FinalProps>, State> {
   }
 
   uploadAvatar = (e: ChangeEvent<HTMLInputElement>) =>{
-    if((e.target.files as FileList).length === 0){ return }
-    let file = (e.target.files as FileList).item(0) as File
+    if(e.target.files!.length === 0){ return }
+    let file = e.target.files!.item(0)!
     this.setState({ imgUploadStatus: 2 })
     user.uploadAvatar({ file })
       .then(data =>{
@@ -58,7 +58,7 @@ class UserInfo extends Component<PropsWithChildren<FinalProps>, State> {
     })
       .then(() =>{
         this.setState({ saveStatus: 3 })
-        this.props.user.set({ name, avatar })
+        this.props.$user.set({ name, avatar })
         $notify.success('信息已保存')
       })
       .catch(e =>{
@@ -74,7 +74,7 @@ class UserInfo extends Component<PropsWithChildren<FinalProps>, State> {
 
         <label {...c(classes.avatar)} data-status={this.state.imgUploadStatus}>
           <img src={this.state.avatar || require('~/images/sub/akari.jpg')} />
-          <input type="file" style={{ position: 'fixed', left: -9999 }} onChange={this.uploadAvatar} />
+          <input type="file" accept=".png, .jpg, .jpeg" style={{ position: 'fixed', left: -9999 }} onChange={this.uploadAvatar} />
         </label>
 
         <TextField fullWidth 

@@ -25,7 +25,7 @@ function SideBar({
 
       <img src={theme.avatar || require('~/images/sub/akari.jpg')} alt="icon" {...c(classes.avatar)} />
       <List className={classes.drawer}>
-        <ListItem button>
+        <ListItem button onClick={() => router.search('/')}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>

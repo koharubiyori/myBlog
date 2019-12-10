@@ -10,5 +10,6 @@ declare namespace ApiData {
     name: string
     avatar: string
     deleted: boolean
+    isAdmin: boolean
   }
 }

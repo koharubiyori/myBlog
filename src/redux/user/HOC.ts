@@ -7,7 +7,7 @@ import store from '~/redux'
 import user from '~/api/user'
 import Cookies from 'js-cookie'
 
-const { dispatch } = store
+const { dispatch, getState } = store
 
 export const set = (data: Partial<ConnectedState>) => dispatch({ type: SET, data })
 export const clear = () => dispatch({ type: CLEAR })
@@ -30,21 +30,23 @@ export const updateUserInfo = () => new Promise((resolve, reject) =>{
   }
 })
 
-const stateName = 'user'
+export const isAdmin = () => getState().user.isAdmin
+
 interface ConnectedDispatch {
-  [stateName]: {
-    set: typeof set,
+  '$user': {
+    set: typeof set
     clear: typeof clear
+    isAdmin: typeof isAdmin
   }
 }
 
 export type UserConnectedProps = ConnectedDispatch & {
-  state: { [stateName]: ConnectedState }
+  state: { user: ConnectedState }
 }
 
-export default connect(
+export const userHOC = connect(
   (state: object) => ({ state }),
   (): ConnectedDispatch => ({
-    [stateName]: { set, clear }
+    $user: { set, clear, isAdmin }
   })
 )

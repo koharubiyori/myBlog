@@ -2,16 +2,20 @@ import React, { PropsWithChildren } from 'react'
 import { Drawer } from '@material-ui/core'
 import classes from './index.module.scss'
 import { MyRouter } from '~/utils/createRouter'
+import resetComponentProps from '~/utils/resetComponentProps'
+import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 
 export interface Props {
   router: MyRouter
 }
 
-type FinalProps = Props
+type FinalProps = Props & UserConnectedProps
 
 function SideBarRight({
   children,
-  router
+  router,
+  state,
+  $user
 }: PropsWithChildren<FinalProps>){
   return (
     <Drawer
@@ -26,4 +30,6 @@ function SideBarRight({
   )
 }
 
-export default SideBarRight
+export default resetComponentProps<Props>(
+  userHOC(SideBarRight)
+) 

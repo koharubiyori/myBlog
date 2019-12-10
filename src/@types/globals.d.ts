@@ -44,3 +44,7 @@ declare interface ResponseData<ApiData = {}> {
   message: string
   data: ApiData
 }
+
+declare interface Methods {
+  [key: string]: Function
+}

@@ -14,6 +14,7 @@ const init = () => ({
   account: '',
   avatar: '',
   deleted: false,
+  isAdmin: false
 })
 
 const reducer: ReduxReducer<ConnectedState> = (state: ApiData.User = init(), action) =>{

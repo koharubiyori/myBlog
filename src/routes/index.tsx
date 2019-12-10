@@ -1,31 +1,42 @@
 import React from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
-import loadable from '@loadable/component'
+import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import asyncLoader from './asyncLoader'
 import MainLayout from '~/views/mainLayout'
 import Register from '~/views/account/Register'
 import Login from '~/views/account/Login'
 
-const UserInfo = loadable(() => import('~/views/account/UserInfo'))
+const l = asyncLoader
+const UserInfo = l(() => import('~/views/account/UserInfo'))
+const ArticleEdit = l(() => import('~/views/article/edit'))
 
-export default class Routes extends React.Component{
-  constructor (props: Object){
-    super(props)
-    this.state = {
-      
-    }
-  }
+function AnimationRoutes(){
+  let location = useLocation()
 
-  render(): JSX.Element{
-    return (
-      <BrowserRouter basename="/view">
-        <Route path="/">
-          <MainLayout>
-            <Route path="/account/register" component={Register} />
-            <Route path="/account/login" component={Login} />
-            <Route path="/account/userInfo" component={UserInfo} />
-          </MainLayout>
-        </Route>
-      </BrowserRouter>
-    )
-  }
+  return (
+    <TransitionGroup>
+      <CSSTransition unmountOnExit appear key={location.key} timeout={300} classNames="fade">
+        <Switch location={location}>
+          <Route path="/account/register" component={Register} />
+          <Route path="/account/login" component={Login} />
+          <Route path="/account/userInfo" component={UserInfo} />
+          
+          <Route path="/article/edit" component={ArticleEdit} />
+        </Switch>
+      </CSSTransition>
+    </TransitionGroup>
+  )
+}
+
+export default function Routes(){
+
+  return (
+    <BrowserRouter basename="/view">
+      <Route path="/">
+        <MainLayout>
+          <AnimationRoutes />
+        </MainLayout>
+      </Route>
+    </BrowserRouter>
+  )
 }

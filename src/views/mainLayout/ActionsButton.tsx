@@ -12,7 +12,11 @@ import { MyRouter } from '~/utils/createRouter'
 
 export interface Props {
   router: MyRouter
-  getMethods?<T extends { [Key in keyof T]: Function }> (methods: T): void
+  getMethods?: GetMethods<Methods>
+}
+
+export interface Methods {
+  setHidden (val: boolean): void
 }
 
 type FinalProps = Props & UserConnectedProps
@@ -40,7 +44,7 @@ function ActionsButton({
   function actionHandler (actionName: string){
     switch(actionName){
       case '新建文章': {
-
+        router.search('/article/edit')
       }
     }
 

@@ -45,6 +45,10 @@ declare interface ResponseData<ApiData = {}> {
   data: ApiData
 }
 
-declare interface Methods {
-  [key: string]: Function
+// declare interface FCMethods {
+//   [Key in MethodNames]: Function
+// }
+
+declare interface GetMethods<Methods> {
+  (methods: Methods): void
 }

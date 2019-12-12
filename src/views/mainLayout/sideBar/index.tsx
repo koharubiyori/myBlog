@@ -17,22 +17,27 @@ function SideBar({
   router,
 }: PropsWithChildren<FinalProps>){
   return (
-    <Drawer
-      variant="permanent"
-    >
-      {/* 给toolbar让出位置 */}
-      <div style={{ height: 70 }} />
+    <>
+      <Drawer
+        variant="permanent"
+      >
+        {/* 给toolbar让出位置 */}
+        <div style={{ height: 70 }} />
 
-      <img src={theme.avatar || require('~/images/sub/akari.jpg')} alt="icon" {...c(classes.avatar)} />
-      <List className={classes.drawer}>
-        <ListItem button onClick={() => router.search('/')}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary="首页" />
-        </ListItem>
-      </List>
-    </Drawer>
+        <img src={theme.avatar || require('~/images/sub/akari.jpg')} alt="icon" {...c(classes.avatar)} />
+        <List className={classes.drawer}>
+          <ListItem button onClick={() => router.search('/')}>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="首页" />
+          </ListItem>
+        </List>
+      </Drawer>
+
+      {/* 真实的drawer使用position:fiexd，这里再加一个元素用于占位 */}
+      <div className={classes.drawer} />
+    </>
   )
 }
 

@@ -13,6 +13,7 @@ export interface Props {
 
 export interface Methods {
   setVisible (val: boolean): void
+  setDisabledResizeHandler (val: boolean): void
 }
 
 type FinalProps = Props & UserConnectedProps
@@ -25,27 +26,39 @@ function SideBarRight({
   $user
 }: PropsWithChildren<FinalProps>){
   const [visible, setVisible] = useState(true)
+  let disabledResizeHandler = false
   
   useEffect(() =>{
-    const resizeHandler = () => setVisible(window.innerWidth >= 880)
+    const resizeHandler = () =>{
+      if(disabledResizeHandler){ return }
+      setVisible(window.innerWidth >= 880)
+    }
     window.addEventListener('resize', resizeHandler)
     return () => window.removeEventListener('resize', resizeHandler)
   }, [])
 
-  getMethods && getMethods({ setVisible }) 
+  function setDisabledResizeHandler(val: boolean){
+    disabledResizeHandler = val
+  }
+
+  getMethods && getMethods({ setVisible, setDisabledResizeHandler }) 
 
   return (
-    <CSSTransition in={visible} unmountOnExit timeout={500} classNames="fade">
-      <Drawer
-        variant="permanent"
-        anchor="right"
-        classes={{ root: classes.drawerContainer }}
-      >
-        {/* 给toolbar让出位置 */}
-        <div style={{ height: 70 }} />
-        <div style={{ width: 200, backgroundColor: '#eee' }}></div>
-      </Drawer>
-    </CSSTransition>
+    visible ?
+      <>
+        <Drawer
+          variant="permanent"
+          anchor="right"
+          classes={{ root: classes.drawerContainer }}
+        >
+          {/* 给toolbar让出位置 */}
+          <div style={{ height: 70 }} />
+          <div style={{ width: 200, backgroundColor: '#eee' }}></div>
+        </Drawer>
+
+        <div style={{ width: 200 }} />
+      </>
+    : null
   )
 }
 

@@ -17,8 +17,15 @@ export interface State {
 }
 
 export interface MainLayoutControllers {
-  setSideBarRightVisible (val: boolean): void
-  setActionsButtonVisible (val: boolean): void 
+  sideBarRight: {
+    setVisible (val: boolean): void
+    setDisabledResizeHandler (val: boolean): void
+  }
+
+  actionsButton: {
+    setVisible (val: boolean): void
+    setDisabledResizeHandler (val: boolean): void
+  }
 }
 
 export const MainLayoutContext = createContext<MainLayoutControllers>(null as any)
@@ -44,8 +51,15 @@ class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
     // 管理主布局各部分的显隐
     // this.sideBarRightMethods.setVisible()
     this.mainLayoutControllers = {
-      setActionsButtonVisible: val => { this.actionsButtonMethods.setHidden(!val) },
-      setSideBarRightVisible: val => { this.sideBarRightMethods.setVisible(val) }
+      sideBarRight: {
+        setVisible: this.sideBarRightMethods.setVisible,
+        setDisabledResizeHandler: this.sideBarRightMethods.setDisabledResizeHandler
+      },
+
+      actionsButton: {
+        setVisible: val => this.actionsButtonMethods.setHidden(!val),
+        setDisabledResizeHandler: this.actionsButtonMethods.setDisabledResizeHandler
+      }
     }
   }
 
@@ -53,14 +67,20 @@ class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
     return (
       <>
         <MyAppBar router={this.router} />
-        <SideBar theme={this.state.theme} router={this.router} />
-        <SideBarRight router={this.router} getMethods={methods => this.sideBarRightMethods = methods} />
-        <ActionsButton router={this.router} getMethods={methods => this.actionsButtonMethods = methods} />
-        <div {...c(classes.contentContainer)}>
-          <MainLayoutContext.Provider value={this.mainLayoutControllers}>
-            <div className="content">{this.props.children}</div>
-          </MainLayoutContext.Provider>
+
+        <div className="flex-row">
+          <SideBar theme={this.state.theme} router={this.router} />
+
+          <div {...c(classes.contentContainer, 'flex-grow')}>
+            <MainLayoutContext.Provider value={this.mainLayoutControllers}>
+              <div className="mainLayout-content">{this.props.children}</div>
+            </MainLayoutContext.Provider>
+          </div>
+          
+          <SideBarRight router={this.router} getMethods={methods => this.sideBarRightMethods = methods} />
         </div>
+        
+        <ActionsButton router={this.router} getMethods={methods => this.actionsButtonMethods = methods} />
       </>
     )
   }

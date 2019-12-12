@@ -7,6 +7,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import { MyRouter } from '~/utils/createRouter'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
+import { Link } from 'react-router-dom'
 
 export interface Props {
   router: MyRouter
@@ -39,13 +40,17 @@ function MyAppBar({
         </IconButton>
 
         {state.user.account ? 
-          <IconButton onClick={() => router.search('/account/userInfo')}>
-            <img src={state.user.avatar || require('~/images/sub/akari.jpg')} alt="icon" style={{ width: 24, height: 24, borderRadius: '50%' }} />
-          </IconButton>
+          <Link replace to="/account/userInfo" >
+            <IconButton>
+              <img src={state.user.avatar || require('~/images/sub/akari.jpg')} alt="icon" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+            </IconButton>
+          </Link>
         :
-          <IconButton onClick={() => router.search('/account/login')}>
-            <AccountCircleIcon />
-          </IconButton>
+          <Link replace to="/account/login">
+            <IconButton>
+              <AccountCircleIcon />
+            </IconButton>
+          </Link>
         }
       </Toolbar>
     </AppBar>

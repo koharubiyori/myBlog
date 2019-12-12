@@ -17,6 +17,7 @@ export interface Props {
 
 export interface Methods {
   setHidden (val: boolean): void
+  setDisabledResizeHandler (val: boolean): void
 }
 
 type FinalProps = Props & UserConnectedProps
@@ -40,7 +41,18 @@ function ActionsButton({
 }: PropsWithChildren<FinalProps>){
   const [open, setOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
-  
+  let disabledResizeHandler = false
+
+  useEffect(() =>{
+    const resizeHandler = () => {
+      if(disabledResizeHandler){ return }
+      setHidden(window.innerWidth < 880)
+    }
+
+    window.addEventListener('resize', resizeHandler)
+    return () => window.removeEventListener('resize', resizeHandler)
+  }, [])
+
   function actionHandler (actionName: string){
     switch(actionName){
       case '新建文章': {
@@ -51,13 +63,11 @@ function ActionsButton({
     setOpen(false)
   }
 
-  useEffect(() =>{
-    const resizeHandler = () => setHidden(window.innerWidth < 880)
-    window.addEventListener('resize', resizeHandler)
-    return () => window.removeEventListener('resize', resizeHandler)
-  }, [])
+  function setDisabledResizeHandler(val: boolean){
+    disabledResizeHandler = val
+  }
 
-  getMethods && getMethods({ setHidden })
+  getMethods && getMethods({ setHidden, setDisabledResizeHandler })
   
   return (
     <>

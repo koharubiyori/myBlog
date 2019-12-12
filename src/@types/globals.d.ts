@@ -52,3 +52,11 @@ declare interface ResponseData<ApiData = {}> {
 declare interface GetMethods<Methods> {
   (methods: Methods): void
 }
+
+declare interface PageData<Data = any> {
+  total: number
+  pageTotal: number
+  limit: number
+  currentPage: number
+  list: Data[]
+}

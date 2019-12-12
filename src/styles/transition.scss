@@ -1,17 +1,28 @@
 .fade{
   &-enter, 
-  &-appear,
   &-exit-active{
     opacity: 0;
   }
 
   &-enter-active,
-  &-appear-active,
   &-exit-active{
     transition: all 0.3s;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
+  }
+}
+
+.narrow{
+  &-enter, 
+  &-exit-active{
+    width: 200px;
+  }
+
+  &-enter-active,
+  &-exit-active{
+    transition: all 100.3s;
+    width: 0;
   }
 }

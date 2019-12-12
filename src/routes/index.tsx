@@ -14,17 +14,19 @@ function AnimationRoutes(){
   let location = useLocation()
 
   return (
-    <TransitionGroup>
-      <CSSTransition unmountOnExit appear key={location.key} timeout={300} classNames="fade">
-        <Switch location={location}>
-          <Route path="/account/register" component={Register} />
-          <Route path="/account/login" component={Login} />
-          <Route path="/account/userInfo" component={UserInfo} />
-          
-          <Route path="/article/edit" component={ArticleEdit} />
-        </Switch>
-      </CSSTransition>
-    </TransitionGroup>
+    // <TransitionGroup>
+    //   {/* <CSSTransition unmountOnExit appear key={location.key} timeout={300} classNames="fade"> */}
+
+    //   {/* </CSSTransition> */}
+    // {/* </TransitionGroup> */}
+
+    <Switch location={location}>
+      <Route path="/account/register" component={Register} />
+      <Route path="/account/login" component={Login} />
+      <Route path="/account/userInfo" component={UserInfo} />
+      
+      <Route path="/article/edit" component={ArticleEdit} />
+    </Switch>
   )
 }
 

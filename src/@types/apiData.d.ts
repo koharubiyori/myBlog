@@ -12,4 +12,18 @@ declare namespace ApiData {
     deleted: boolean
     isAdmin: boolean
   }
+
+  interface Article {
+    _id?: ObjectID
+    title: string
+    profile: string
+    content: string
+    tags: string[]
+    updatedAt: Date
+    headImg: string
+    readNum: number
+    deleted: boolean
+    createdYear: number
+    createdMonth: number
+  }
 }

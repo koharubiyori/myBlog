@@ -21,7 +21,7 @@ export default function(
   return {
     params: {
       search: qs.parse(history.location.search.split('?')[1]),
-      state: history.location.state
+      state: history.location.state || {}
     },
 
     search (path, params = {}, action = 'push'){

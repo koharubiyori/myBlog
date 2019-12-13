@@ -6,7 +6,7 @@ export default {
 
   search: get<Api.Search, PageData<ApiData.Article>>('article/search', { loading: true, fail: true }),
 
-  publish: post<Api.Publish>('article/publish', { upload: true }),
+  publish: post<Api.Publish>('article/publish', { loading: true, fail: true }),
 
   delete: post<Api.Delete>('article/delete', { loading: true, fail: true }),
   

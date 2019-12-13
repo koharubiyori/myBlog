@@ -1,4 +1,4 @@
-import React, { Component, PropsWithChildren, ChangeEvent } from 'react'
+import React, { Component, PropsWithChildren, ChangeEvent, KeyboardEvent } from 'react'
 import './index.scss'
 import classes from './index.module.scss'
 import Editor from 'tui-editor'
@@ -7,12 +7,16 @@ import 'tui-editor/dist/tui-editor-contents.css' // editor's content
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
 import { MainLayoutContext, MainLayoutControllers } from '~/views/mainLayout'
-import { Button, TextField, InputLabel, FormControl, OutlinedInput } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
 import createRouter from '~/utils/createRouter'
 import { RouteChildrenProps } from 'react-router'
 import ImageIcon from '@material-ui/icons/Image'
 import article from '~/api/article'
-import TagSvg from '~/images/sub/tag.svg'
+import { getTags } from '~/redux/data/HOC'
+import _ from 'lodash'
+import TagInput from './components/TagInput'
+import tagApis from '~/api/tag'
+import nProgress from 'nprogress'
 
 export interface Props {
   
@@ -23,6 +27,7 @@ export interface State {
   profile: string
   tags: string[]
   tagInput: string
+  tagInputFocused: boolean
   headImg: string
   headImgStatus: number
 }
@@ -47,6 +52,7 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
       profile: '',
       tags: [],
       tagInput: '',
+      tagInputFocused: false,
       headImg: '',
       headImgStatus: 1
     }
@@ -102,8 +108,68 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
       })
   }
 
+  tagInputKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) =>{
+    let tag = this.state.tagInput.trim()
+
+    if(tag === '' && event.keyCode === 8){
+      if(this.state.tags.length !== 0){
+        this.setState({ tags: _.dropRight(this.state.tags) })
+      }
+    }
+  }
+
+  removeTag = (index: number) =>{
+    this.state.tags.splice(index, 1)
+    this.setState({ tags: this.state.tags })
+  }
+
   publish = () =>{
-    console.log(this.editor.getMarkdown())
+    let {title, profile, tags, headImg} = this.state
+    let content = this.editor.getMarkdown()
+    
+    if(!title) return $notify('标题不能为空')
+    if(!profile) return $notify('简介不能为空')
+    if(!content) return $notify('内容不能为空')
+    if(!tags.length) return $notify('至少需要一个标签')
+    if(!headImg) return $notify('头图不能为空')
+
+    nProgress.start()
+    getTags()
+      .then(tagList =>{
+        return Promise.all(
+          tags.map((tag, index) => 
+            new Promise((resolve, reject) =>{
+              let tagObj = tagList.find(item => item.name === tag)
+              if(tagObj){
+                resolve(tagObj._id)
+              }else{
+                tagApis.set({ name: tag }, { loading: false, fail: false })
+                  .then(data =>{
+                    resolve(data.tagId)
+                  })
+                  .catch(e =>{
+                    reject(e)
+                  })
+              }
+            })
+          )
+        )
+      })
+      .finally(() =>{
+        nProgress.done()
+        getTags(true)
+      })
+      .then(() =>{
+        return article.publish({
+          title, profile, content, headImg,
+          tags: tags.map(item => (item as any)._id)
+        })
+      })
+      .then(() => $notify.success('文章发布成功'))
+      .catch(e =>{
+        console.log(e)
+        $notify.error('网络错误')
+      })
   }
 
   render (){
@@ -138,39 +204,15 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
               onChange={e => this.setState({ profile: e.target.value })}
             />
 
-            <FormControl {...c('flex-row flex-wrap')} variant="outlined">
-              <InputLabel shrink variant="outlined">标签</InputLabel>
-              {this.state.tags.map((item: any) => <div {...c(classes.tag)}>{typeof item === 'string' ? item : item.name}</div>)}
-              <OutlinedInput notched labelWidth={32} {...c('flex-grow')} 
-                value={this.state.tagInput}
-                onChange={e => this.setState({ tagInput: e.target.value })} 
-                placeholder="回车添加标签"
-              />
-            </FormControl>
-{/* 
-            <FormControl {...c('flex-row flex-wrap')} variant="outlined">
-              <InputLabel shrink variant="outlined">标签</InputLabel>
-              <OutlinedInput notched labelWidth={32}
-                inputComponent={() => 
-                  <div style={{ margin: '20px 0' }}>           
-                    <label {...c(classes.upload)}>
-                      {this.state.headImgStatus === 3 ?
-                        <img src={this.state.headImg} />
-                      :
-                        <div className="hint">
-                          <ImageIcon fontSize="large" />
-                          <p style={{ marginTop: 5 }}>{['', '添加头图', '上传中'][this.state.headImgStatus]}</p>
-                        </div>
-                      }
-                      <input type="file" style={{ position: 'fixed', left: -9999 }} onChange={this.uploadHeadImg} />
-                    </label>
-                  </div>
-                }
-              />
-            </FormControl> */}
+            <TagInput
+              value={this.state.tagInput}
+              tags={this.state.tags}
+              onChange={e => this.setState({ tagInput: e.target.value })}
+              onSelectHint={name => this.setState({ tags: this.state.tags.concat([name]), tagInput: '' })}
+              onRemoveTag={this.removeTag}
+            />
 
-
-            <div style={{ margin: '20px 0' }}>           
+            <div style={{ margin: '20px auto', maxWidth: 800 }}>           
               <label {...c(classes.upload)}>
                 {this.state.headImgStatus === 3 ?
                   <img src={this.state.headImg} />

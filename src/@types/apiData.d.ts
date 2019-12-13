@@ -14,7 +14,7 @@ declare namespace ApiData {
   }
 
   interface Article {
-    _id?: ObjectID
+    _id?: string
     title: string
     profile: string
     content: string
@@ -25,5 +25,10 @@ declare namespace ApiData {
     deleted: boolean
     createdYear: number
     createdMonth: number
+  }
+
+  interface Tag {
+    _id: string
+    name: string
   }
 }

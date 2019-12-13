@@ -37,7 +37,7 @@ const createRequester: CreateRequester = (method) => <RequestParams, ApiData = {
       }).catch(e =>{
         console.log(e)
         reject()
-        fail && $notify('嘿，伙计！我敢打赌，你的网络就像隔壁苏珊大妈烤的苹果派一样糟糕...')
+        fail && $notify('网络错误')
       })
   })
 }

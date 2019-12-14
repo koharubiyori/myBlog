@@ -28,7 +28,7 @@ interface ConnectedDispatch {
   }
 }
 
-export type UserConnectedProps = ConnectedDispatch & {
+export type DataConnectedProps = ConnectedDispatch & {
   state: { data: ConnectedState }
 }
 

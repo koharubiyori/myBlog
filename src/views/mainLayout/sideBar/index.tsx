@@ -20,15 +20,19 @@ function SideBar({
     <>
       <Drawer
         variant="permanent"
+        className={classes.root}
       >
         {/* 给toolbar让出位置 */}
         <div style={{ height: 70 }} />
 
         <img src={theme.avatar || require('~/images/sub/akari.jpg')} alt="icon" {...c(classes.avatar)} />
+        <div className={classes.info}>
+          <div className="name">小春日和</div>
+        </div>
         <List className={classes.drawer}>
           <ListItem button onClick={() => router.search('/')}>
             <ListItemIcon>
-              <HomeIcon />
+              <HomeIcon style={{ color: '#C5C5C5' }} />
             </ListItemIcon>
             <ListItemText primary="首页" />
           </ListItem>

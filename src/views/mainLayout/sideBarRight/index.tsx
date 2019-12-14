@@ -49,7 +49,7 @@ function SideBarRight({
         <Drawer
           variant="permanent"
           anchor="right"
-          classes={{ root: classes.drawerContainer }}
+          classes={{ root: classes.root }}
         >
           {/* 给toolbar让出位置 */}
           <div style={{ height: 70 }} />

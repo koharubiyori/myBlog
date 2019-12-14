@@ -4,7 +4,7 @@ import nProgress from 'nprogress'
 
 interface RequesterOptions {
   loading?: boolean
-  fail?: boolean
+  fail?: boolean | string
   upload?: boolean
 }
 
@@ -14,12 +14,13 @@ type CreateRequester =
       (params?: RequestParams, options?: RequesterOptions) => Promise<ApiData>
 
 const createRequester: CreateRequester = (method) => <RequestParams, ApiData = {}>(url: string, options?: RequesterOptions) =>{
-  let {loading, fail, upload = false} = options || {}
+  let {loading, fail, upload} = options || {}
 
   return (params?: RequestParams, options?: RequesterOptions): Promise<ApiData> => new Promise((resolve, reject) =>{
     if(options){
-      if(options.loading) loading = options.loading
-      if(options.fail) fail = options.fail
+      if('loading' in options) loading = options.loading
+      if('fail' in options) fail = options.fail
+      if('upload' in options) upload = options.upload
     }
 
     loading && nProgress.start()
@@ -37,7 +38,7 @@ const createRequester: CreateRequester = (method) => <RequestParams, ApiData = {
       }).catch(e =>{
         console.log(e)
         reject()
-        fail && $notify('网络错误')
+        fail && $notify(typeof fail === 'string' ? fail : '网络错误')
       })
   })
 }

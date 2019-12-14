@@ -74,7 +74,8 @@
       border-top: 1px #eee solid;
     }
 
-    &[data-selected="true"]{
+    &[data-selected="true"],
+    &:hover{
       background-color: #eee;
     }
   }

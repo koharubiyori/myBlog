@@ -60,3 +60,10 @@ declare interface PageData<Data = any> {
   currentPage: number
   list: Data[]
 }
+
+declare interface PageState<ListData = any> {
+  pageTotal: number
+  currentPage: number
+  list: ListData[],
+  status: number
+}

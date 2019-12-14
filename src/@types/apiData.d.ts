@@ -14,7 +14,7 @@ declare namespace ApiData {
   }
 
   interface Article {
-    _id?: string
+    _id: string
     title: string
     profile: string
     content: string
@@ -25,7 +25,11 @@ declare namespace ApiData {
     deleted: boolean
     createdYear: number
     createdMonth: number
+    commentTotal: number
+    collectTotal: number
   }
+
+  type SearchResult = Omit<Article, 'content'>[]
 
   interface Tag {
     _id: string

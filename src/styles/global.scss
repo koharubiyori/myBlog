@@ -2,12 +2,14 @@ $main: #6B69D6;
 $dark: #504FA0;
 $light: #9796E3;
 $subtext: #ABABAB;
+$black: #313131;
 
 $colors: (
   main: $main,
   dark: $dark,
   light: $light,
-  subtext: $subtext
+  subtext: $subtext,
+  black: $black
 );
 
 $sideBarRightHideLimit: 880px;
@@ -22,10 +24,10 @@ $sideBarRightHideLimit: 880px;
   }
 }
 
-@function light($color){
-  @return mix($color, white, 10%);
+@function light($color, $purity: 10%){
+  @return mix($color, white, $purity);
 }
 
-@function dark($color){
-  @return mix($color, black, 90%);
+@function dark($color, $purity: 90%){
+  @return mix($color, black, $purity);
 }

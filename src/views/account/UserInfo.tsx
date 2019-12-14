@@ -40,7 +40,6 @@ class UserInfo extends Component<PropsWithChildren<FinalProps>, State> {
       }).catch(e =>{
         console.log(e)
         this.setState({ imgUploadStatus: 0 })
-        $notify.error('图片上传失败，请再试一次')
       })
   }
 

@@ -2,10 +2,13 @@ import React, { Component, PropsWithChildren, ChangeEvent, KeyboardEvent } from 
 import './index.scss'
 import classes from './index.module.scss'
 import Editor from 'tui-editor'
+import 'tui-editor/dist/tui-editor-extScrollSync'
+import 'tui-editor/dist/tui-editor-extColorSyntax'
 import 'tui-editor/dist/tui-editor.css' // editor's ui
 import 'tui-editor/dist/tui-editor-contents.css' // editor's content
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
+import 'tui-color-picker/dist/tui-color-picker.css'
 import { MainLayoutContext, MainLayoutControllers } from '~/views/mainLayout'
 import { Button, TextField } from '@material-ui/core'
 import createRouter from '~/utils/createRouter'
@@ -70,10 +73,16 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
       height: '650px',
       initialEditType: 'markdown',
       previewStyle: 'vertical',
+      language: 'zh_CN',
+      exts: ['scrollSync', 'colorSyntax']
     })
 
-    this.editor.addHook('addImageBlobHook', (blob: Blob) =>{
-      console.log(blob)
+    this.editor.addHook('addImageBlobHook', (file: File, cb: (url: string, text?: string) => void) =>{
+      article.uploadImg({ file })
+        .then(data =>{
+          cb(data.fileUrl)
+        })
+
     })
   }
 
@@ -87,7 +96,7 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
   }
 
   setMainLayoutControllers = (mainLayoutControllers: MainLayoutControllers) =>{
-    if(this.mainLayoutControllers){ return }
+    if(!mainLayoutControllers || this.mainLayoutControllers){ return }
     this.mainLayoutControllers = mainLayoutControllers
     mainLayoutControllers.actionsButton.setVisible(false)
     mainLayoutControllers.actionsButton.setDisabledResizeHandler(true)
@@ -98,13 +107,13 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
   uploadHeadImg = (event: ChangeEvent<HTMLInputElement>) =>{
     if(event.target.files!.length === 0){ return }
     let file = event.target.files!.item(0)!
+    
     this.setState({ headImgStatus: 2 })
     article.uploadHeadImg({ file })
       .then(data =>{
         this.setState({ headImgStatus: 3, headImg: data.fileUrl })
       }).catch(e =>{
         this.setState({ headImgStatus: 1 })
-        $notify.error('图片上传失败，请再试一次')
       })
   }
 
@@ -127,6 +136,9 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
     let {title, profile, tags, headImg} = this.state
     let content = this.editor.getMarkdown()
     
+    title = title.trim()
+    profile = profile.trim()
+
     if(!title) return $notify('标题不能为空')
     if(!profile) return $notify('简介不能为空')
     if(!content) return $notify('内容不能为空')
@@ -159,13 +171,16 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
         nProgress.done()
         getTags(true)
       })
-      .then(() =>{
+      .then(tagIds =>{
         return article.publish({
           title, profile, content, headImg,
-          tags: tags.map(item => (item as any)._id)
+          tags: tagIds as string[]
         })
       })
-      .then(() => $notify.success('文章发布成功'))
+      .then(() =>{
+        $notify.success('文章发布成功')
+        this.router.search('/')
+      })
       .catch(e =>{
         console.log(e)
         $notify.error('网络错误')
@@ -205,7 +220,7 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
             />
 
             <TagInput
-              value={this.state.tagInput}
+              value={this.state.tagInput.trim()}
               tags={this.state.tags}
               onChange={e => this.setState({ tagInput: e.target.value })}
               onSelectHint={name => this.setState({ tags: this.state.tags.concat([name]), tagInput: '' })}
@@ -213,7 +228,7 @@ class ArticleEdit extends Component<PropsWithChildren<FinalProps>, State> {
             />
 
             <div style={{ margin: '20px auto', maxWidth: 800 }}>           
-              <label {...c(classes.upload)}>
+              <label {...c(classes.upload)} data-status={this.state.headImgStatus}>
                 {this.state.headImgStatus === 3 ?
                   <img src={this.state.headImg} />
                 :

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, KeyboardEvent, ChangeEvent, useRef } from 'react'
+import React, { PropsWithChildren, useState, KeyboardEvent, ChangeEvent, useRef, useEffect } from 'react'
 import classes from './TagInput.module.scss'
 import store from '~/redux'
 import { InputBase, Box } from '@material-ui/core'
@@ -19,14 +19,16 @@ export interface Props {
 
 type FinalProps = Props
 
-function TagInput({
-  children,
-  tags,
-  value,
-  onChange,
-  onSelectHint,
-  onRemoveTag
-}: PropsWithChildren<FinalProps>){
+function TagInput(this: any, props: PropsWithChildren<FinalProps>){
+  const {
+    children,
+    tags,
+    value,
+    onChange,
+    onSelectHint,
+    onRemoveTag
+  } = props
+
   const [tagInputFocused, setTagInputFocused] = useState(false)  
   const [selectedHint, setSelectedHint] = useState(-1)      // -1代表选中的为输入栏
   const {tags: tagList} = store.getState().data
@@ -45,12 +47,10 @@ function TagInput({
     if(e.keyCode === 38){
       setSelectedHint(prevVal =>{
         if(prevVal === -1){
-          // onSelectHint(value)
           setInputLocation(value.length)
           return filteredTags.length
         }else{
           let newVal = prevVal - 1
-          // onSelectHint(newVal === -1 ? value : filteredTags[newVal].name)
           setInputLocation(value.length)
           return newVal
         }
@@ -60,12 +60,10 @@ function TagInput({
     if(e.keyCode === 40){
       setSelectedHint(prevVal =>{
         if(prevVal === filteredTags.length){
-          // onSelectHint(value)
           setInputLocation(value.length)
           return -1
         }else{
           let newVal = prevVal + 1
-          // onSelectHint(filteredTags.length === 0 ? value : filteredTags[newVal].name)
           setInputLocation(value.length)
           return newVal
         }
@@ -108,14 +106,14 @@ function TagInput({
         <CSSTransition unmountOnExit in={!!value} timeout={200} classNames="fade">
           <Box boxShadow={3} className={classes.hintsMenu}>
             {filteredTags.map((item, index) =>
-              <p tabIndex={1} data-selected={index === selectedHint}>
+              <p key={index} tabIndex={1} data-selected={index === selectedHint} onClick={() => onSelectHint(item.name)}>
                 <TagIcon style={{ width: 18, height: 18, margin: '0 4px' }} />
                 <span>{item.name}</span>
               </p>
             )}
 
             {(tagList || []).map(item => item.name).includes(value) === false ?
-              <p tabIndex={1} data-selected={filteredTags.length === selectedHint}>
+              <p tabIndex={1} data-selected={filteredTags.length === selectedHint} onClick={() => onSelectHint(value)}>
                 <AddIcon />
                 <span>{value}</span>
               </p>

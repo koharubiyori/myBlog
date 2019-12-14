@@ -7,8 +7,9 @@ import Register from '~/views/account/Register'
 import Login from '~/views/account/Login'
 
 const l = asyncLoader
-const UserInfo = l(() => import('~/views/account/UserInfo'))
-const ArticleEdit = l(() => import('~/views/article/edit'))
+const UserInfo = l('account/UserInfo')
+const ArticleEdit = l('article/edit')
+const Home = l('home')
 
 function AnimationRoutes(){
   let location = useLocation()
@@ -26,6 +27,8 @@ function AnimationRoutes(){
       <Route path="/account/userInfo" component={UserInfo} />
       
       <Route path="/article/edit" component={ArticleEdit} />
+
+      <Route path="/" component={Home} />
     </Switch>
   )
 }

@@ -1,16 +1,18 @@
 .upload{
-  height: 150px;
+  height: 300px;
   border-radius: 3px;
   border: 1px #C4C4C4 solid;
   transition: all 0.2s;
   display: block;
   position: relative;
   cursor: pointer;
+  overflow: hidden;
 
   > img{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: all 0.2s;
   }
   
   :global .hint{
@@ -31,6 +33,36 @@
 
     :global .hint{
       color: $main;
+    }
+
+    &::before{
+      opacity: 1 !important;
+    }
+
+    > img {
+      transform: scale(1.1);
+    }
+  }
+
+  &[data-status="3"]{
+    &::before{  
+      content: '更换头图';
+      text-decoration: underline;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: all 0.2s;
+      z-index: 1;
+      cursor: pointer;
     }
   }
 }

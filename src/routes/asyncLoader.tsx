@@ -2,8 +2,12 @@ import React from 'react'
 import { default as loadable, DefaultComponent} from '@loadable/component'
 import { CircularProgress } from '@material-ui/core'
 
-export default function(component: (props: any) => Promise<DefaultComponent<any>>){
-  return loadable(component, {
+export default function(path: string){
+  if(process.env.NODE_ENV === 'development'){
+    return require('~/views/' + path).default
+  }
+
+  return loadable(() => import('~/views/' + path), {
     fallback: <LoadingProgress /> 
   })
 }

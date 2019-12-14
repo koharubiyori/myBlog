@@ -1,4 +1,4 @@
-import React, { Component, PropsWithChildren, createContext } from 'react'
+import React, { Component, PropsWithChildren, createContext, createRef } from 'react'
 import classes from './index.module.scss'
 import MyAppBar from './myAppBar'
 import SideBar from './sideBar'
@@ -36,7 +36,7 @@ class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
   router = createRouter(this.props)
   sideBarRightMethods: SideBarRightMethods = null as any
   actionsButtonMethods: ActionsButtonMethods = null as any
-  mainLayoutControllers: MainLayoutControllers = {} as any
+  mainLayoutControllers: MainLayoutControllers = null as any
   
   constructor (props: PropsWithChildren<FinalProps>){
     super(props)
@@ -44,12 +44,16 @@ class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
       theme: {} as any
     }
 
-    common.getTheme().then(theme => this.setState({ theme }))
+    common.getTheme().then(theme =>{
+      this.setState({ theme })
+      document.body.style.cssText = `
+        background-color: #ccc;
+      `
+    })
   }
 
   componentDidMount (){
     // 管理主布局各部分的显隐
-    // this.sideBarRightMethods.setVisible()
     this.mainLayoutControllers = {
       sideBarRight: {
         setVisible: this.sideBarRightMethods.setVisible,
@@ -61,6 +65,7 @@ class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
         setDisabledResizeHandler: this.actionsButtonMethods.setDisabledResizeHandler
       }
     }
+
   }
 
   render (){

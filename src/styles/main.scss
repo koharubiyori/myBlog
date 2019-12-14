@@ -9,6 +9,11 @@ html, body{
   margin: 0;
 }
 
+::selection {
+  background-color: light($black, 80%);
+  color: white;
+}
+
 .MuiAppBar-positionFixed:not(foo){
   left: 0;
   min-width: $minWidth;

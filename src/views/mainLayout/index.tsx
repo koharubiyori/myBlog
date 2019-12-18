@@ -47,7 +47,7 @@ class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
     common.getTheme().then(theme =>{
       this.setState({ theme })
       document.body.style.cssText = `
-        background-color: #ccc;
+        background-color: #eee;
       `
     })
   }

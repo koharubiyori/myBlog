@@ -1,3 +1,4 @@
+import './utils/mountColors'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
@@ -7,6 +8,7 @@ import nProgress from 'nprogress'
 
 // 用于拼接class
 window.c = (...args: string[]) => ({ className: args.join(' ') })
+
 
 nProgress.configure({ showSpinner: false })
 

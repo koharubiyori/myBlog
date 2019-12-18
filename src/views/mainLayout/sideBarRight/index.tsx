@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react'
-import { Drawer } from '@material-ui/core'
+import { Drawer, makeStyles } from '@material-ui/core'
 import classes from './index.module.scss'
 import { MyRouter } from '~/utils/createRouter'
 import resetComponentProps from '~/utils/resetComponentProps'
@@ -27,7 +27,7 @@ function SideBarRight({
 }: PropsWithChildren<FinalProps>){
   const [visible, setVisible] = useState(true)
   let disabledResizeHandler = false
-  
+
   useEffect(() =>{
     const resizeHandler = () =>{
       if(disabledResizeHandler){ return }

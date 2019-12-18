@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import './styles/main.scss'
 import { ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -21,25 +21,23 @@ const theme = createMuiTheme({
   }
 })
 
-export default class App extends React.Component {
-  _refs = {
-    snackbar: React.createRef()
-  }
-  
-  componentDidMount (){
-    mountNotifyMethod((this._refs.snackbar.current as any).enqueueSnackbar)
-    init()
+export default function App(){
+  const refs = {
+    snackbar: useRef()
   }
 
-  render (){
-    return (
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <SnackbarProvider maxSnack={3} ref={this._refs.snackbar}>
-            <Routes />
-          </SnackbarProvider>
-        </Provider>
-      </ThemeProvider>
-    )
-  }
+  useEffect(() =>{
+    mountNotifyMethod((refs.snackbar.current as any).enqueueSnackbar)
+    init()
+  }, [])
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <SnackbarProvider maxSnack={3} ref={refs.snackbar}>
+          <Routes />
+        </SnackbarProvider>
+      </Provider>
+    </ThemeProvider>
+  )
 }

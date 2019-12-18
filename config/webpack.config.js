@@ -478,12 +478,12 @@ module.exports = function(webpackEnv) {
                   'sass-loader'
                 ),
 
-                {
-                  loader: 'sass-resources-loader',
-                  options: {
-                    resources: path.resolve(__dirname, '../src/styles/global.scss')
-                  }
-                }
+                // {
+                //   loader: 'sass-resources-loader',
+                //   options: {
+                //     resources: path.resolve(__dirname, '../src/styles/global.scss')
+                //   }
+                // }
               ],
 
               // Don't consider CSS imports dead code even if the

@@ -33,9 +33,14 @@ declare interface Window {
     warning (message: string, position?: SnackbarPosition): void
     error (message: string, position?: SnackbarPosition): void
   }
+
+  $colors: {
+    [Name in 'main' | 'dark' | 'light' | 'subtext' | 'black']: string
+  }
 }
 
 declare let $notify: Window['$notify']
+declare let $colors: Window['$colors']
 declare const __REDUX_DEVTOOLS_EXTENSION__: any
 
 declare interface ResponseData<ApiData = {}> {

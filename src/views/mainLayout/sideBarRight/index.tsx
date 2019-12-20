@@ -1,11 +1,10 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react'
 import { Drawer, makeStyles } from '@material-ui/core'
-import { MyRouter } from '~/utils/createRouter'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
+import useRouter from '~/hooks/useRouter'
 
 export interface Props {
-  router: MyRouter
   getRef?: React.MutableRefObject<any>
 }
 
@@ -19,6 +18,7 @@ type FinalProps = Props & UserConnectedProps
 function SideBarRight(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(), 
+    router = useRouter(),
     [visible, setVisible] = useState(true)
   let disabledResizeHandler = false
 

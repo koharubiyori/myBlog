@@ -3,21 +3,19 @@ import { TextField, ButtonBase, Button, makeStyles } from '@material-ui/core'
 import user from '~/api/user'
 import md5 from 'md5'
 import textChecker from '~/utils/textChecker'
-import { RouteChildrenProps, useHistory } from 'react-router'
-import createRouter from '~/utils/createRouter'
 import { com, flex } from '~/styles'
+import useRouter from '~/hooks/useRouter'
 
-console.log(flex)
 export interface Props {
   
 }
 
-type FinalProps = Props & RouteChildrenProps
+type FinalProps = Props
 
 function Register(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = createRouter(useHistory()),
+    router = useRouter(),
     [account, setAccount] = useState(''),
     [name, setName] = useState(''),
     [password, setPassword] = useState(''),

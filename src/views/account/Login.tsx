@@ -1,22 +1,21 @@
 import React, { useState,  PropsWithChildren } from 'react'
-import { RouteChildrenProps, useHistory } from 'react-router'
-import createRouter from '~/utils/createRouter'
 import { TextField, Button, makeStyles } from '@material-ui/core'
 import md5 from 'md5'
 import user from '~/api/user'
 import { set as setUserInfo } from '~/redux/user/HOC'
 import { com, flex } from '~/styles'
+import useRouter from '~/hooks/useRouter'
 
 export interface Props {
   
 }
 
-type FinalProps = Props & RouteChildrenProps
+type FinalProps = Props
 
 function Login(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = createRouter(useHistory()),
+    router = useRouter(),
     [accountOrName, setAccountOrName] = useState(''),
     [password, setPassword] = useState(''),
     [loginStatus, setLoginStatus] = useState(1)

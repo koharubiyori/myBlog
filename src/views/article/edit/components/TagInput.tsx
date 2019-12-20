@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add'
 import TagSvg from '~/images/sub/tag.svg'
 import { CSSTransition } from 'react-transition-group'
 import ClearIcon from '@material-ui/icons/Clear'
-import { flex } from '~/styles'
+import { flex, transition } from '~/styles'
 import styleVars from '~/styles/styleVars'
 
 const TagIcon = (props: any) => <embed src={TagSvg} {...props} />
@@ -100,7 +100,7 @@ function TagInput(props: PropsWithChildren<FinalProps>){
           inputRef={refs.input}
         />
 
-        <CSSTransition unmountOnExit in={!!props.value} timeout={200} classNames="fade">
+        <CSSTransition unmountOnExit in={!!props.value} timeout={200} classNames={transition.fade}>
           <Box boxShadow={3} className={classes.hintsMenu}>
             {filteredTags.map((item, index) =>
               <p key={index} tabIndex={1} data-selected={index === selectedHint} onClick={() => props.onSelectHint(item.name)}>

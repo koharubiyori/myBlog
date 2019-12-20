@@ -3,7 +3,6 @@ import { AppBar, Toolbar, Typography, InputBase, IconButton, Button, makeStyles 
 import SearchIcon from '@material-ui/icons/Search'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import { MyRouter } from '~/utils/createRouter'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { Link } from 'react-router-dom'
@@ -11,7 +10,7 @@ import { flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
 
 export interface Props {
-  router: MyRouter
+  
 }
 
 type FinalProps = Props & UserConnectedProps

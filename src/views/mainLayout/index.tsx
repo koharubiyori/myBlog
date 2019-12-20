@@ -4,10 +4,9 @@ import SideBar from './sideBar'
 import { default as SideBarRight, SideBarRightRef } from './sideBarRight'
 import { default as ActionsButton, ActionsButtonRef } from './ActionsButton'
 import common from '~/api/common'
-import { useHistory } from 'react-router'
-import createRouter from '~/utils/createRouter'
 import { makeStyles } from '@material-ui/core'
 import { flex } from '~/styles'
+import useRouter from '~/hooks/useRouter'
 
 export interface Props {
   
@@ -29,7 +28,6 @@ type FinalProps = Props
 function MainLayout(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = createRouter(useHistory()),
     [theme, setTheme] = useState<ApiData.Theme>({} as any),
     refs = {
       sideBarRight: useRef<SideBarRightRef>(),
@@ -55,10 +53,10 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
 
     return (
       <>
-        <MyAppBar router={router} />
+        <MyAppBar />
 
         <div className={c(flex.row)}>
-          <SideBar theme={theme} router={router} />
+          <SideBar theme={theme} />
 
           <div className={c(classes.contentContainer, flex.grow)}>
             <MainLayoutContext.Provider value={mainLayoutControllers.current}>
@@ -66,10 +64,10 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
             </MainLayoutContext.Provider>
           </div>
           
-          <SideBarRight router={router} getRef={refs.sideBarRight} />
+          <SideBarRight getRef={refs.sideBarRight} />
         </div>
         
-        <ActionsButton router={router} getRef={refs.actionsButton} />
+        <ActionsButton getRef={refs.actionsButton} />
       </>
     )
 }

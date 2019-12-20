@@ -1,19 +1,19 @@
 import React, { PropsWithChildren } from 'react'
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core'
 import HomeIcon from '@material-ui/icons/Home'
-import { MyRouter } from '~/utils/createRouter'
 import styleVars from '~/styles/styleVars'
+import useRouter from '~/hooks/useRouter'
 
 export interface Props {
   theme: ApiData.Theme
-  router: MyRouter
 }
 
 type FinalProps = Props
 
 function SideBar(props: PropsWithChildren<FinalProps>){
   const 
-    classes = useStyles()
+    classes = useStyles(),
+    router = useRouter()
   
   return (
     <>
@@ -29,7 +29,7 @@ function SideBar(props: PropsWithChildren<FinalProps>){
           <div className="name">小春日和</div>
         </div>
         <List className={classes.drawer}>
-          <ListItem button onClick={() => props.router.search('/')}>
+          <ListItem button onClick={() => router.search('/')}>
             <ListItemIcon>
               <HomeIcon style={{ color: '#C5C5C5' }} />
             </ListItemIcon>

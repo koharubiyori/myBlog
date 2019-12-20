@@ -8,10 +8,9 @@ import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
-import { MyRouter } from '~/utils/createRouter'
+import useRouter from '~/hooks/useRouter'
 
 export interface Props {
-  router: MyRouter
   getRef?: React.MutableRefObject<any>
 }
 
@@ -33,8 +32,10 @@ const adminActions = [
 ].reverse()
 
 function ActionsButton(props: PropsWithChildren<FinalProps>){
-  const [open, setOpen] = useState(false)
-  const [visible, setVisible] = useState(true)
+  const 
+    router = useRouter(),
+    [open, setOpen] = useState(false),
+    [visible, setVisible] = useState(true)
   let disabledResizeHandler = false
 
   if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler }
@@ -52,7 +53,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   function actionHandler (actionName: string){
     switch(actionName){
       case '新建文章': {
-        props.router.search('/article/edit')
+        router.search('/article/edit')
       }
     }
 

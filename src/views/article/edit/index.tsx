@@ -9,8 +9,6 @@ import 'highlight.js/styles/github.css' // code block highlight
 import 'tui-color-picker/dist/tui-color-picker.css'
 import { MainLayoutContext } from '~/views/mainLayout'
 import { Button, TextField, makeStyles } from '@material-ui/core'
-import createRouter from '~/utils/createRouter'
-import { RouteChildrenProps, useHistory } from 'react-router'
 import ImageIcon from '@material-ui/icons/Image'
 import article from '~/api/article'
 import { getTags } from '~/redux/data/HOC'
@@ -21,16 +19,17 @@ import nProgress from 'nprogress'
 import useHideSideBarRight from '~/hooks/useHideSideBarRight'
 import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
+import useRouter from '~/hooks/useRouter'
 
 export interface Props {
   
 }
 
-type FinalProps = Props & RouteChildrenProps
+type FinalProps = Props
 
 function ArticleEdit(props: PropsWithChildren<FinalProps>){
   const 
-    router = createRouter(useHistory()),
+    router = useRouter(),
     classes = useStyles(),
     mainLayoutControllers = useContext(MainLayoutContext),
     [title, setTitle] = useState(''),

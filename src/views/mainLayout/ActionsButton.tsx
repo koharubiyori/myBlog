@@ -12,11 +12,11 @@ import { MyRouter } from '~/utils/createRouter'
 
 export interface Props {
   router: MyRouter
-  getMethods?: GetMethods<Methods>
+  getRef?: React.MutableRefObject<any>
 }
 
-export interface Methods {
-  setHidden (val: boolean): void
+export interface ActionsButtonRef {
+  setVisible (val: boolean): void
   setDisabledResizeHandler (val: boolean): void
 }
 
@@ -32,21 +32,17 @@ const adminActions = [
   { icon: <AddIcon />, name: '新建文章' }
 ].reverse()
 
-function ActionsButton({
-  children,
-  getMethods,
-  router,
-  state,
-  $user
-}: PropsWithChildren<FinalProps>){
+function ActionsButton(props: PropsWithChildren<FinalProps>){
   const [open, setOpen] = useState(false)
-  const [hidden, setHidden] = useState(false)
+  const [visible, setVisible] = useState(true)
   let disabledResizeHandler = false
+
+  if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler }
 
   useEffect(() =>{
     const resizeHandler = () => {
       if(disabledResizeHandler){ return }
-      setHidden(window.innerWidth < 880)
+      setVisible(window.innerWidth >= 880)
     }
 
     window.addEventListener('resize', resizeHandler)
@@ -56,7 +52,7 @@ function ActionsButton({
   function actionHandler (actionName: string){
     switch(actionName){
       case '新建文章': {
-        router.search('/article/edit')
+        props.router.search('/article/edit')
       }
     }
 
@@ -66,26 +62,24 @@ function ActionsButton({
   function setDisabledResizeHandler(val: boolean){
     disabledResizeHandler = val
   }
-
-  getMethods && getMethods({ setHidden, setDisabledResizeHandler })
   
   return (
     <>
-      {state.user.name !== '' ?
+      {props.state.user.name !== '' ?
         <SpeedDial
           style={{ position: 'fixed', bottom: 70, right: 260 }}
           ariaLabel=""
-          hidden={hidden}
+          hidden={!visible}
           open={open}
           icon={<SpeedDialIcon 
-            openIcon={$user.isAdmin() ? <EditIcon /> : <FavoriteIcon />} 
-            onClick={() => actionHandler($user.isAdmin() ? '编辑' : '收藏')}
+            openIcon={props.$user.isAdmin() ? <EditIcon /> : <FavoriteIcon />} 
+            onClick={() => actionHandler(props.$user.isAdmin() ? '编辑' : '收藏')}
           />}
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
 
         >
-          {($user.isAdmin() ? adminActions : visitorActions).map(action => (
+          {(props.$user.isAdmin() ? adminActions : visitorActions).map(action => (
             <SpeedDialAction
               key={action.name}
               icon={action.icon}

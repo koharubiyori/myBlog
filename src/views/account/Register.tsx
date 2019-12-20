@@ -3,9 +3,11 @@ import { TextField, ButtonBase, Button, makeStyles } from '@material-ui/core'
 import user from '~/api/user'
 import md5 from 'md5'
 import textChecker from '~/utils/textChecker'
-import { RouteChildrenProps } from 'react-router'
+import { RouteChildrenProps, useHistory } from 'react-router'
 import createRouter from '~/utils/createRouter'
+import { com, flex } from '~/styles'
 
+console.log(flex)
 export interface Props {
   
 }
@@ -15,7 +17,7 @@ type FinalProps = Props & RouteChildrenProps
 function Register(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = createRouter(props),
+    router = createRouter(useHistory()),
     [account, setAccount] = useState(''),
     [name, setName] = useState(''),
     [password, setPassword] = useState(''),
@@ -61,11 +63,11 @@ function Register(props: PropsWithChildren<FinalProps>){
   }
 
   return (
-    <div {...c(classes.container)}>
-      <h2 className="com-mainTitle" style={{ marginTop: 40 }}>注册</h2>
-      <p {...c('com-subTitle')}>僕と契約して、魔法少女になってほしいんだ&emsp;／人◕ ‿‿ ◕人＼</p>
+    <div className={classes.container}>
+      <h2 className={com.mainTitle} style={{ marginTop: 40 }}>注册</h2>
+      <p className={com.subTitle}>僕と契約して、魔法少女になってほしいんだ&emsp;／人◕ ‿‿ ◕人＼</p>
       <TextField fullWidth 
-        {...c(classes.input)}
+        className={classes.input}
         label="帐号" 
         placeholder="8-16位的字母、数字、下划线"
         variant="outlined" 
@@ -74,7 +76,7 @@ function Register(props: PropsWithChildren<FinalProps>){
       />
 
       <TextField fullWidth 
-        {...c(classes.input)}
+        className={classes.input}
         label="昵称" 
         placeholder="奇怪的颜文字是不行的哦_(:з」∠)_"
         variant="outlined" 
@@ -83,7 +85,7 @@ function Register(props: PropsWithChildren<FinalProps>){
       />
       
       <TextField fullWidth 
-        {...c(classes.input)}
+        className={classes.input}
         style={{ marginTop: 40 }}
         label="密码" 
         placeholder="8-16位字母、数字、以及「_!@#$%^&*?」"
@@ -93,7 +95,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         onChange={e => setPassword(e.target.value)}
       />
 
-      <div {...c('flex-row flex-between flex-cross-bottom')} style={{ marginTop: 40 }}>
+      <div className={c(flex.row, flex.between, flex.crossEnd)} style={{ marginTop: 40 }}>
         <TextField
           label="验证码" 
           variant="filled" 
@@ -103,14 +105,14 @@ function Register(props: PropsWithChildren<FinalProps>){
 
         <ButtonBase focusRipple onClick={getRegisterSecurityCode}>
           <div 
-            {...c('com-pointer')} 
+            className={com.pointer}
             title="看不清？点击再来一个"
             dangerouslySetInnerHTML={{ __html: RSCodeSvg }}
           />
         </ButtonBase>
       </div>
 
-      <div {...c('flex-row flex-between')} style={{ marginTop: 40 }}>
+      <div className={c(flex.row, flex.between)} style={{ marginTop: 40 }}>
         <Button variant="contained" color="primary" size="large"
           disabled={registerStatus === 2}
           onClick={register}

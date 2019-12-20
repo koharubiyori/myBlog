@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react'
-import './styles/main.scss'
 import { ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { Provider } from 'react-redux'
@@ -8,14 +7,15 @@ import Routes from './routes'
 import { SnackbarProvider } from 'notistack'
 import mountNotifyMethod from './utils/mountNotifyMethod'
 import init from './init'
+import styleVars from './styles/styleVars'
 
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#6B69D6',
-      dark: '#504FA0',
-      light: '#9796E3',
+      main: styleVars.main,
+      dark: styleVars.dark,
+      light: styleVars.light,
       contrastText: 'white'
     }
   }

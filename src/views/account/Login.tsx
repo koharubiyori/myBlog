@@ -1,10 +1,11 @@
 import React, { useState,  PropsWithChildren } from 'react'
-import { RouteChildrenProps } from 'react-router'
+import { RouteChildrenProps, useHistory } from 'react-router'
 import createRouter from '~/utils/createRouter'
 import { TextField, Button, makeStyles } from '@material-ui/core'
 import md5 from 'md5'
 import user from '~/api/user'
 import { set as setUserInfo } from '~/redux/user/HOC'
+import { com, flex } from '~/styles'
 
 export interface Props {
   
@@ -15,7 +16,7 @@ type FinalProps = Props & RouteChildrenProps
 function Login(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = createRouter(props),
+    router = createRouter(useHistory()),
     [accountOrName, setAccountOrName] = useState(''),
     [password, setPassword] = useState(''),
     [loginStatus, setLoginStatus] = useState(1)
@@ -40,9 +41,9 @@ function Login(props: PropsWithChildren<FinalProps>){
 
   return (
     <div className={classes.container}>
-      <h2 className="com-mainTitle" style={{ marginTop: 40 }}>登录</h2>
+      <h2 className={com.mainTitle} style={{ marginTop: 40 }}>登录</h2>
       <TextField fullWidth 
-        {...c(classes.input)}
+        className={classes.input}
         label="帐号或昵称" 
         variant="outlined" 
         value={accountOrName} 
@@ -59,7 +60,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         onChange={e => setPassword(e.target.value)}
       />
 
-      <div className="flex-row flex-between" style={{ marginTop: 40 }}>
+      <div className={c(flex.row, flex.between)} style={{ marginTop: 40 }}>
         <Button variant="contained" color="primary" size="large"
           disabled={loginStatus === 2}
           onClick={login}

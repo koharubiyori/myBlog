@@ -4,6 +4,8 @@ import resetComponentProps from '~/utils/resetComponentProps'
 import { TextField, Button, makeStyles } from '@material-ui/core'
 import user from '~/api/user'
 import textChecker from '~/utils/textChecker'
+import { com } from '~/styles'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   
@@ -57,9 +59,9 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
 
   return (
     <div>
-      <h2 {...c('com-mainTitle')}>编辑个人信息</h2>
+      <h2 className={com.mainTitle}>编辑个人信息</h2>
 
-      <label {...c(classes.avatar)} data-status={imgUploadStatus}>
+      <label className={classes.avatar} data-status={imgUploadStatus}>
         <img alt="avatar" src={avatar || require('~/images/sub/akari.jpg')} />
         <input type="file" accept=".png, .jpg, .jpeg" style={{ position: 'fixed', left: -9999 }} onChange={uploadAvatar} />
       </label>
@@ -91,7 +93,7 @@ const useStyles = makeStyles({
     width: 250,
     height: 250,
     borderRadius: '50%',
-    border: `3px ${$colors.main} solid`,
+    border: `3px ${styleVars.main} solid`,
     boxSizing: 'border-box',
     overflow: 'hidden',
     position: 'relative',

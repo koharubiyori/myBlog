@@ -1,23 +1,17 @@
-import { RouteChildrenProps } from 'react-router'
+import { useHistory } from 'react-router'
 import qs from 'qs'
 
 export interface MyRouter {
   params: {
-    search: { [key: string]: any }
-    state: { [key: string]: any }
+    search: { [key: string]: any } | any
+    state: { [key: string]: any } | any
   }
 
   search (path: string, params?: { [key: string]: any }, action?: 'push' | 'replace'): void
   state (path: string, params?: { [key: string]: any }, action?: 'push' | 'replace'): void 
 }
 
-export default function(
-  props: { 
-    history: RouteChildrenProps['history'] 
-  }
-): Readonly<MyRouter>{
-  let {history} = props
-  
+export default function(history: ReturnType<typeof useHistory>): Readonly<MyRouter>{  
   return {
     params: {
       search: qs.parse(history.location.search.split('?')[1]),

@@ -1,13 +1,13 @@
-import './utils/mountColors'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import 'nprogress/nprogress.css'
 import nProgress from 'nprogress'
+import './styles/main'
 
 // 用于拼接class
-window.c = (...args: string[]) => ({ className: args.join(' ') })
+window.c = (...args: string[]) => args.join(' ')
 
 
 nProgress.configure({ showSpinner: false })

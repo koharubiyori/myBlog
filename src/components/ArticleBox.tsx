@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react'
-import classes from './ArticleBox.module.scss'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { Box } from '@material-ui/core'

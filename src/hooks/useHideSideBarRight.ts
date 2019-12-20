@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { MainLayoutControllers } from '~/views/mainLayout'
 
-export default function(mainLayoutControllers: MainLayoutControllers){
+export default function(mainLayoutControllers: MainLayoutControllers | null){
   useEffect(() =>{
     if(!mainLayoutControllers){ return () =>{} }
     mainLayoutControllers.actionsButton.setVisible(false)

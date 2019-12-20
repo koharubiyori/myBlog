@@ -1,8 +1,8 @@
 import React, { PropsWithChildren } from 'react'
-import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
-import classes from './index.module.scss'
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core'
 import HomeIcon from '@material-ui/icons/Home'
 import { MyRouter } from '~/utils/createRouter'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   theme: ApiData.Theme
@@ -11,11 +11,10 @@ export interface Props {
 
 type FinalProps = Props
 
-function SideBar({
-  children,
-  theme,
-  router,
-}: PropsWithChildren<FinalProps>){
+function SideBar(props: PropsWithChildren<FinalProps>){
+  const 
+    classes = useStyles()
+  
   return (
     <>
       <Drawer
@@ -25,12 +24,12 @@ function SideBar({
         {/* 给toolbar让出位置 */}
         <div style={{ height: 70 }} />
 
-        <img src={theme.avatar || require('~/images/sub/akari.jpg')} alt="icon" {...c(classes.avatar)} />
+        <img src={props.theme.avatar || require('~/images/sub/akari.jpg')} alt="icon" className={classes.avatar} />
         <div className={classes.info}>
           <div className="name">小春日和</div>
         </div>
         <List className={classes.drawer}>
-          <ListItem button onClick={() => router.search('/')}>
+          <ListItem button onClick={() => props.router.search('/')}>
             <ListItemIcon>
               <HomeIcon style={{ color: '#C5C5C5' }} />
             </ListItemIcon>
@@ -46,3 +45,48 @@ function SideBar({
 }
 
 export default SideBar
+
+const useStyles = makeStyles({
+  root: {
+    '@global': {
+      '.MuiPaper-root': {
+        backgroundColor: styleVars.black,
+        color: '#C5C5C5'
+      },
+  
+      '.MuiListItem-button:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.2)'
+      },
+  
+      '.MuiTouchRipple-root': {
+        color: 'white'
+      }
+    }
+  },
+
+  drawer: {
+    width: 220
+  },
+
+  avatar: {
+    margin: '30px auto',
+    width: 130,
+    height: 130,
+    borderRadius: '50%',
+    border: '5px white solid',
+    transition: 'all 0.2s',
+    cursor: 'pointer',
+  
+    '&:hover': {
+      transform: 'scale(1.05)'
+    }
+  },
+
+  info: {
+    textAlign: 'center',
+    color: '#A99CFF',
+    fontWeight: 'bold',
+    marginTop: -20,
+    marginBottom: 10
+  }
+})

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from 'react'
-import classes from './index.module.scss'
 import article from '~/api/article'
+import { com } from '~/styles'
 
 export interface Props {
   
@@ -42,7 +42,7 @@ function Home(props: PropsWithChildren<FinalProps>){
   return (
     <div>
       <header>
-        <h2 {...c('com-mainTitle')}>小春日和の小窝</h2>
+        <h2 className={com.mainTitle}>小春日和の小窝</h2>
         <p>明日もきっと、こはるびよりなんです。</p>
       </header>
     </div>

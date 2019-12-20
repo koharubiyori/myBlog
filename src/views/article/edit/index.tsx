@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef, useContext, PropsWithChildren, ChangeEvent, KeyboardEvent } from 'react'
-import './index.scss'
-import classes from './index.module.scss'
 import Editor from 'tui-editor'
 import 'tui-editor/dist/tui-editor-extScrollSync'
 import 'tui-editor/dist/tui-editor-extColorSyntax'
@@ -10,9 +8,9 @@ import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
 import 'tui-color-picker/dist/tui-color-picker.css'
 import { MainLayoutContext } from '~/views/mainLayout'
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField, makeStyles } from '@material-ui/core'
 import createRouter from '~/utils/createRouter'
-import { RouteChildrenProps } from 'react-router'
+import { RouteChildrenProps, useHistory } from 'react-router'
 import ImageIcon from '@material-ui/icons/Image'
 import article from '~/api/article'
 import { getTags } from '~/redux/data/HOC'
@@ -21,6 +19,8 @@ import TagInput from './components/TagInput'
 import tagApis from '~/api/tag'
 import nProgress from 'nprogress'
 import useHideSideBarRight from '~/hooks/useHideSideBarRight'
+import { com, flex } from '~/styles'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   
@@ -30,7 +30,8 @@ type FinalProps = Props & RouteChildrenProps
 
 function ArticleEdit(props: PropsWithChildren<FinalProps>){
   const 
-    router = createRouter(props),
+    router = createRouter(useHistory()),
+    classes = useStyles(),
     mainLayoutControllers = useContext(MainLayoutContext),
     [title, setTitle] = useState(''),
     [profile, setProfile] = useState(''),
@@ -149,11 +150,11 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
   return (
     <div>
-      <h2 className="com-mainTitle" style={{ marginBottom: 40 }}>{type === 0 ? '新建' : '修改'}文章</h2>
+      <h2 className={com.mainTitle} style={{ marginBottom: 40 }}>{type === 0 ? '新建' : '修改'}文章</h2>
       <div>
-        <div className="flex-row flex-cross-center">
+        <div className={c(flex.row, flex.crossCenter)}>
           <TextField
-            {...c('flex-grow')}
+            className={flex.grow}
             label="标题" 
             InputLabelProps={{ shrink: true }} 
             placeholder="文章标题"
@@ -185,7 +186,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         />
 
         <div style={{ margin: '20px auto', maxWidth: 800 }}>           
-          <label {...c(classes.upload)} data-status={headImgStatus}>
+          <label className={classes.upload} data-status={headImgStatus}>
             {headImgStatus === 3 ?
               <img src={headImg} />
             :
@@ -205,3 +206,91 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 }
 
 export default ArticleEdit
+
+const useStyles = makeStyles({
+  '@global': {
+    '.mainLayout-content': {
+      maxWidth: 'initial !important'
+    },
+    
+    '.CodeMirror-scroll': {
+      boxSizing: 'border-box',
+      padding: '0 15px'
+    }
+  },
+
+  upload: {
+    height: 300,
+    borderRadius: 3,
+    border: '1px #C4C4C4 solid',
+    transition: 'all 0.2s',
+    display: 'block',
+    position: 'relative',
+    cursor: 'pointer',
+    overflow: 'hidden',
+  
+    '@global': {
+      '> img': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        transition: 'all 0.2s',
+      },
+      
+      '.hint': {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: styleVars.subtext,
+        fontSize: 14,
+      }
+    },
+  
+    '&:hover': {
+      borderColor: styleVars.main,
+  
+      '@global': {
+        '> img': {
+          transform: 'scale(1.1)',
+        },
+
+        '.hint': {
+          color: styleVars.main,
+        },
+      },
+  
+      '&::before': {
+        opacity: '1 !important',
+      },
+    },
+  
+    '&[data-status="3"]': {
+      '&::before': {  
+        content: '"更换头图"',
+        textDcoration: 'underline',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        color: 'white',
+        fontSize: 18,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity: 0,
+        transition: 'all 0.2s',
+        zIndex: 1,
+        cursor: 'pointer',
+      }
+    }
+  }
+})
+
+

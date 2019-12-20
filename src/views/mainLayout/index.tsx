@@ -1,12 +1,13 @@
-import React, { Component, PropsWithChildren, createContext, createRef } from 'react'
-import classes from './index.module.scss'
+import React, { useState, useEffect, PropsWithChildren, createContext, useRef } from 'react'
 import MyAppBar from './myAppBar'
 import SideBar from './sideBar'
-import { default as SideBarRight, Methods as SideBarRightMethods } from './sideBarRight'
-import { default as ActionsButton, Methods as ActionsButtonMethods } from './ActionsButton'
+import { default as SideBarRight, SideBarRightRef } from './sideBarRight'
+import { default as ActionsButton, ActionsButtonRef } from './ActionsButton'
 import common from '~/api/common'
-import { RouteChildrenProps, withRouter } from 'react-router'
+import { useHistory } from 'react-router'
 import createRouter from '~/utils/createRouter'
+import { makeStyles } from '@material-ui/core'
+import { flex } from '~/styles'
 
 export interface Props {
   
@@ -17,78 +18,75 @@ export interface State {
 }
 
 export interface MainLayoutControllers {
-  sideBarRight: {
-    setVisible (val: boolean): void
-    setDisabledResizeHandler (val: boolean): void
-  }
-
-  actionsButton: {
-    setVisible (val: boolean): void
-    setDisabledResizeHandler (val: boolean): void
-  }
+  sideBarRight: SideBarRightRef
+  actionsButton: ActionsButtonRef
 }
 
-export const MainLayoutContext = createContext<MainLayoutControllers>(null as any)
+export const MainLayoutContext = createContext<MainLayoutControllers | null>(null)
 
-type FinalProps = Props & RouteChildrenProps
+type FinalProps = Props
 
-class MainLayout extends Component<PropsWithChildren<FinalProps>, State> {
-  router = createRouter(this.props)
-  sideBarRightMethods: SideBarRightMethods = null as any
-  actionsButtonMethods: ActionsButtonMethods = null as any
-  mainLayoutControllers: MainLayoutControllers = null as any
-  
-  constructor (props: PropsWithChildren<FinalProps>){
-    super(props)
-    this.state = {
-      theme: {} as any
-    }
+function MainLayout(props: PropsWithChildren<FinalProps>){
+  const 
+    classes = useStyles(),
+    router = createRouter(useHistory()),
+    [theme, setTheme] = useState<ApiData.Theme>({} as any),
+    refs = {
+      sideBarRight: useRef<SideBarRightRef>(),
+      actionsButton: useRef<ActionsButtonRef>()
+    },
+    mainLayoutControllers = useRef<MainLayoutControllers>(null)
 
-    common.getTheme().then(theme =>{
-      this.setState({ theme })
-      document.body.style.cssText = `
-        background-color: #eee;
-      `
-    })
-  }
+    useEffect(() =>{
+      common.getTheme().then(theme =>{
+        setTheme(theme)
+        document.body.style.cssText = `
+          background-color: #eee;
+        `
+      })
+    }, [])
 
-  componentDidMount (){
-    // 管理主布局各部分的显隐
-    this.mainLayoutControllers = {
-      sideBarRight: {
-        setVisible: this.sideBarRightMethods.setVisible,
-        setDisabledResizeHandler: this.sideBarRightMethods.setDisabledResizeHandler
-      },
-
-      actionsButton: {
-        setVisible: val => this.actionsButtonMethods.setHidden(!val),
-        setDisabledResizeHandler: this.actionsButtonMethods.setDisabledResizeHandler
+    useEffect(() =>{
+      (mainLayoutControllers.current as any) = {
+        sideBarRight: refs.sideBarRight.current!,
+        actionsButton: refs.actionsButton.current!
       }
-    }
+    }, [])
 
-  }
-
-  render (){
     return (
       <>
-        <MyAppBar router={this.router} />
+        <MyAppBar router={router} />
 
-        <div className="flex-row">
-          <SideBar theme={this.state.theme} router={this.router} />
+        <div className={c(flex.row)}>
+          <SideBar theme={theme} router={router} />
 
-          <div {...c(classes.contentContainer, 'flex-grow')}>
-            <MainLayoutContext.Provider value={this.mainLayoutControllers}>
-              <div className="mainLayout-content">{this.props.children}</div>
+          <div className={c(classes.contentContainer, flex.grow)}>
+            <MainLayoutContext.Provider value={mainLayoutControllers.current}>
+              <div className="mainLayout-content">{props.children}</div>
             </MainLayoutContext.Provider>
           </div>
           
-          <SideBarRight router={this.router} getMethods={methods => this.sideBarRightMethods = methods} />
+          <SideBarRight router={router} getRef={refs.sideBarRight} />
         </div>
         
-        <ActionsButton router={this.router} getMethods={methods => this.actionsButtonMethods = methods} />
+        <ActionsButton router={router} getRef={refs.actionsButton} />
       </>
     )
-  }
 }
 
-export default withRouter(MainLayout as any)
+export default MainLayout
+
+const useStyles = makeStyles({
+  contentContainer: {
+    position: 'relative',
+    top: 84,
+    margin: '0 20px'
+  },
+
+  '@global .mainLayout-content': {
+    maxWidth: 800,
+    minWidth: 400,
+    margin: '0 auto',
+    paddingBottom: 20
+  }
+})

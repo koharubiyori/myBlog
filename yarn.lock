@@ -1202,6 +1202,28 @@
     jss-plugin-vendor-prefixer "^10.0.0"
     prop-types "^15.7.2"
 
+"@material-ui/styles@^4.7.1":
+  version "4.7.1"
+  resolved "https://registry.npm.taobao.org/@material-ui/styles/download/@material-ui/styles-4.7.1.tgz#48fa70f06441c35e301a9c4b6c825526a97b7a29"
+  integrity sha1-SPpw8GRBw14wGpxLbIJVJql7eik=
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    "@emotion/hash" "^0.7.1"
+    "@material-ui/types" "^4.1.1"
+    "@material-ui/utils" "^4.7.1"
+    clsx "^1.0.2"
+    csstype "^2.5.2"
+    hoist-non-react-statics "^3.2.1"
+    jss "^10.0.0"
+    jss-plugin-camel-case "^10.0.0"
+    jss-plugin-default-unit "^10.0.0"
+    jss-plugin-global "^10.0.0"
+    jss-plugin-nested "^10.0.0"
+    jss-plugin-props-sort "^10.0.0"
+    jss-plugin-rule-value-function "^10.0.0"
+    jss-plugin-vendor-prefixer "^10.0.0"
+    prop-types "^15.7.2"
+
 "@material-ui/system@^4.5.2":
   version "4.5.2"
   resolved "https://registry.npm.taobao.org/@material-ui/system/download/@material-ui/system-4.5.2.tgz#7143bd8422a3f33f435c23f378136254004bbd60"
@@ -1398,6 +1420,25 @@
   integrity sha1-hh8byzEAwKBkVnxUAPKYHPSujKc=
   dependencies:
     "@types/tern" "*"
+
+"@types/color-convert@*":
+  version "1.9.0"
+  resolved "https://registry.npm.taobao.org/@types/color-convert/download/@types/color-convert-1.9.0.tgz#bfa8203e41e7c65471e9841d7e306a7cd8b5172d"
+  integrity sha1-v6ggPkHnxlRx6YQdfjBqfNi1Fy0=
+  dependencies:
+    "@types/color-name" "*"
+
+"@types/color-name@*":
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/@types/color-name/download/@types/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
+  integrity sha1-HBJhu+qhCoBVu8XYq4S3sq/IRqA=
+
+"@types/color@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/@types/color/download/@types/color-3.0.0.tgz#40f8a6bf2fd86e969876b339a837d8ff1b0a6e30"
+  integrity sha1-QPimvy/YbpaYdrM5qDfY/xsKbjA=
+  dependencies:
+    "@types/color-convert" "*"
 
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
@@ -3000,7 +3041,7 @@ color-string@^1.5.2:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
-color@^3.0.0:
+color@^3.0.0, color@^3.1.2:
   version "3.1.2"
   resolved "https://registry.npm.taobao.org/color/download/color-3.1.2.tgz#68148e7f85d41ad7649c5fa8c8106f098d229e10"
   integrity sha1-aBSOf4XUGtdknF+oyBBvCY0inhA=
@@ -6427,7 +6468,7 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jss-plugin-camel-case@^10.0.0:
+jss-plugin-camel-case@10.0.0, jss-plugin-camel-case@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/jss-plugin-camel-case/download/jss-plugin-camel-case-10.0.0.tgz#d601bae2e8e2041cc526add289dcd7062db0a248"
   integrity sha1-1gG64ujiBBzFJq3SidzXBi2wokg=
@@ -6436,7 +6477,16 @@ jss-plugin-camel-case@^10.0.0:
     hyphenate-style-name "^1.0.3"
     jss "10.0.0"
 
-jss-plugin-default-unit@^10.0.0:
+jss-plugin-compose@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npm.taobao.org/jss-plugin-compose/download/jss-plugin-compose-10.0.0.tgz#6a33566373b9d98b2c086d41b7477d5391b0ec91"
+  integrity sha1-ajNWY3O52YssCG1Bt0d9U5Gw7JE=
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    jss "10.0.0"
+    tiny-warning "^1.0.2"
+
+jss-plugin-default-unit@10.0.0, jss-plugin-default-unit@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/jss-plugin-default-unit/download/jss-plugin-default-unit-10.0.0.tgz#601caf5f576fc0c66986fbe8a9aa37307a3a3ea3"
   integrity sha1-YByvX1dvwMZphvvoqao3MHo6PqM=
@@ -6444,7 +6494,24 @@ jss-plugin-default-unit@^10.0.0:
     "@babel/runtime" "^7.3.1"
     jss "10.0.0"
 
-jss-plugin-global@^10.0.0:
+jss-plugin-expand@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npm.taobao.org/jss-plugin-expand/download/jss-plugin-expand-10.0.0.tgz#ab6a3fac5925267c9d25119aa51de7756b4ff8d8"
+  integrity sha1-q2o/rFklJnydJRGapR3ndWtP+Ng=
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    jss "10.0.0"
+
+jss-plugin-extend@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npm.taobao.org/jss-plugin-extend/download/jss-plugin-extend-10.0.0.tgz#0ce24831b41b622ae3f0f29a519200e864fd303c"
+  integrity sha1-DOJIMbQbYirj8PKaUZIA6GT9MDw=
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    jss "10.0.0"
+    tiny-warning "^1.0.2"
+
+jss-plugin-global@10.0.0, jss-plugin-global@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/jss-plugin-global/download/jss-plugin-global-10.0.0.tgz#0fed1b6461e0d57d6e394f877529009bc1cb3cb6"
   integrity sha1-D+0bZGHg1X1uOU+HdSkAm8HLPLY=
@@ -6452,7 +6519,7 @@ jss-plugin-global@^10.0.0:
     "@babel/runtime" "^7.3.1"
     jss "10.0.0"
 
-jss-plugin-nested@^10.0.0:
+jss-plugin-nested@10.0.0, jss-plugin-nested@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/jss-plugin-nested/download/jss-plugin-nested-10.0.0.tgz#d37ecc013c3b0d0e4acc2b48f6b62da6ae53948b"
   integrity sha1-037MATw7DQ5KzCtI9rYtpq5TlIs=
@@ -6461,7 +6528,7 @@ jss-plugin-nested@^10.0.0:
     jss "10.0.0"
     tiny-warning "^1.0.2"
 
-jss-plugin-props-sort@^10.0.0:
+jss-plugin-props-sort@10.0.0, jss-plugin-props-sort@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/jss-plugin-props-sort/download/jss-plugin-props-sort-10.0.0.tgz#38a13407384c2a4a7c026659488350669b953b18"
   integrity sha1-OKE0BzhMKkp8AmZZSINQZpuVOxg=
@@ -6469,7 +6536,7 @@ jss-plugin-props-sort@^10.0.0:
     "@babel/runtime" "^7.3.1"
     jss "10.0.0"
 
-jss-plugin-rule-value-function@^10.0.0:
+jss-plugin-rule-value-function@10.0.0, jss-plugin-rule-value-function@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/jss-plugin-rule-value-function/download/jss-plugin-rule-value-function-10.0.0.tgz#3ec1b781b7c86080136dbef6c36e91f20244b72e"
   integrity sha1-PsG3gbfIYIATbb72w26R8gJEty4=
@@ -6477,7 +6544,25 @@ jss-plugin-rule-value-function@^10.0.0:
     "@babel/runtime" "^7.3.1"
     jss "10.0.0"
 
-jss-plugin-vendor-prefixer@^10.0.0:
+jss-plugin-rule-value-observable@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npm.taobao.org/jss-plugin-rule-value-observable/download/jss-plugin-rule-value-observable-10.0.0.tgz#1e801cbd35f29d08a6184bb073b2565376319e1e"
+  integrity sha1-HoAcvTXynQimGEuwc7JWU3Yxnh4=
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    jss "10.0.0"
+    symbol-observable "^1.2.0"
+
+jss-plugin-template@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npm.taobao.org/jss-plugin-template/download/jss-plugin-template-10.0.0.tgz#b656c95ef3994a78e1bcc7f177818b31f8015d34"
+  integrity sha1-tlbJXvOZSnjhvMfxd4GLMfgBXTQ=
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    jss "10.0.0"
+    tiny-warning "^1.0.2"
+
+jss-plugin-vendor-prefixer@10.0.0, jss-plugin-vendor-prefixer@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/jss-plugin-vendor-prefixer/download/jss-plugin-vendor-prefixer-10.0.0.tgz#400280535b0f483a9c78105afe4eee61b70018eb"
   integrity sha1-QAKAU1sPSDqceBBa/k7uYbcAGOs=
@@ -6485,6 +6570,26 @@ jss-plugin-vendor-prefixer@^10.0.0:
     "@babel/runtime" "^7.3.1"
     css-vendor "^2.0.6"
     jss "10.0.0"
+
+jss-preset-default@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npm.taobao.org/jss-preset-default/download/jss-preset-default-10.0.0.tgz#ea6941b453f70f300087889ff5d81d010bfbf7e3"
+  integrity sha1-6mlBtFP3DzAAh4if9dgdAQv79+M=
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    jss "10.0.0"
+    jss-plugin-camel-case "10.0.0"
+    jss-plugin-compose "10.0.0"
+    jss-plugin-default-unit "10.0.0"
+    jss-plugin-expand "10.0.0"
+    jss-plugin-extend "10.0.0"
+    jss-plugin-global "10.0.0"
+    jss-plugin-nested "10.0.0"
+    jss-plugin-props-sort "10.0.0"
+    jss-plugin-rule-value-function "10.0.0"
+    jss-plugin-rule-value-observable "10.0.0"
+    jss-plugin-template "10.0.0"
+    jss-plugin-vendor-prefixer "10.0.0"
 
 jss@10.0.0, jss@^10.0.0:
   version "10.0.0"
@@ -6876,7 +6981,7 @@ memory-fs@^0.5.0:
 
 meow@^3.7.0:
   version "3.7.0"
-  resolved "https://registry.npm.taobao.org/meow/download/meow-3.7.0.tgz#72cb668b425228290abbfa856892587308a801fb"
+  resolved "https://registry.npm.taobao.org/meow/download/meow-3.7.0.tgz?cache=0&sync_timestamp=1575730464003&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmeow%2Fdownload%2Fmeow-3.7.0.tgz#72cb668b425228290abbfa856892587308a801fb"
   integrity sha1-cstmi0JSKCkKu/qFaJJYcwioAfs=
   dependencies:
     camelcase-keys "^2.0.0"
@@ -7213,7 +7318,7 @@ node-forge@0.9.0:
 
 node-gyp@^3.8.0:
   version "3.8.0"
-  resolved "https://registry.npm.taobao.org/node-gyp/download/node-gyp-3.8.0.tgz?cache=0&sync_timestamp=1572603536473&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-gyp%2Fdownload%2Fnode-gyp-3.8.0.tgz#540304261c330e80d0d5edce253a68cb3964218c"
+  resolved "https://registry.npm.taobao.org/node-gyp/download/node-gyp-3.8.0.tgz?cache=0&sync_timestamp=1576455470576&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-gyp%2Fdownload%2Fnode-gyp-3.8.0.tgz#540304261c330e80d0d5edce253a68cb3964218c"
   integrity sha1-VAMEJhwzDoDQ1e3OJTpoyzlkIYw=
   dependencies:
     fstream "^1.0.0"
@@ -9069,7 +9174,7 @@ react@^16.12.0:
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npm.taobao.org/read-pkg-up/download/read-pkg-up-1.0.1.tgz?cache=0&sync_timestamp=1569564428450&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fread-pkg-up%2Fdownload%2Fread-pkg-up-1.0.1.tgz#9d63c13276c065918d57f002a57f40a1b643fb02"
+  resolved "https://registry.npm.taobao.org/read-pkg-up/download/read-pkg-up-1.0.1.tgz#9d63c13276c065918d57f002a57f40a1b643fb02"
   integrity sha1-nWPBMnbAZZGNV/ACpX9AobZD+wI=
   dependencies:
     find-up "^1.0.0"

@@ -5,6 +5,8 @@ import AddIcon from '@material-ui/icons/Add'
 import TagSvg from '~/images/sub/tag.svg'
 import { CSSTransition } from 'react-transition-group'
 import ClearIcon from '@material-ui/icons/Clear'
+import { flex } from '~/styles'
+import styleVars from '~/styles/styleVars'
 
 const TagIcon = (props: any) => <embed src={TagSvg} {...props} />
 
@@ -78,19 +80,20 @@ function TagInput(props: PropsWithChildren<FinalProps>){
   
   return (
     <label>
-      <div tabIndex={1} {...c('flex-row flex-wrap flex-cross-center', classes.tagInput)} data-focused={tagInputFocused}
+      <div tabIndex={1} className={c(flex.row, flex.wrap, flex.crossCenter, classes.tagInput)} data-focused={tagInputFocused}
         onFocus={() => setTagInputFocused(true)}
         onBlur={() => setTagInputFocused(false)}
       >
         {props.tags.map((item: any, index) => 
-          <div {...c(classes.tag)} key={index}>
+          <div className={classes.tag} key={index}>
             <span style={{ position: 'relative', top: -1 }}>{typeof item === 'string' ? item : item.name}</span>
             <ClearIcon style={{ position: 'relative', left: 3, cursor: 'pointer' }} onClick={() => props.onRemoveTag(index)} />
           </div>
         )}
-        <InputBase {...c('flex-grow')}
+        <InputBase 
+          className={flex.grow}
           style={{ marginLeft: 5 }}
-         value={props.value}
+          value={props.value}
           onChange={props.onChange} 
           onKeyDown={_onKeyDown}
           placeholder="回车添加标签"
@@ -156,7 +159,7 @@ const useStyles = makeStyles({
     '&[data-focused=true]': {
       '&::before': {
         borderWidth: 2,
-        borderColor: `${$colors.main} !important`,
+        borderColor: `${styleVars.main} !important`,
       }
     }
   },
@@ -166,7 +169,7 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     padding: '5px 10px',
-    backgroundColor: $colors.main,
+    backgroundColor: styleVars.main,
     color: 'white',
     fontSize: 13,
     border: '1px #ccc solid',

@@ -1,32 +1,28 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react'
 import { Drawer, makeStyles } from '@material-ui/core'
-import classes from './index.module.scss'
 import { MyRouter } from '~/utils/createRouter'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
-import { CSSTransition } from 'react-transition-group'
 
 export interface Props {
   router: MyRouter
-  getMethods?: GetMethods<Methods>
+  getRef?: React.MutableRefObject<any>
 }
 
-export interface Methods {
+export interface SideBarRightRef {
   setVisible (val: boolean): void
   setDisabledResizeHandler (val: boolean): void
 }
 
 type FinalProps = Props & UserConnectedProps
 
-function SideBarRight({
-  children,
-  getMethods,
-  router,
-  state,
-  $user
-}: PropsWithChildren<FinalProps>){
-  const [visible, setVisible] = useState(true)
+function SideBarRight(props: PropsWithChildren<FinalProps>){
+  const
+    classes = useStyles(), 
+    [visible, setVisible] = useState(true)
   let disabledResizeHandler = false
+
+  if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler }
 
   useEffect(() =>{
     const resizeHandler = () =>{
@@ -40,8 +36,6 @@ function SideBarRight({
   function setDisabledResizeHandler(val: boolean){
     disabledResizeHandler = val
   }
-
-  getMethods && getMethods({ setVisible, setDisabledResizeHandler }) 
 
   return (
     visible ?
@@ -65,3 +59,11 @@ function SideBarRight({
 export default resetComponentProps<Props>(
   userHOC(SideBarRight)
 ) 
+
+const useStyles = makeStyles({
+  root: {
+    '@global .MuiPaper-root': {
+      backgroundColor: 'rgba(255, 255, 255, 0.7)'
+    }
+  }
+})

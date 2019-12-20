@@ -18,9 +18,9 @@ type FinalProps = Props & UserConnectedProps
 function MyAppBar(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles()
-  
+
   return (
-    <AppBar className={classes.appBar}>
+    <AppBar className={classes.appBar} style={{ backgroundColor: styleVars.main }}>
       <Toolbar>
         <Typography variant="h6" className={c(flex.grow)}>title</Typography>
         <InputBase 
@@ -60,12 +60,6 @@ export default resetComponentProps<Props>(
 ) 
 
 const useStyles = makeStyles({
-  '@global': {
-    '.MuiAppBar-root': {
-      backgroundColor: styleVars.main
-    }
-  },
-
   appBar: {
     zIndex: 1201,    // sideBar的z-index为1200
     minWidth: 1350,

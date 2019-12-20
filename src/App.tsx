@@ -9,7 +9,6 @@ import mountNotifyMethod from './utils/mountNotifyMethod'
 import init from './init'
 import styleVars from './styles/styleVars'
 
-
 const theme = createMuiTheme({
   palette: {
     primary: {

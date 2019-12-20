@@ -12,7 +12,7 @@ const ArticleEdit = l('article/edit')
 const Home = l('home')
 
 function AnimationRoutes(){
-  let location = useLocation()
+  const location = useLocation()
 
   return (
     // <TransitionGroup>

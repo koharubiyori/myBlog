@@ -11,7 +11,7 @@ export interface MyRouter {
   state (path: string, params?: { [key: string]: any }, action?: 'push' | 'replace'): void 
 }
 
-export default function(): Readonly<MyRouter>{  
+export default function useRouter(): Readonly<MyRouter>{  
   const history = useHistory()
   
   return {

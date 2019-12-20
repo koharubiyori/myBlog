@@ -187,7 +187,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         <div style={{ margin: '20px auto', maxWidth: 800 }}>           
           <label className={classes.upload} data-status={headImgStatus}>
             {headImgStatus === 3 ?
-              <img src={headImg} />
+              <img alt="headImg" src={headImg} />
             :
               <div className="hint">
                 <ImageIcon fontSize="large" />
@@ -199,7 +199,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         </div>
       </div>
 
-      <div ref={refs.editor as any} />
+      <div ref={refs.editor as any} style={{ backgroundColor: 'white' }} />
     </div>
   )
 }

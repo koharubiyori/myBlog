@@ -1,4 +1,5 @@
 import createClasses from '~/utils/createClasses'
+import styleVars from './styleVars'
 
 const minWidth = 720
 const nProgressColor = '#F9CD36'

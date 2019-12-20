@@ -4,7 +4,7 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import 'nprogress/nprogress.css'
 import nProgress from 'nprogress'
-import './styles/main'
+import './styles/global'
 
 // 用于拼接class
 window.c = (...args: string[]) => args.join(' ')

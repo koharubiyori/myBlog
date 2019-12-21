@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, PropsWithChildren, ChangeEvent, KeyboardEvent } from 'react'
+import React, { useState, useEffect, useRef, useContext, PropsWithChildren, ChangeEvent } from 'react'
 import Editor from 'tui-editor'
 import 'tui-editor/dist/tui-editor-extScrollSync'
 import 'tui-editor/dist/tui-editor-extColorSyntax'
@@ -25,11 +25,19 @@ export interface Props {
   
 }
 
+interface RouteStateParams {
+  type: 0 | 1       // 0为新建，1为编辑，当为1时，也应该传入下面的几个参数
+  title?: string
+  profile?: string
+  tags?: string[]
+  headImg?: string
+}
+
 type FinalProps = Props
 
 function ArticleEdit(props: PropsWithChildren<FinalProps>){
   const 
-    router = useRouter(),
+    router = useRouter<{}, RouteStateParams>(),
     classes = useStyles(),
     mainLayoutControllers = useContext(MainLayoutContext),
     [title, setTitle] = useState(''),
@@ -48,11 +56,11 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     if(type === 1){
       const {title, profile, tags, headImg} = router.params.state
 
-      setTitle(title)
-      setProfile(profile)
-      setHeadImg(headImg)
+      setTitle(title!)
+      setProfile(profile!)
+      setHeadImg(headImg!)
       getTags().then(tagList =>{
-        setTags(tags.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
+        setTags(tags!.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
       })
     }
   }, [])

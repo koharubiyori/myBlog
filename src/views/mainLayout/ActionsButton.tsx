@@ -9,6 +9,8 @@ import EditIcon from '@material-ui/icons/Edit'
 import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import useRouter from '~/hooks/useRouter'
+import { makeStyles } from '@material-ui/styles'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -33,6 +35,7 @@ const adminActions = [
 
 function ActionsButton(props: PropsWithChildren<FinalProps>){
   const 
+    classes = useStyles(),
     router = useRouter(),
     [open, setOpen] = useState(false),
     [visible, setVisible] = useState(true)
@@ -97,3 +100,11 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
 export default resetComponentProps<Props>(
   userHOC(ActionsButton)
 ) 
+
+const useStyles = makeStyles({
+  '@global': {
+    // '.MuiFab-primary:not(foo)': {
+    //   backgroundColor: styleVars.main
+    // }
+  }
+})

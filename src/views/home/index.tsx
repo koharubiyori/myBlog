@@ -1,6 +1,9 @@
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren, useState, useEffect } from 'react'
 import article from '~/api/article'
 import { com } from '~/styles'
+import { makeStyles } from '@material-ui/styles'
+import ArticleBox from '~/components/ArticleBox'
+import useRouter from '~/hooks/useRouter'
 
 export interface Props {
   
@@ -9,12 +12,19 @@ export interface Props {
 type FinalProps = Props
 
 function Home(props: PropsWithChildren<FinalProps>){
-  const [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>({
-    currentPage: 1,
-    pageTotal: 1,
-    list: [],
-    status: 1
-  })
+  const 
+    classes = useStyles(),
+    router = useRouter(),
+    [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>({
+      currentPage: 1,
+      pageTotal: 1,
+      list: [],
+      status: 1
+    })
+
+  useEffect(() =>{
+    load()
+  }, [])
 
   function load(page = 1, keyword?: string){
     if(articleList.status === 2){ return }
@@ -44,9 +54,20 @@ function Home(props: PropsWithChildren<FinalProps>){
       <header>
         <h2 className={com.mainTitle}>小春日和の小窝</h2>
         <p>明日もきっと、こはるびよりなんです。</p>
+        {articleList.status === 3 || articleList.status === 4 ? 
+          <div className={classes.articleList}>{articleList.list.map(item =>
+            <ArticleBox articleData={item} key={item._id} onClick={() => router.search('/article/view', { articleId: item._id })} />  
+          )}</div>
+        : null}
       </header>
     </div>
   )
 }
 
 export default Home
+
+const useStyles = makeStyles({
+  articleList: {
+    marginTop: 50
+  }
+})

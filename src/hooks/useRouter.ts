@@ -1,17 +1,18 @@
 import { useHistory } from 'react-router'
 import qs from 'qs'
+import { RoutePaths } from '~/routes'
 
-export interface MyRouter {
+export interface MyRouter<SearchParams, StateParams> {
   params: {
-    search: { [key: string]: any } | any
-    state: { [key: string]: any } | any
+    search: SearchParams
+    state: StateParams
   }
 
-  search (path: string, params?: { [key: string]: any }, action?: 'push' | 'replace'): void
-  state (path: string, params?: { [key: string]: any }, action?: 'push' | 'replace'): void 
+  search (path: RoutePaths, params?: { [key: string]: any }, action?: 'push' | 'replace'): void
+  state (path: RoutePaths, params?: { [key: string]: any }, action?: 'push' | 'replace'): void 
 }
 
-export default function useRouter(): Readonly<MyRouter>{  
+export default function useRouter<SearchParams = {}, StateParams = {}>(): Readonly<MyRouter<SearchParams, StateParams>>{  
   const history = useHistory()
   
   return {

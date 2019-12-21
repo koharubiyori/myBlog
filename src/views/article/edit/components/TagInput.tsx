@@ -2,13 +2,11 @@ import React, { PropsWithChildren, useState, KeyboardEvent, ChangeEvent, useRef 
 import store from '~/redux'
 import { InputBase, Box, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import TagSvg from '~/images/sub/tag.svg'
 import { CSSTransition } from 'react-transition-group'
 import ClearIcon from '@material-ui/icons/Clear'
 import { flex, transition } from '~/styles'
 import styleVars from '~/styles/styleVars'
-
-const TagIcon = (props: any) => <embed src={TagSvg} {...props} />
+import TagIcon from '~/components/icons/tag'
 
 export interface Props {
   tags: string[]

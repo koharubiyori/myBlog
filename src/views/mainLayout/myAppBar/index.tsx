@@ -7,7 +7,6 @@ import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { Link } from 'react-router-dom'
 import { flex } from '~/styles'
-import styleVars from '~/styles/styleVars'
 
 export interface Props {
   
@@ -20,7 +19,7 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
     classes = useStyles()
 
   return (
-    <AppBar className={classes.appBar} style={{ backgroundColor: styleVars.main }}>
+    <AppBar className={classes.appBar}>
       <Toolbar>
         <Typography variant="h6" className={c(flex.grow)}>title</Typography>
         <InputBase 

@@ -3,13 +3,20 @@ import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import asyncLoader from './asyncLoader'
 import MainLayout from '~/views/mainLayout'
-import Register from '~/views/account/Register'
-import Login from '~/views/account/Login'
+import Home from '~/views/home'
 
 const l = asyncLoader
-const UserInfo = l('account/UserInfo')
-const ArticleEdit = l('article/edit')
-const Home = l('home')
+
+export const routeMaps = {
+  '/account/register': l('account/Register'),
+  '/account/login': l('account/Login'),
+  '/account/userInfo': l('account/UserInfo'),
+
+  '/article/edit': l('article/edit'),
+  '/article/view': l('article/view')
+}
+
+export type RoutePaths = keyof (typeof routeMaps & { '/': any })
 
 function AnimationRoutes(){
   const location = useLocation()
@@ -22,12 +29,7 @@ function AnimationRoutes(){
     // {/* </TransitionGroup> */}
 
     <Switch location={location}>
-      <Route path="/account/register" component={Register} />
-      <Route path="/account/login" component={Login} />
-      <Route path="/account/userInfo" component={UserInfo} />
-      
-      <Route path="/article/edit" component={ArticleEdit} />
-
+      {Object.keys(routeMaps).map((path) => <Route key={path} path={path} component={(routeMaps as any)[path]} />)}
       <Route path="/" component={Home} />
     </Switch>
   )

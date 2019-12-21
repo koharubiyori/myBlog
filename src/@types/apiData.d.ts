@@ -29,7 +29,7 @@ declare namespace ApiData {
     collectTotal: number
   }
 
-  type SearchResult = Omit<Article, 'content'>[]
+  type SearchResult = Omit<Article, 'content'>
 
   interface Tag {
     _id: string

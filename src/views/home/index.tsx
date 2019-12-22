@@ -4,6 +4,7 @@ import { com } from '~/styles'
 import { makeStyles } from '@material-ui/styles'
 import ArticleBox from '~/components/ArticleBox'
 import useRouter from '~/hooks/useRouter'
+import { KeepAlive } from 'react-keep-alive'
 
 export interface Props {
   
@@ -23,6 +24,7 @@ function Home(props: PropsWithChildren<FinalProps>){
     })
 
   useEffect(() =>{
+    console.log(2)
     load()
   }, [])
 
@@ -67,6 +69,10 @@ function Home(props: PropsWithChildren<FinalProps>){
 export default Home
 
 const useStyles = makeStyles({
+  '@global .mainLayout-content:not(foo)': {
+    backgroundColor: 'transparent'
+  },
+  
   articleList: {
     marginTop: 50
   }

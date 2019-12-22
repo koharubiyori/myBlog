@@ -85,7 +85,7 @@ const useStyles = makeStyles({
     '&:hover': {
       '@global': {
         '.bgImg': {
-          filter: 'brightness(0.5) blur(3px)',
+          filter: 'brightness(0.5)',
           transform: 'scale(1.1)'
         },
 
@@ -108,7 +108,6 @@ const useStyles = makeStyles({
         top: 0,
         left: 0,
         objectFit: 'cover',
-        zIndex: -1,
         filter: 'brightness(0.65)',
         transition: _transition
       },

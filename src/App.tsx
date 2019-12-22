@@ -1,12 +1,13 @@
 import React, { useRef, useEffect } from 'react'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
-import { Provider } from 'react-redux'
+import { Provider as ReduxProvider } from 'react-redux'
 import store from './redux'
 import Routes from './routes'
 import { SnackbarProvider } from 'notistack'
 import mountNotifyMethod from './utils/mountNotifyMethod'
 import init from './init'
 import styleVars from './styles/styleVars'
+import { Provider as KeepAliveProvider } from 'react-keep-alive'
 
 const theme = createMuiTheme({
   palette: {
@@ -31,11 +32,13 @@ export default function App(){
 
   return (
     <ThemeProvider theme={theme}>
-      <Provider store={store}>
+      <ReduxProvider store={store}>
         <SnackbarProvider maxSnack={3} ref={refs.snackbar}>
-          <Routes />
+          <KeepAliveProvider>
+            <Routes />
+          </KeepAliveProvider>
         </SnackbarProvider>
-      </Provider>
+      </ReduxProvider>
     </ThemeProvider>
   )
 }

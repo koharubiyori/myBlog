@@ -59,3 +59,7 @@ declare interface PageState<ListData = any> {
   list: ListData[],
   status: number
 }
+
+declare interface RouteComponent {
+  path: string
+}

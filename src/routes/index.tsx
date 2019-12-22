@@ -1,5 +1,6 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
+import { Router } from '@reach/router'
+// import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import asyncLoader from './asyncLoader'
 import MainLayout from '~/views/mainLayout'
@@ -19,31 +20,36 @@ export const routeMaps = {
 export type RoutePaths = keyof (typeof routeMaps & { '/': any })
 
 function AnimationRoutes(){
-  const location = useLocation()
+  // const location = useLocation()
 
-  return (
-    // <TransitionGroup>
-    //   {/* <CSSTransition unmountOnExit appear key={location.key} timeout={300} classNames="fade"> */}
+  // return (
+  //   // <TransitionGroup>
+  //   //   {/* <CSSTransition unmountOnExit appear key={location.key} timeout={300} classNames="fade"> */}
 
-    //   {/* </CSSTransition> */}
-    // {/* </TransitionGroup> */}
+  //   //   {/* </CSSTransition> */}
+  //   // {/* </TransitionGroup> */}
 
-    <Switch location={location}>
-      {Object.keys(routeMaps).map((path) => <Route key={path} path={path} component={(routeMaps as any)[path]} />)}
-      <Route path="/" component={Home} />
-    </Switch>
-  )
+  //   // <>
+  //   //   {Object.keys(routeMaps).map((path) => <Route key={path} path={path} component={(routeMaps as any)[path]} />)}
+  //   //   <Route exact path="/" component={Home} />
+  //   // </>
+  // )
 }
 
 export default function Routes(){
 
   return (
-    <BrowserRouter basename="/view">
-      <Route path="/">
-        <MainLayout>
-          <AnimationRoutes />
-        </MainLayout>
-      </Route>
-    </BrowserRouter>
+    // <BrowserRouter basename="/view">
+    //   <Route path="/">
+    //     <MainLayout>
+    //       <AnimationRoutes />
+    //     </MainLayout>
+    //   </Route>
+    // </BrowserRouter>
+    <Router basepath="/view">
+      <MainLayout path="/">
+        
+      </MainLayout>
+    </Router>
   )
 }

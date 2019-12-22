@@ -7,7 +7,7 @@ import common from '~/api/common'
 import { makeStyles } from '@material-ui/core'
 import { flex } from '~/styles'
 
-export interface Props {
+export interface Props extends RouteComponent {
   
 }
 
@@ -38,7 +38,9 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
       common.getTheme().then(theme =>{
         setTheme(theme)
         document.body.style.cssText = `
-          background-color: #eee;
+          background-image: url('https://i.loli.net/2019/11/19/1tconZNSjgXROA7.png');
+          background-size: cover;
+          background-repeat: no-repeat;
         `
       })
     }, [])
@@ -77,13 +79,13 @@ const useStyles = makeStyles({
   contentContainer: {
     position: 'relative',
     top: 84,
-    margin: '0 20px'
+    margin: '0 20px',
   },
 
   '@global .mainLayout-content': {
     maxWidth: 800,
     minWidth: 400,
     margin: '0 auto',
-    paddingBottom: 20
+    paddingBottom: 20,
   }
 })

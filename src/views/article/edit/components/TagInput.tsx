@@ -145,7 +145,6 @@ const useStyles = makeStyles({
       border: '1px #C4C4C4 solid',
       borderRadius: 3,
       transition: 'all 0.2s',
-      zIndex: -1,
     },
   
     '&:hover': {

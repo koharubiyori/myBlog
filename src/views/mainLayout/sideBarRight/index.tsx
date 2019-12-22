@@ -39,19 +39,9 @@ function SideBarRight(props: PropsWithChildren<FinalProps>){
 
   return (
     visible ?
-      <>
-        <Drawer
-          variant="permanent"
-          anchor="right"
-          classes={{ root: classes.root }}
-        >
-          {/* 给toolbar让出位置 */}
-          <div style={{ height: 70 }} />
-          <div style={{ width: 200, backgroundColor: '#eee' }}></div>
-        </Drawer>
+      <div className={classes.root}>
 
-        <div style={{ width: 200 }} />
-      </>
+      </div>
     : null
   )
 }
@@ -62,8 +52,7 @@ export default resetComponentProps<Props>(
 
 const useStyles = makeStyles({
   root: {
-    '@global .MuiPaper-root': {
-      backgroundColor: 'rgba(255, 255, 255, 0.7)'
-    }
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    width: 200
   }
 })

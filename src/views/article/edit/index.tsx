@@ -216,8 +216,12 @@ export default ArticleEdit
 
 const useStyles = makeStyles({
   '@global': {
+    body: {
+      backgroundImage: 'initial !important',
+    },
+
     '.mainLayout-content': {
-      maxWidth: 'initial !important'
+      maxWidth: 'initial',
     },
     
     '.CodeMirror-scroll': {

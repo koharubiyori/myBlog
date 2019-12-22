@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router'
+// import { useHistory } from 'react-router'
 import qs from 'qs'
 import { RoutePaths } from '~/routes'
 
@@ -13,7 +13,8 @@ export interface MyRouter<SearchParams, StateParams> {
 }
 
 export default function useRouter<SearchParams = {}, StateParams = {}>(): Readonly<MyRouter<SearchParams, StateParams>>{  
-  const history = useHistory()
+  // const history = useHistory()
+  const history: any = {}
   
   return {
     params: {

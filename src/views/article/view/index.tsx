@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Box } from '@material-ui/core'
 import EditorViewer from 'tui-editor/dist/tui-editor-Viewer'
 import 'tui-editor/dist/tui-editor.css' // editor's ui
 import 'tui-editor/dist/tui-editor-contents.css' // editor's content
@@ -30,7 +30,6 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
   
   useEffect(() =>{
     loadArticle(router.params.search.articleId)
-
   }, [])
 
   function loadArticle(articleId: string){
@@ -46,10 +45,13 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
   
   if(!articleData) return null
   return (
-    <div className={classes.container}>
+    <Box className={classes.container}>
       <img src={articleData.headImg} className={classes.headImg} alt="headImg" />
-      <div ref={refs.editor as any} className={classes.content} />
-    </div>
+      <div className={classes.content}>
+        <div className={classes.profile}>{articleData.profile}</div>
+        <div ref={refs.editor as any} className={classes.markdownViewer} />
+      </div>
+    </Box>
   )
 }
 
@@ -58,6 +60,7 @@ export default ArticleView
 
 const useStyles = makeStyles({
   container: {
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 5,
     overflow: 'hidden'
   },
@@ -69,6 +72,15 @@ const useStyles = makeStyles({
   },
 
   content: {
-    backgroundColor: 'white'
+    boxSizing: 'border-box',
+    padding: '0 10px'
+  },
+
+  profile: {
+    margin: '10px 0',
+  },
+
+  markdownViewer: {
+
   }
 })

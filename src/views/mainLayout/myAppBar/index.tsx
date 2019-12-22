@@ -5,7 +5,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
-import { Link } from 'react-router-dom'
+import { Link } from '@reach/router'
 import { flex } from '~/styles'
 
 export interface Props {

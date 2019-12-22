@@ -18,7 +18,7 @@ type FinalProps = Props & UserConnectedProps
 function SideBarRight(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(), 
-    router = useRouter(),
+    // router = useRouter(),
     [visible, setVisible] = useState(true)
   let disabledResizeHandler = false
 

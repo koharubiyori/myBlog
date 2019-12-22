@@ -11,6 +11,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import useRouter from '~/hooks/useRouter'
 import { makeStyles } from '@material-ui/styles'
 import styleVars from '~/styles/styleVars'
+import { navigate } from '@reach/router'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -36,7 +37,7 @@ const adminActions = [
 function ActionsButton(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = useRouter(),
+    // router = useRouter(),
     [open, setOpen] = useState(false),
     [visible, setVisible] = useState(true)
   let disabledResizeHandler = false
@@ -56,7 +57,8 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   function actionHandler (actionName: string){
     switch(actionName){
       case '新建文章': {
-        router.search('/article/edit')
+        // router.search('/article/edit')
+        navigate('/view/article/view', { state: { aaa: 1 } })
       }
     }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router } from '@reach/router'
+import { Router, Redirect } from '@reach/router'
 // import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import asyncLoader from './asyncLoader'
@@ -36,6 +36,11 @@ function AnimationRoutes(){
   // )
 }
 
+const Test = (props: any) =>{
+  console.log(props)
+  return <div>123</div>
+}
+
 export default function Routes(){
 
   return (
@@ -48,8 +53,10 @@ export default function Routes(){
     // </BrowserRouter>
     <Router basepath="/view">
       <MainLayout path="/">
-        
+        {Object.keys(routeMaps).map(path => React.createElement((routeMaps as any)[path], { path }))}
+        <Home path="/" />
       </MainLayout>
     </Router>
   )
 }
+

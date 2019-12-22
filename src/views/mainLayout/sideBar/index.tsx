@@ -12,8 +12,8 @@ type FinalProps = Props
 
 function SideBar(props: PropsWithChildren<FinalProps>){
   const 
-    classes = useStyles(),
-    router = useRouter()
+    classes = useStyles()
+    // router = useRouter()
   
   return (
     <>
@@ -29,7 +29,7 @@ function SideBar(props: PropsWithChildren<FinalProps>){
           <div className="name">小春日和</div>
         </div>
         <List className={classes.drawer}>
-          <ListItem button onClick={() => router.search('/')}>
+          <ListItem button onClick={() => {}}>
             <ListItemIcon>
               <HomeIcon style={{ color: '#C5C5C5' }} />
             </ListItemIcon>

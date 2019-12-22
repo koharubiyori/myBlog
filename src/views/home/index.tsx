@@ -6,7 +6,7 @@ import ArticleBox from '~/components/ArticleBox'
 import useRouter from '~/hooks/useRouter'
 import { KeepAlive } from 'react-keep-alive'
 
-export interface Props {
+export interface Props extends RouteComponent {
   
 }
 
@@ -15,7 +15,7 @@ type FinalProps = Props
 function Home(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = useRouter(),
+    // router = useRouter(),
     [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>({
       currentPage: 1,
       pageTotal: 1,
@@ -58,7 +58,7 @@ function Home(props: PropsWithChildren<FinalProps>){
         <p>明日もきっと、こはるびよりなんです。</p>
         {articleList.status === 3 || articleList.status === 4 ? 
           <div className={classes.articleList}>{articleList.list.map(item =>
-            <ArticleBox articleData={item} key={item._id} onClick={() => router.search('/article/view', { articleId: item._id })} />  
+            <ArticleBox articleData={item} key={item._id} onClick={() => {}} />  
           )}</div>
         : null}
       </header>

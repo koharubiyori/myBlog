@@ -1,7 +1,14 @@
-import { navigate } from '@reach/router'
+import { globalHistory, HistoryListener, HistoryUnsubscribe, HistoryLocation } from '@reach/router'
 import qs from 'qs'
-import { RoutePaths } from '~/routes'
+import { basePath, RoutePaths } from '~/routes'
 
+type MyNavigateFn = (
+  path: RoutePaths, 
+  args?: {
+    search?: { [key: string]: any }
+    state?: { [key: string]: any }
+  }
+) => Promise<void>
 
 export interface MyRouter<SearchParams, StateParams> {
   params: {
@@ -9,26 +16,34 @@ export interface MyRouter<SearchParams, StateParams> {
     state: StateParams
   }
 
-  search (path: RoutePaths, params?: { [key: string]: any }, action?: 'push' | 'replace'): void
-  state (path: RoutePaths, params?: { [key: string]: any }, action?: 'push' | 'replace'): void 
+  push: MyNavigateFn
+  replace: MyNavigateFn
+  listen: (listener: HistoryListener) => HistoryUnsubscribe
+  location: HistoryLocation
 }
 
-export default function useRouter<SearchParams = {}, StateParams = {}>(): Readonly<MyRouter<SearchParams, StateParams>>{  
-  // const history = useHistory()
-  const history: any = {}
+export default function createRouter<SearchParams = {}, StateParams = {}>(): Readonly<MyRouter<SearchParams, StateParams>>{  
+  const {location, navigate} = globalHistory
   
   return {
     params: {
-      search: qs.parse(history.location.search.split('?')[1]),
-      state: history.location.state || {}
+      search: qs.parse(location!.search.split('?')[1]),
+      state: location!.state || {}
     },
 
-    search (path, params = {}, action = 'push'){
-      history[action]({ pathname: path, search: qs.stringify(params) })
+    push: (path, args = {}) =>{
+      let toPath = basePath + path
+      if(args.search) toPath += '?' + qs.stringify(args.search)
+      return navigate(toPath, { state: args.state })
     },
 
-    state (path, params = {}, action = 'push'){
-      history[action]({ pathname: path, state: params })
-    }
+    replace: (path, args = {}) =>{
+      let toPath = basePath + path
+      if(args.search) toPath += '?' + qs.stringify(args.search)
+      return navigate(toPath, { state: args.state, replace: true })
+    },
+
+    listen: globalHistory.listen,
+    location: globalHistory.location
   }
 }

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect } from 'react'
+import React, { PropsWithChildren, useState, useEffect, useLayoutEffect, useRef } from 'react'
 import resetComponentProps from '~/utils/resetComponentProps'
 import SpeedDial from '@material-ui/lab/SpeedDial'
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon'
@@ -8,10 +8,11 @@ import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
-import useRouter from '~/hooks/useRouter'
 import { makeStyles } from '@material-ui/styles'
-import styleVars from '~/styles/styleVars'
-import { navigate } from '@reach/router'
+import createRouter from '~/utils/createRouter'
+import { RoutePaths, basePath } from '~/routes'
+import _ from 'lodash'
+import qs from 'qs'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -25,21 +26,49 @@ export interface ActionsButtonRef {
 type FinalProps = Props & UserConnectedProps
 
 type ActionName = '新建文章' | '分享' | '收藏' | '编辑'
-const visitorActions = [
-  { icon: <ShareIcon />, name: '分享' }
-].reverse()
 
-const adminActions = [
-  { icon: <ShareIcon />, name: '分享' },
-  { icon: <AddIcon />, name: '新建文章' }
-].reverse()
+interface Action {
+  icon: JSX.Element | null
+  name: ActionName | ''
+}
+
+const actionMaps: {
+  [Key in RoutePaths | 'default']?: { [Key in 'admin' | 'visitor' | 'user']?: Action[] }
+} = {
+  '/article/view': {
+    admin: [
+      { icon: <ShareIcon />, name: '分享' },
+      { icon: <AddIcon />, name: '新建文章' },
+      { icon: <EditIcon />, name: '编辑' },
+    ],
+
+    user: [
+      { icon: <ShareIcon />, name: '分享' },
+      { icon: <FavoriteIcon />, name: '收藏' },
+    ],
+  },
+
+  default: {
+    admin: [
+      { icon: <AddIcon />, name: '新建文章' },
+      { icon: <ShareIcon />, name: '分享' },
+    ],
+
+    user: [
+      { icon: <FavoriteIcon />, name: '收藏' }
+    ]
+  }
+}
 
 function ActionsButton(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    // router = useRouter(),
+    router = createRouter(),
     [open, setOpen] = useState(false),
-    [visible, setVisible] = useState(true)
+    [visible, setVisible] = useState(true),
+    [actions, setActions] = useState<Action[]>([]),
+    [dialAction, setDialAction] = useState<Action>({ icon: null, name: '' }),
+    lastProps = useRef<FinalProps>(props)
   let disabledResizeHandler = false
 
   if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler }
@@ -54,11 +83,38 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     return () => window.removeEventListener('resize', resizeHandler)
   }, [])
 
-  function actionHandler (actionName: string){
+  useEffect(() =>{
+    router.listen(({location}) => loadActions(location.pathname))
+  }, [])
+
+  useEffect(() =>{
+    if(lastProps.current.state.user._id === '' && props.state.user._id){
+      loadActions(router.location.pathname)
+    }
+
+    lastProps.current = props
+  })
+
+  function loadActions(pathName: string){
+    const path: RoutePaths = pathName.replace(new RegExp('^' + _.escapeRegExp(basePath)), '') as any
+    const action = actionMaps[path] || actionMaps.default
+    const role = props.$user.getRole()
+    const roleAction = action![role] || actionMaps.default![role]
+    
+    roleAction && setActions(roleAction.reverse())
+  }
+
+  function actionHandler (actionName: ActionName){
     switch(actionName){
       case '新建文章': {
-        // router.search('/article/edit')
-        navigate('/view/article/view', { state: { aaa: 1 } })
+        router.push('/article/edit')
+        break
+      }
+      case '编辑': {
+        router.push('/article/edit', { state: {
+          type: 1,
+          articleId: qs.parse(router.location.search.split('?')[1]).articleId
+        } })
       }
     }
 
@@ -77,15 +133,12 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
           ariaLabel=""
           hidden={!visible}
           open={open}
-          icon={<SpeedDialIcon 
-            openIcon={props.$user.isAdmin() ? <EditIcon /> : <FavoriteIcon />} 
-            onClick={() => actionHandler(props.$user.isAdmin() ? '编辑' : '收藏')}
-          />}
+          icon={<SpeedDialIcon />}
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
 
         >
-          {(props.$user.isAdmin() ? adminActions : visitorActions).map(action => (
+          {actions.map(action => (
             <SpeedDialAction
               key={action.name}
               icon={action.icon}

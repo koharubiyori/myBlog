@@ -4,7 +4,9 @@ import md5 from 'md5'
 import user from '~/api/user'
 import { set as setUserInfo } from '~/redux/user/HOC'
 import { com, flex } from '~/styles'
-import useRouter from '~/hooks/useRouter'
+import createRouter from '~/utils/createRouter'
+import styleVars from '~/styles/styleVars'
+import BgImg from '~/components/BgImg'
 
 export interface Props {
   
@@ -15,7 +17,7 @@ type FinalProps = Props
 function Login(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = useRouter(),
+    router = createRouter(),
     [accountOrName, setAccountOrName] = useState(''),
     [password, setPassword] = useState(''),
     [loginStatus, setLoginStatus] = useState(1)
@@ -30,7 +32,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         setLoginStatus(3)
         $notify.success('登录成功')
         setUserInfo(data)
-        router.search('/')
+        router.replace('/')
       })
       .catch(e => {
         console.log(e)
@@ -40,6 +42,7 @@ function Login(props: PropsWithChildren<FinalProps>){
 
   return (
     <div className={classes.container}>
+      <BgImg hidden />
       <h2 className={com.mainTitle} style={{ marginTop: 40 }}>登录</h2>
       <TextField fullWidth 
         className={classes.input}
@@ -66,7 +69,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         >登录</Button>
         
         <Button color="primary" 
-          onClick={() => router.search('/account/register')}
+          onClick={() => router.replace('/account/register')}
         >没有帐号？前往注册</Button>
       </div>
     </div>
@@ -76,9 +79,13 @@ function Login(props: PropsWithChildren<FinalProps>){
 export default Login
 
 const useStyles = makeStyles({
+  '@global body': {
+    backgroundImage: 'initial !important'
+  },
+  
   container: {
     maxWidth: 500,
-    margin: '0 auto'
+    margin: '0 auto',
   },
 
   input: {

@@ -4,7 +4,8 @@ import user from '~/api/user'
 import md5 from 'md5'
 import textChecker from '~/utils/textChecker'
 import { com, flex } from '~/styles'
-import useRouter from '~/hooks/useRouter'
+import createRouter from '~/utils/createRouter'
+import BgImg from '~/components/BgImg'
 
 export interface Props {
   
@@ -15,7 +16,7 @@ type FinalProps = Props
 function Register(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = useRouter(),
+    router = createRouter(),
     [account, setAccount] = useState(''),
     [name, setName] = useState(''),
     [password, setPassword] = useState(''),
@@ -52,7 +53,7 @@ function Register(props: PropsWithChildren<FinalProps>){
       .then(() =>{
         setRegisterStatus(3)
         $notify.success('注册成功，即将前往登录')
-        setTimeout(() => router.search('/account/login'), 1500)
+        setTimeout(() => router.replace('/account/login'), 1500)
       })
       .catch(e =>{
         console.log(e)
@@ -62,6 +63,7 @@ function Register(props: PropsWithChildren<FinalProps>){
 
   return (
     <div className={classes.container}>
+      <BgImg hidden />
       <h2 className={com.mainTitle} style={{ marginTop: 40 }}>注册</h2>
       <p className={com.subTitle}>僕と契約して、魔法少女になってほしいんだ&emsp;／人◕ ‿‿ ◕人＼</p>
       <TextField fullWidth 
@@ -117,7 +119,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         >注册</Button>
         
         <Button color="primary" 
-          onClick={() => router.search('/account/login')}
+          onClick={() => router.replace('/account/login')}
         >已有帐号？前往登录</Button>
       </div>
     </div>
@@ -126,10 +128,14 @@ function Register(props: PropsWithChildren<FinalProps>){
 
 export default Register
 
-const useStyles = makeStyles({
+const useStyles = makeStyles({  
+  '@global body': {
+    backgroundImage: 'initial !important'
+  },
+  
   container: {
     maxWidth: 500,
-    margin: '0 auto'
+    margin: '0 auto',
   },
 
   input: {

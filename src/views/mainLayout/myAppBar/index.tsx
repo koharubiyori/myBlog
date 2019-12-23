@@ -7,6 +7,7 @@ import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { Link } from '@reach/router'
 import { flex } from '~/styles'
+import createRouter from '~/utils/createRouter'
 
 export interface Props {
   
@@ -16,7 +17,8 @@ type FinalProps = Props & UserConnectedProps
 
 function MyAppBar(props: PropsWithChildren<FinalProps>){
   const
-    classes = useStyles()
+    classes = useStyles(),
+    router = createRouter()
 
   return (
     <AppBar className={classes.appBar}>
@@ -37,17 +39,13 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
         </IconButton>
 
         {props.state.user.account ? 
-          <Link replace to="/account/userInfo" >
-            <IconButton>
-              <img src={props.state.user.avatar || require('~/images/sub/akari.jpg')} alt="icon" style={{ width: 24, height: 24, borderRadius: '50%' }} />
-            </IconButton>
-          </Link>
+          <IconButton onClick={() => router.push('/account/userInfo')}>
+            <img src={props.state.user.avatar || require('~/images/sub/akari.jpg')} alt="icon" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+          </IconButton>
         :
-          <Link replace to="/account/login">
-            <IconButton>
-              <AccountCircleIcon />
-            </IconButton>
-          </Link>
+          <IconButton onClick={() => router.push('/account/register')}>
+            <AccountCircleIcon />
+          </IconButton>
         }
       </Toolbar>
     </AppBar>

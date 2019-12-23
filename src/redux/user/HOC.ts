@@ -30,13 +30,17 @@ export const updateUserInfo = () => new Promise((resolve, reject) =>{
   }
 })
 
-export const isAdmin = () => getState().user.isAdmin
+export const getRole = () =>{
+  const {user} = getState()
+  if(!user._id) return 'visitor'
+  return user.isAdmin ? 'admin' : 'user'
+}
 
 interface ConnectedDispatch {
   '$user': {
     set: typeof set
     clear: typeof clear
-    isAdmin: typeof isAdmin
+    getRole: typeof getRole
   }
 }
 
@@ -47,6 +51,6 @@ export type UserConnectedProps = ConnectedDispatch & {
 export const userHOC = connect(
   (state: object) => ({ state }),
   (): ConnectedDispatch => ({
-    $user: { set, clear, isAdmin }
+    $user: { set, clear, getRole }
   })
 )

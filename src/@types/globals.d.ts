@@ -61,5 +61,5 @@ declare interface PageState<ListData = any> {
 }
 
 declare interface RouteComponent {
-  path: string
+  path?: string
 }

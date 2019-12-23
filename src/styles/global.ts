@@ -16,6 +16,19 @@ createClasses('', {
       color: 'white'
     },
 
+    '::-webkit-scrollbar': {
+      width: 8
+    },
+
+    '::-webkit-scrollbar-thumb': {
+      borderRadius: 5,
+      backgroundColor: '#666'
+    },
+
+    '::-webkit-scrollbar-track': {
+      backgroundColor: '#ccc'
+    },
+
     '.MuiAppBar-positionFixed:not(foo)': {
       left: 0,
       minWidth

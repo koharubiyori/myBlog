@@ -6,6 +6,7 @@ import user from '~/api/user'
 import textChecker from '~/utils/textChecker'
 import { com } from '~/styles'
 import styleVars from '~/styles/styleVars'
+import BgImg from '~/components/BgImg'
 
 export interface Props {
   
@@ -60,6 +61,7 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
   return (
     <div>
       <h2 className={com.mainTitle}>编辑个人信息</h2>
+      <BgImg hidden />
 
       <label className={classes.avatar} data-status={imgUploadStatus}>
         <img alt="avatar" src={avatar || require('~/images/sub/akari.jpg')} />
@@ -88,6 +90,10 @@ export default resetComponentProps(
 
 const transition = 'all 0.25s'
 const useStyles = makeStyles({
+  '@global body': {
+    backgroundImage: 'initial !important'
+  },
+
   avatar: {
     display: 'block',
     width: 250,

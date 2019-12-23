@@ -6,6 +6,8 @@ import { default as ActionsButton, ActionsButtonRef } from './ActionsButton'
 import common from '~/api/common'
 import { makeStyles } from '@material-ui/core'
 import { flex } from '~/styles'
+import createRouter from '~/utils/createRouter'
+import BgImg from '~/components/BgImg'
 
 export interface Props extends RouteComponent {
   
@@ -27,6 +29,7 @@ type FinalProps = Props
 function MainLayout(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
+    router = createRouter(),
     [theme, setTheme] = useState<ApiData.Theme>({} as any),
     refs = {
       sideBarRight: useRef<SideBarRightRef>(),
@@ -35,14 +38,7 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
     mainLayoutControllers = useRef<MainLayoutControllers>(null)
 
     useEffect(() =>{
-      common.getTheme().then(theme =>{
-        setTheme(theme)
-        document.body.style.cssText = `
-          background-image: url('https://i.loli.net/2019/11/19/1tconZNSjgXROA7.png');
-          background-size: cover;
-          background-repeat: no-repeat;
-        `
-      })
+      common.getTheme().then(setTheme)
     }, [])
 
     useEffect(() =>{
@@ -55,7 +51,7 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
     return (
       <>
         <MyAppBar />
-
+        <BgImg uri={'https://i.loli.net/2019/11/19/1tconZNSjgXROA7.png'} />
         <div className={c(flex.row)}>
           <SideBar theme={theme} />
 

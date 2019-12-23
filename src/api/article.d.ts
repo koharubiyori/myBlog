@@ -10,6 +10,7 @@ export namespace Api {
 
   interface Get {
     articleId: string
+    noCount?: boolean
   }
 
   interface Search {

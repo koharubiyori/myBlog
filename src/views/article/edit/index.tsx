@@ -19,26 +19,23 @@ import nProgress from 'nprogress'
 import useHideSideBarRight from '~/hooks/useHideSideBarRight'
 import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
-import useRouter from '~/hooks/useRouter'
+import createRouter from '~/utils/createRouter'
 
 export interface Props {
   
 }
 
 interface RouteStateParams {
-  type: 0 | 1       // 0为新建，1为编辑，当为1时，也应该传入下面的几个参数
-  title?: string
-  profile?: string
-  tags?: string[]
-  headImg?: string
+  type: 0 | 1       // 0为新建，1为编辑，当为1时，也应该传入articleId
+  articleId?: string
 }
 
 type FinalProps = Props
 
 function ArticleEdit(props: PropsWithChildren<FinalProps>){
   const 
-    router = useRouter<{}, RouteStateParams>(),
     classes = useStyles(),
+    router = createRouter<{}, RouteStateParams>(),
     mainLayoutControllers = useContext(MainLayoutContext),
     [title, setTitle] = useState(''),
     [profile, setProfile] = useState(''),
@@ -54,14 +51,28 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
   useEffect(() =>{
     if(type === 1){
-      const {title, profile, tags, headImg} = router.params.state
+      article.get({
+        articleId: router.params.state.articleId!,
+        noCount: true
+      }).then(data =>{
+        setTitle(data.title)
+        setProfile(data.profile)
+        setHeadImg(data.headImg)
+        setHeadImgStatus(3)
+        getTags().then(tagList =>{
+          setTags(data.tags.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
+        })
 
-      setTitle(title!)
-      setProfile(profile!)
-      setHeadImg(headImg!)
-      getTags().then(tagList =>{
-        setTags(tags!.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
+        editor.current!.setMarkdown(data.content)
       })
+    //   const {title, profile, tags, headImg} = router.params.state.articleData
+
+    //   setTitle(title!)
+    //   setProfile(profile!)
+    //   setHeadImg(headImg!)
+    //   getTags().then(tagList =>{
+    //     setTags(tags!.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
+    //   })
     }
   }, [])
 
@@ -147,7 +158,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
       })
       .then(() =>{
         $notify.success('文章发布成功')
-        router.search('/')
+        router.replace('/')
       })
       .catch(e =>{
         console.log(e)

@@ -3,8 +3,8 @@ import article from '~/api/article'
 import { com } from '~/styles'
 import { makeStyles } from '@material-ui/styles'
 import ArticleBox from '~/components/ArticleBox'
-import useRouter from '~/hooks/useRouter'
-import { KeepAlive } from 'react-keep-alive'
+import { KeepAlive, useKeepAliveEffect } from 'react-keep-alive'
+import createRouter from '~/utils/createRouter'
 
 export interface Props extends RouteComponent {
   
@@ -15,7 +15,7 @@ type FinalProps = Props
 function Home(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    // router = useRouter(),
+    router = createRouter(),
     [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>({
       currentPage: 1,
       pageTotal: 1,
@@ -58,7 +58,7 @@ function Home(props: PropsWithChildren<FinalProps>){
         <p>明日もきっと、こはるびよりなんです。</p>
         {articleList.status === 3 || articleList.status === 4 ? 
           <div className={classes.articleList}>{articleList.list.map(item =>
-            <ArticleBox articleData={item} key={item._id} onClick={() => {}} />  
+            <ArticleBox articleData={item} key={item._id} onClick={() => router.push('/article/view', { search: { articleId: item._id } })} />  
           )}</div>
         : null}
       </header>
@@ -66,7 +66,7 @@ function Home(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default Home
+export default (() => <KeepAlive name="home" children={[<Home />]} />) as any
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

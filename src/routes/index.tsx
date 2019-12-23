@@ -1,10 +1,12 @@
 import React from 'react'
-import { Router, Redirect } from '@reach/router'
+import { Router } from '@reach/router'
 // import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import asyncLoader from './asyncLoader'
 import MainLayout from '~/views/mainLayout'
 import Home from '~/views/home'
+
+export const basePath = '/view'
 
 const l = asyncLoader
 
@@ -51,9 +53,9 @@ export default function Routes(){
     //     </MainLayout>
     //   </Route>
     // </BrowserRouter>
-    <Router basepath="/view">
+    <Router basepath={basePath}>
       <MainLayout path="/">
-        {Object.keys(routeMaps).map(path => React.createElement((routeMaps as any)[path], { path }))}
+        {Object.keys(routeMaps).map(path => React.createElement((routeMaps as any)[path], { path, key: path }))}
         <Home path="/" />
       </MainLayout>
     </Router>

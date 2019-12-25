@@ -98,7 +98,7 @@ function TagInput(props: PropsWithChildren<FinalProps>){
           inputRef={refs.input}
         />
 
-        <CSSTransition unmountOnExit in={!!props.value} timeout={200} classNames={transition.fade}>
+        {props.value !== '' ?
           <Box boxShadow={3} className={classes.hintsMenu}>
             {filteredTags.map((item, index) =>
               <p key={index} tabIndex={1} data-selected={index === selectedHint} onClick={() => props.onSelectHint(item.name)}>
@@ -114,7 +114,7 @@ function TagInput(props: PropsWithChildren<FinalProps>){
               </p>
             : null}
           </Box>
-        </CSSTransition>
+        : null}
       </div>
     </label>
   )
@@ -180,7 +180,7 @@ const useStyles = makeStyles({
     overflow: 'auto',
     position: 'absolute',
     left: 0,
-    top: '100%',
+    top: '100% !important',
     backgroundColor: 'white',
     zIndex: 1,
     cursor: 'pointer',

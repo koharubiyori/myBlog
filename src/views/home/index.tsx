@@ -3,35 +3,52 @@ import article from '~/api/article'
 import { com } from '~/styles'
 import { makeStyles } from '@material-ui/styles'
 import ArticleBox from '~/components/ArticleBox'
-import { KeepAlive, useKeepAliveEffect } from 'react-keep-alive'
+import keepAlive from '~/components/HOC/keepAlive'
 import createRouter from '~/utils/createRouter'
+import { useKeepAliveEffect } from 'react-keep-alive'
 
 export interface Props extends RouteComponent {
   
 }
 
+interface RouteStateParams {
+  reload?: boolean
+}
+
 type FinalProps = Props
+
+const initList = () =>({
+  currentPage: 1,
+  pageTotal: 1,
+  list: [],
+  status: 1
+})
 
 function Home(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = createRouter(),
-    [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>({
-      currentPage: 1,
-      pageTotal: 1,
-      list: [],
-      status: 1
-    })
+    router = createRouter<{}, RouteStateParams>(),
+    [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>(initList())
+
+  useKeepAliveEffect(() =>{
+    if(router.params.state.reload){
+      setArticleList(initList())
+      load()
+      router.clearState()
+    }
+  })
 
   useEffect(() =>{
-    console.log(2)
     load()
   }, [])
 
   function load(page = 1, keyword?: string){
     if(articleList.status === 2){ return }
     
-    setArticleList(prevVal => ({ ...prevVal, status: 2 }))
+    setArticleList(prevVal =>{
+      console.log(prevVal)
+      return ({ ...prevVal, status: 2 })
+    })
     article.search({ page, keyword })
       .then(data =>{ 
         let status = 3
@@ -66,7 +83,7 @@ function Home(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default (() => <KeepAlive name="home" children={[<Home />]} />) as any
+export default keepAlive(Home)
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

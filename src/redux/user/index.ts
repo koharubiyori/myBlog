@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 export const SET = Symbol()
 export const CLEAR = Symbol()
 
-export interface ConnectedState extends ApiData.User {
+export interface State extends ApiData.User {
 
 }
 
@@ -17,7 +17,7 @@ const init = () => ({
   isAdmin: false
 })
 
-const reducer: ReduxReducer<ConnectedState> = (state: ApiData.User = init(), action) =>{
+const reducer: ReduxReducer<State> = (state: ApiData.User = init(), action) =>{
   switch(action.type){
     case SET: {
       return { ...state, ...action.data }

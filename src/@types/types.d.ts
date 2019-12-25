@@ -1,8 +1,8 @@
 import { Reducer } from '~/../node_modules/redux'
 
-export interface ReduxAction {
-  type: symbol,
+export interface ReduxAction<Type, ParamNames> {
+  type: Type
   [key: string]: any
 }
 
-export interface ReduxReducer<State> extends Reducer<State, ReduxAction> {}
+export interface ReduxReducer<State, Type = symbol, ParamNames = any> extends Reducer<State, ReduxAction<Type, ParamNames>> {}

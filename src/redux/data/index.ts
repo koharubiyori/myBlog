@@ -3,11 +3,11 @@ import { ReduxReducer } from '~/@types/types'
 export const SET = Symbol()
 export const REMOVE = Symbol()
 
-export interface ConnectedState {
+export interface State {
   tags: ApiData.Tag[]
 }
 
-const reducer: ReduxReducer<ConnectedState> = (state = {
+const reducer: ReduxReducer<State> = (state = {
   tags: null as any
 }, action) =>{
   switch(action.type){

@@ -60,6 +60,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         type="password" 
         value={password} 
         onChange={e => setPassword(e.target.value)}
+        onKeyDown={e => e.keyCode === 13 && login()}
       />
 
       <div className={c(flex.row, flex.between)} style={{ marginTop: 40 }}>

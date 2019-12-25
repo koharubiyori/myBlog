@@ -8,11 +8,13 @@ import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
+import DeleteIcon from '@material-ui/icons/Delete'
 import { makeStyles } from '@material-ui/styles'
 import createRouter from '~/utils/createRouter'
 import { RoutePaths, basePath } from '~/routes'
 import _ from 'lodash'
 import qs from 'qs'
+import article from '~/api/article'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -25,7 +27,7 @@ export interface ActionsButtonRef {
 
 type FinalProps = Props & UserConnectedProps
 
-type ActionName = '新建文章' | '分享' | '收藏' | '编辑'
+type ActionName = '新建文章' | '分享' | '收藏' | '编辑' | '删除'
 
 interface Action {
   icon: JSX.Element | null
@@ -39,6 +41,7 @@ const actionMaps: {
     admin: [
       { icon: <ShareIcon />, name: '分享' },
       { icon: <AddIcon />, name: '新建文章' },
+      { icon: <DeleteIcon />, name: '删除' },
       { icon: <EditIcon />, name: '编辑' },
     ],
 
@@ -50,8 +53,8 @@ const actionMaps: {
 
   default: {
     admin: [
-      { icon: <AddIcon />, name: '新建文章' },
       { icon: <ShareIcon />, name: '分享' },
+      { icon: <AddIcon />, name: '新建文章' },
     ],
 
     user: [
@@ -67,7 +70,6 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     [open, setOpen] = useState(false),
     [visible, setVisible] = useState(true),
     [actions, setActions] = useState<Action[]>([]),
-    [dialAction, setDialAction] = useState<Action>({ icon: null, name: '' }),
     lastProps = useRef<FinalProps>(props)
   let disabledResizeHandler = false
 
@@ -76,7 +78,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   useEffect(() =>{
     const resizeHandler = () => {
       if(disabledResizeHandler){ return }
-      setVisible(window.innerWidth >= 880)
+      setVisible(window.innerWidth >= 1060)
     }
 
     window.addEventListener('resize', resizeHandler)
@@ -107,14 +109,30 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   function actionHandler (actionName: ActionName){
     switch(actionName){
       case '新建文章': {
-        router.push('/article/edit')
+        router.push('/article/edit', { state: { type: 0 } })
         break
       }
+
       case '编辑': {
         router.push('/article/edit', { state: {
           type: 1,
           articleId: qs.parse(router.location.search.split('?')[1]).articleId
         } })
+        break
+      }
+
+      case '删除': {
+        $confirm({
+          content: '确定要删除这篇文章？',
+          onCheck (){
+            article.delete({ articleId: qs.parse(router.location.search.split('?')[1]).articleId })
+              .then(() =>{
+                $notify.success('操作成功')
+                router.replace('/', { state: { reload: true } })
+              })
+          }
+        })
+        break
       }
     }
 
@@ -129,7 +147,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     <>
       {props.state.user.name !== '' ?
         <SpeedDial
-          style={{ position: 'fixed', bottom: 70, right: 260 }}
+          style={{ position: 'fixed', bottom: 70, right: 200 }}
           ariaLabel=""
           hidden={!visible}
           open={open}

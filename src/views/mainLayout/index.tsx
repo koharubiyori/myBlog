@@ -80,7 +80,7 @@ const useStyles = makeStyles({
 
   '@global .mainLayout-content': {
     maxWidth: 800,
-    minWidth: 400,
+    minWidth: 600,
     margin: '0 auto',
     paddingBottom: 20,
   }

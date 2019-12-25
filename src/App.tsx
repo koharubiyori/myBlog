@@ -9,6 +9,7 @@ import init from './init'
 import styleVars from './styles/styleVars'
 import { Provider as KeepAliveProvider } from 'react-keep-alive'
 import { navigate } from '@reach/router'
+import MyConfirm, { MyConfirmRef } from './components/dialog/Confirm'
 
 const theme = createMuiTheme({
   palette: {
@@ -23,11 +24,19 @@ const theme = createMuiTheme({
 
 export default function App(){
   const refs = {
-    snackbar: useRef()
+    snackbar: useRef(),
+    myConfirm: useRef<MyConfirmRef>()
   }
 
   useEffect(() =>{
     mountNotifyMethod((refs.snackbar.current as any).enqueueSnackbar)
+    
+    setTimeout(() =>{
+      let confirm: any = refs.myConfirm.current!.show
+      confirm.hide = refs.myConfirm.current!.hide
+      window.$confirm = confirm
+    })
+    
     init()
   }, [])
 
@@ -43,6 +52,7 @@ export default function App(){
         <SnackbarProvider maxSnack={3} ref={refs.snackbar}>
           <KeepAliveProvider>
             <Routes />
+            <MyConfirm getRef={refs.myConfirm} />
           </KeepAliveProvider>
         </SnackbarProvider>
       </ReduxProvider>

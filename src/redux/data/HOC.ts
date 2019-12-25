@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import {
   SET, REMOVE,
-  ConnectedState
+  State
 } from './index'
 import store from '~/redux'
 import tag from '~/api/tag'
@@ -29,7 +29,7 @@ interface ConnectedDispatch {
 }
 
 export type DataConnectedProps = ConnectedDispatch & {
-  state: { data: ConnectedState }
+  state: { data: State }
 }
 
 export const dataHOC = connect(

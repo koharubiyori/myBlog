@@ -29,6 +29,13 @@ createClasses('', {
       backgroundColor: '#ccc'
     },
 
+    hr: {
+      width: '100%',
+      border: 'none',
+      height: 1,
+      margin: '10px 0'
+    },
+
     '.MuiAppBar-positionFixed:not(foo)': {
       left: 0,
       minWidth

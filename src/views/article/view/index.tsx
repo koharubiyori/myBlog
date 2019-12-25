@@ -17,6 +17,7 @@ import { flex } from '~/styles'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import styleVars from '~/styles/styleVars'
+import ArticleComment from './Comment'
 
 export interface Props {
   
@@ -102,6 +103,8 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
           <div ref={refs.editor as any} className={classes.markdownViewer} />
         </div>
       </Box>
+
+      <ArticleComment articleData={articleData} />
     </div>
   )
 }
@@ -174,7 +177,7 @@ const useStyles = makeStyles({
 
   content: {
     boxSizing: 'border-box',
-    padding: '0 10px',
+    padding: '15px 20px 20px 20px',
   },
 
   profile: {

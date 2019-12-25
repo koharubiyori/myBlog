@@ -2,7 +2,7 @@ import { get, post } from '~/utils/fetch'
 import { Api } from './user.d'
 
 export default {
-  getRegisterSecurityCode: get<undefined, { svg: string }>('user/getRegisterSecurityCode'),
+  getRegisterSecurityCode: get<undefined, { svg: string }>('user/getRegisterSecurityCode', { loading: true, fail: true }),
   
   getUserInfo: get<undefined, ApiData.User>('user/getUserInfo'),
 

@@ -18,7 +18,9 @@ export interface MyRouter<SearchParams, StateParams> {
 
   push: MyNavigateFn
   replace: MyNavigateFn
-  listen: (listener: HistoryListener) => HistoryUnsubscribe
+  back: History['back']
+  clearState (): void
+  listen (listener: HistoryListener): HistoryUnsubscribe
   location: HistoryLocation
 }
 
@@ -43,6 +45,8 @@ export default function createRouter<SearchParams = {}, StateParams = {}>(): Rea
       return navigate(toPath, { state: args.state, replace: true })
     },
 
+    back: window.history.back,
+    clearState: () => window.history.replaceState({}, ''),
     listen: globalHistory.listen,
     location: globalHistory.location
   }

@@ -101,6 +101,7 @@ function Register(props: PropsWithChildren<FinalProps>){
           variant="filled" 
           value={RSCode}
           onChange={e => setRSCode(e.target.value)}
+          onKeyDown={e => e.keyCode === 13 && register()}
         />
 
         <ButtonBase focusRipple onClick={getRegisterSecurityCode}>

@@ -27,7 +27,7 @@ function SideBarRight(props: PropsWithChildren<FinalProps>){
   useEffect(() =>{
     const resizeHandler = () =>{
       if(disabledResizeHandler){ return }
-      setVisible(window.innerWidth >= 880)
+      setVisible(window.innerWidth >= 1060)
     }
     window.addEventListener('resize', resizeHandler)
     return () => window.removeEventListener('resize', resizeHandler)

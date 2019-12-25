@@ -33,9 +33,23 @@ declare interface Window {
     warning (message: string, position?: SnackbarPosition): void
     error (message: string, position?: SnackbarPosition): void
   }
+
+  $confirm: {
+    (params: {
+      title?: string
+      content: string
+      checkText?: string
+      closeText?: string
+      onCheck?: Function | null
+      onClose?: Function | null
+    }): void
+
+    hide (): void
+  }
 }
 
 declare let $notify: Window['$notify']
+declare let $confirm: Window['$confirm']
 declare const __REDUX_DEVTOOLS_EXTENSION__: any
 
 declare interface ResponseData<ApiData = {}> {

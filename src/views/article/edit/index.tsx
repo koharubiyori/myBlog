@@ -20,6 +20,7 @@ import useHideSideBarRight from '~/hooks/useHideSideBarRight'
 import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
+import BgImg from '~/components/BgImg'
 
 export interface Props {
   
@@ -54,25 +55,19 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
       article.get({
         articleId: router.params.state.articleId!,
         noCount: true
-      }).then(data =>{
-        setTitle(data.title)
-        setProfile(data.profile)
-        setHeadImg(data.headImg)
-        setHeadImgStatus(3)
-        getTags().then(tagList =>{
-          setTags(data.tags.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
-        })
-
-        editor.current!.setMarkdown(data.content)
       })
-    //   const {title, profile, tags, headImg} = router.params.state.articleData
+        .then(data =>{
+          setTitle(data.title)
+          setProfile(data.profile)
+          setHeadImg(data.headImg)
+          setHeadImgStatus(3)
+          getTags().then(tagList =>{
+            setTags(data.tags.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
+          })
 
-    //   setTitle(title!)
-    //   setProfile(profile!)
-    //   setHeadImg(headImg!)
-    //   getTags().then(tagList =>{
-    //     setTags(tags!.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
-    //   })
+          editor.current!.setMarkdown(data.content)
+          editor.current!.moveCursorToStart()
+        })
     }
   }, [])
 
@@ -153,12 +148,13 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
       .then(tagIds =>{
         return article.publish({
           title, profile, content, headImg,
-          tags: tagIds as string[]
+          tags: tagIds as string[],
+          ...(type === 1 ? { articleId: router.params.state.articleId } : {})
         })
       })
       .then(() =>{
-        $notify.success('文章发布成功')
-        router.replace('/')
+        $notify.success(`文章${type === 0 ? '发布' : '修改'}成功`)
+        type === 0 && router.replace('/', { state: { reload: true } })
       })
       .catch(e =>{
         console.log(e)
@@ -168,6 +164,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
   return (
     <div>
+      <BgImg hidden />
       <h2 className={com.mainTitle} style={{ marginBottom: 40 }}>{type === 0 ? '新建' : '修改'}文章</h2>
       <div>
         <div className={c(flex.row, flex.crossCenter)}>
@@ -181,7 +178,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
             onChange={e => setTitle(e.target.value.trim())}
           />
 
-          <Button style={{ marginLeft: 30 }} variant="contained" color="primary" size="large" onClick={publish}>发布</Button>
+          <Button style={{ marginLeft: 30 }} variant="contained" color="primary" size="large" onClick={publish}>{type === 0 ? '发布' : '保存'}</Button>
         </div>
         
         <TextField fullWidth multiline 

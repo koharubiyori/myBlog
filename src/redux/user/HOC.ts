@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import {
   SET, CLEAR,
-  ConnectedState
+  State
 } from './index'
 import store from '~/redux'
 import user from '~/api/user'
@@ -9,7 +9,7 @@ import Cookies from 'js-cookie'
 
 const { dispatch, getState } = store
 
-export const set = (data: Partial<ConnectedState>) => dispatch({ type: SET, data })
+export const set = (data: Partial<State>) => dispatch({ type: SET, data })
 export const clear = () => dispatch({ type: CLEAR })
 
 export const updateUserInfo = () => new Promise((resolve, reject) =>{
@@ -45,7 +45,7 @@ interface ConnectedDispatch {
 }
 
 export type UserConnectedProps = ConnectedDispatch & {
-  state: { user: ConnectedState }
+  state: { user: State }
 }
 
 export const userHOC = connect(

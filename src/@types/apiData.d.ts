@@ -35,4 +35,14 @@ declare namespace ApiData {
     _id: string
     name: string
   }
+
+  interface Comment {
+    _id?: ObjectID
+    articleId: ObjectID
+    userId: ObjectID 
+    parentId: ObjectID | ''
+    content: string
+    deleted: boolean
+    userData: Omit<ApiData.User, 'account'> 
+  }
 }

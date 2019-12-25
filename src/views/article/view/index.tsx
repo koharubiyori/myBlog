@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
+import React, { useState, useEffect, useRef, PropsWithChildren, useContext } from 'react'
 import { makeStyles, Box } from '@material-ui/core'
 import EditorViewer from 'tui-editor/dist/tui-editor-Viewer'
 import 'tui-editor/dist/tui-editor.css' // editor's ui
@@ -18,6 +18,7 @@ import resetComponentProps from '~/utils/resetComponentProps'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import styleVars from '~/styles/styleVars'
 import ArticleComment from './Comment'
+import { SideBarRightContext } from '~/views/mainLayout/sideBarRight'
 
 export interface Props {
   

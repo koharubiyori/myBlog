@@ -1,7 +1,7 @@
 import React, { useState, useEffect, PropsWithChildren, createContext, useRef } from 'react'
 import MyAppBar from './myAppBar'
 import SideBar from './sideBar'
-import { default as SideBarRight, SideBarRightRef } from './sideBarRight'
+import { default as SideBarRight, SideBarRightRef, SideBarRightContext } from './sideBarRight'
 import { default as ActionsButton, ActionsButtonRef } from './ActionsButton'
 import common from '~/api/common'
 import { makeStyles } from '@material-ui/core'
@@ -11,10 +11,6 @@ import BgImg from '~/components/BgImg'
 
 export interface Props extends RouteComponent {
   
-}
-
-export interface State {
-  theme: ApiData.Theme
 }
 
 export interface MainLayoutControllers {
@@ -35,7 +31,8 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
       sideBarRight: useRef<SideBarRightRef>(),
       actionsButton: useRef<ActionsButtonRef>()
     },
-    mainLayoutControllers = useRef<MainLayoutControllers>(null)
+    mainLayoutControllers = useRef<MainLayoutControllers>(null),
+    sideBarRightContentValue = useRef<SideBarRightContext>(null)
 
     useEffect(() =>{
       common.getTheme().then(setTheme)
@@ -57,11 +54,13 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
 
           <div className={c(classes.contentContainer, flex.grow)}>
             <MainLayoutContext.Provider value={mainLayoutControllers.current}>
-              <div className="mainLayout-content">{props.children}</div>
+              <SideBarRightContext.Provider value={sideBarRightContentValue.current}>
+                <div className="mainLayout-content">{props.children}</div>
+              </SideBarRightContext.Provider>
             </MainLayoutContext.Provider>
           </div>
           
-          <SideBarRight getRef={refs.sideBarRight} />
+          <SideBarRight getRef={refs.sideBarRight} getContextValue={sideBarRightContentValue} />
         </div>
         
         <ActionsButton getRef={refs.actionsButton} />

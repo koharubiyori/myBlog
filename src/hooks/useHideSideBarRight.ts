@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
-import { MainLayoutControllers } from '~/views/mainLayout'
+import { useEffect, useContext } from 'react'
+import { MainLayoutContext } from '~/views/mainLayout'
 
-export default function useHideSideBarRight(mainLayoutControllers: MainLayoutControllers | null){
+export default function useHideSideBarRight(){
+  const mainLayoutControllers = useContext(MainLayoutContext)
+  
   useEffect(() =>{
     if(!mainLayoutControllers){ return () =>{} }
     mainLayoutControllers.actionsButton.setVisible(false)

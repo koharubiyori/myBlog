@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, PropsWithChildren, ChangeEvent } from 'react'
+import React, { useState, useEffect, useRef, PropsWithChildren, ChangeEvent } from 'react'
 import Editor from 'tui-editor'
 import 'tui-editor/dist/tui-editor-extScrollSync'
 import 'tui-editor/dist/tui-editor-extColorSyntax'
@@ -7,7 +7,6 @@ import 'tui-editor/dist/tui-editor-contents.css' // editor's content
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
 import 'tui-color-picker/dist/tui-color-picker.css'
-import { MainLayoutContext } from '~/views/mainLayout'
 import { Button, TextField, makeStyles } from '@material-ui/core'
 import ImageIcon from '@material-ui/icons/Image'
 import article from '~/api/article'
@@ -37,7 +36,6 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter<{}, RouteStateParams>(),
-    mainLayoutControllers = useContext(MainLayoutContext),
     [title, setTitle] = useState(''),
     [profile, setProfile] = useState(''),
     [tags, setTags] = useState<string[]>([]),
@@ -49,6 +47,8 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     },
     editor = useRef<InstanceType<typeof Editor>>(),
     type = router.params.state.type
+
+  useHideSideBarRight()
 
   useEffect(() =>{
     if(type === 1){
@@ -88,8 +88,6 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         })
     })
   }, [])
-
-  useHideSideBarRight(mainLayoutControllers)
 
   function uploadHeadImg(event: ChangeEvent<HTMLInputElement>){
     if(event.target.files!.length === 0){ return }

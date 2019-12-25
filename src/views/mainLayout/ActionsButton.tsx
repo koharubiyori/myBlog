@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { PropsWithChildren, useState, useEffect, useRef } from 'react'
 import resetComponentProps from '~/utils/resetComponentProps'
 import SpeedDial from '@material-ui/lab/SpeedDial'
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon'

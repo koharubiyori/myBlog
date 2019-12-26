@@ -27,7 +27,7 @@ function SideBarRight(props: PropsWithChildren<FinalProps>){
     classes = useStyles(), 
     router = createRouter(),
     [visible, setVisible] = useState(true),
-    [Content, setContent] = useState<FC>(() => () => null)
+    [Content, setContent] = useState<FC | null>(null)
   let disabledResizeHandler = false
 
   if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler }
@@ -49,7 +49,11 @@ function SideBarRight(props: PropsWithChildren<FinalProps>){
   return (
     visible ?
       <div className={classes.root}>
-        <Content />
+        {Content ? 
+          <Content />
+        :
+          <div>1234</div>  
+        }
       </div>
     : null
   )

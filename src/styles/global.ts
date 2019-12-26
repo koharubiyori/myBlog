@@ -1,7 +1,7 @@
 import createClasses from '~/utils/createClasses'
 import styleVars from './styleVars'
 
-const minWidth = 720
+const minWidth = 870
 const nProgressColor = '#F9CD36'
 
 createClasses('', {
@@ -17,7 +17,8 @@ createClasses('', {
     },
 
     '::-webkit-scrollbar': {
-      width: 8
+      width: 8,
+      height: 8
     },
 
     '::-webkit-scrollbar-thumb': {
@@ -26,7 +27,14 @@ createClasses('', {
     },
 
     '::-webkit-scrollbar-track': {
-      backgroundColor: '#ccc'
+      backgroundColor: '#eee',
+      boxShadow: 'inset 0 0 5px rgba(0,0,0,0.2)'
+    },
+
+    '[data-name=mojs-shape]': {
+      position: 'fixed !important',
+      zIndex: 10000,
+      pointerEvents: 'none'
     },
 
     hr: {

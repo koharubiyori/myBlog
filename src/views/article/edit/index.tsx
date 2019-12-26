@@ -15,7 +15,7 @@ import _ from 'lodash'
 import TagInput from './components/TagInput'
 import tagApis from '~/api/tag'
 import nProgress from 'nprogress'
-import useHideSideBarRight from '~/hooks/useHideSideBarRight'
+import useHideSidebarRight from '~/hooks/useHideSidebarRight'
 import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
@@ -48,7 +48,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     editor = useRef<InstanceType<typeof Editor>>(),
     type = router.params.state.type
 
-  useHideSideBarRight()
+  useHideSidebarRight()
 
   useEffect(() =>{
     if(type === 1){
@@ -74,7 +74,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
   useEffect(() =>{
     editor.current = new Editor({
       el: refs.editor.current!,
-      height: '650px',
+      height: 'calc(100vh - 100px)',
       initialEditType: 'markdown',
       previewStyle: 'vertical',
       language: 'zh_CN',
@@ -213,7 +213,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         </div>
       </div>
 
-      <div ref={refs.editor as any} style={{ backgroundColor: 'white' }} />
+      <div ref={refs.editor as any} style={{ backgroundColor: 'white', minHeight: 650 }} />
     </div>
   )
 }

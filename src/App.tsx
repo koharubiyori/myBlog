@@ -10,6 +10,7 @@ import styleVars from './styles/styleVars'
 import { Provider as KeepAliveProvider } from 'react-keep-alive'
 import { navigate } from '@reach/router'
 import MyConfirm, { MyConfirmRef } from './components/dialog/Confirm'
+import './utils/mouseClick'
 
 const theme = createMuiTheme({
   palette: {

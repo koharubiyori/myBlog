@@ -1,7 +1,7 @@
 import React, { useState, useEffect, PropsWithChildren, createContext, useRef } from 'react'
 import MyAppBar from './myAppBar'
-import SideBar from './sideBar'
-import { default as SideBarRight, SideBarRightRef, SideBarRightContext } from './sideBarRight'
+import Sidebar from './sidebar'
+import { default as SidebarRight, SidebarRightRef } from './sidebarRight'
 import { default as ActionsButton, ActionsButtonRef } from './ActionsButton'
 import common from '~/api/common'
 import { makeStyles } from '@material-ui/core'
@@ -14,11 +14,14 @@ export interface Props extends RouteComponent {
 }
 
 export interface MainLayoutControllers {
-  sideBarRight: SideBarRightRef
+  sidebarRight: SidebarRightRef
   actionsButton: ActionsButtonRef
 }
 
-export const MainLayoutContext = createContext<MainLayoutControllers | null>(null)
+// 因为mainLayoutControllers的成员都是组件实例(ref)，为了防止拿到null，这里保存一个promise，并将resolve函数赋给外部变量
+// 之后在下面的useEffect中，调用resolve，传入mainLayoutControllers对象
+let mainLayoutControllersResolve: (value: MainLayoutControllers) => void 
+export const MainLayoutContext = createContext<Promise<MainLayoutControllers>>(new Promise(resolve => mainLayoutControllersResolve = resolve))
 
 type FinalProps = Props
 
@@ -28,21 +31,19 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
     router = createRouter(),
     [theme, setTheme] = useState<ApiData.Theme>({} as any),
     refs = {
-      sideBarRight: useRef<SideBarRightRef>(),
+      sidebarRight: useRef<SidebarRightRef>(),
       actionsButton: useRef<ActionsButtonRef>()
-    },
-    mainLayoutControllers = useRef<MainLayoutControllers>(null),
-    sideBarRightContentValue = useRef<SideBarRightContext>(null)
+    }
 
     useEffect(() =>{
       common.getTheme().then(setTheme)
     }, [])
 
     useEffect(() =>{
-      (mainLayoutControllers.current as any) = {
-        sideBarRight: refs.sideBarRight.current!,
+      mainLayoutControllersResolve({
+        sidebarRight: refs.sidebarRight.current!,
         actionsButton: refs.actionsButton.current!
-      }
+      })
     }, [])
 
     return (
@@ -50,17 +51,13 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
         <MyAppBar />
         <BgImg uri={'https://i.loli.net/2019/11/19/1tconZNSjgXROA7.png'} />
         <div className={c(flex.row)}>
-          <SideBar theme={theme} />
+          <Sidebar theme={theme} />
 
           <div className={c(classes.contentContainer, flex.grow)}>
-            <MainLayoutContext.Provider value={mainLayoutControllers.current}>
-              <SideBarRightContext.Provider value={sideBarRightContentValue.current}>
-                <div className="mainLayout-content">{props.children}</div>
-              </SideBarRightContext.Provider>
-            </MainLayoutContext.Provider>
+            <div className="mainLayout-content">{props.children}</div>
           </div>
           
-          <SideBarRight getRef={refs.sideBarRight} getContextValue={sideBarRightContentValue} />
+          <SidebarRight getRef={refs.sidebarRight} />
         </div>
         
         <ActionsButton getRef={refs.actionsButton} />

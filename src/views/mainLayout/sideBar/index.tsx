@@ -10,7 +10,7 @@ export interface Props {
 
 type FinalProps = Props
 
-function SideBar(props: PropsWithChildren<FinalProps>){
+function Sidebar(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter()
@@ -44,7 +44,7 @@ function SideBar(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default SideBar
+export default Sidebar
 
 const useStyles = makeStyles({
   root: {

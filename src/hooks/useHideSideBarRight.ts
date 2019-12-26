@@ -1,21 +1,24 @@
 import { useEffect, useContext } from 'react'
 import { MainLayoutContext } from '~/views/mainLayout'
 
-export default function useHideSideBarRight(){
-  const mainLayoutControllers = useContext(MainLayoutContext)
+export default function useHideSidebarRight(){
+  const mainLayoutControllersPromise = useContext(MainLayoutContext)
   
   useEffect(() =>{
-    if(!mainLayoutControllers){ return () =>{} }
-    mainLayoutControllers.actionsButton.setVisible(false)
-    mainLayoutControllers.actionsButton.setDisabledResizeHandler(true)
-    mainLayoutControllers.sideBarRight.setVisible(false)
-    mainLayoutControllers.sideBarRight.setDisabledResizeHandler(true)
+    mainLayoutControllersPromise.then(controllers =>{
+      controllers.actionsButton.setVisible(false)
+      controllers.actionsButton.setDisabledResizeHandler(true)
+      controllers.sidebarRight.setVisible(false)
+      controllers.sidebarRight.setDisabledResizeHandler(true)
+    })
 
     return () =>{
-      mainLayoutControllers.actionsButton.setVisible(true)
-      mainLayoutControllers.actionsButton.setDisabledResizeHandler(false)
-      mainLayoutControllers.sideBarRight.setVisible(true)
-      mainLayoutControllers.sideBarRight.setDisabledResizeHandler(false)
+      mainLayoutControllersPromise.then(controllers =>{
+        controllers.actionsButton.setVisible(true)
+        controllers.actionsButton.setDisabledResizeHandler(false)
+        controllers.sidebarRight.setVisible(true)
+        controllers.sidebarRight.setDisabledResizeHandler(false)
+      })
     }
   })
 }

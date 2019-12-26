@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 const checker = (regex: RegExp) => (text: string) => regex.test(text)
 
 export default {

@@ -5,7 +5,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
-import { Link } from '@reach/router'
 import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 
@@ -58,7 +57,7 @@ export default resetComponentProps<Props>(
 
 const useStyles = makeStyles({
   appBar: {
-    zIndex: 1201,    // sideBar的z-index为1200
+    zIndex: 1201,    // sidebar的z-index为1200
     minWidth: 1350,
   
     '@global [class*="root"]:not(foo)': {

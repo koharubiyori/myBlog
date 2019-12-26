@@ -22,6 +22,29 @@ declare module 'react-redux' {
   export const Provider: React.Component<{ store: object }> & { new (...args: any[]): any }
 }
 
+declare module 'markdown-contents' {
+  export interface Article {
+    level: number
+    id: string
+    name: string
+  }
+
+  export interface MarkdownContents {
+    articles (): Article[]
+  }
+  
+  export interface CreateMarkdownContents {
+    (markdown: string): MarkdownContents
+  }
+
+  const createMarkdownContents: CreateMarkdownContents
+  export default createMarkdownContents
+}
+
+declare module '@mojs/core' {
+  export default any
+}
+
 declare function c(...args: string[]): string
 
 // type SnackbarPosition = ['top' | 'bottom', 'left' | 'center' | 'right']

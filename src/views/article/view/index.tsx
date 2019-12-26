@@ -18,7 +18,8 @@ import resetComponentProps from '~/utils/resetComponentProps'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import styleVars from '~/styles/styleVars'
 import ArticleComment from './Comment'
-import { SideBarRightContext } from '~/views/mainLayout/sideBarRight'
+import ArticleContents from './Contents'
+import { MainLayoutContext } from '~/views/mainLayout'
 
 export interface Props {
   
@@ -34,14 +35,22 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
     router = createRouter<RouteSearchParams>(),
+    mainLayoutControllersPromise = useContext(MainLayoutContext),
     [articleData, setArticleData] = useState<ApiData.Article>(),
     refs = {
       editor: useRef<HTMLDivElement>()
     },
     editor = useRef<EditorViewer>()
-  
+
+
   useEffect(() =>{
     loadArticle(router.params.search.articleId)
+
+    return () =>{
+      mainLayoutControllersPromise.then(controllers =>{
+        controllers.sidebarRight.writeContent()
+      })
+    }
   }, [])
 
   function loadArticle(articleId: string){
@@ -52,6 +61,20 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
         editor.current = new EditorViewer({
           el: refs.editor.current!,
           initialValue: data.content
+        })
+
+        let titleTopOffsets = Array.from(refs.editor.current!.querySelectorAll('h1, h2, h3, h4, h5, h6')).map((item, index) =>{
+          item.setAttribute('id', `${index}-${item.textContent}`)
+          return item.getBoundingClientRect().top
+        })
+
+        mainLayoutControllersPromise.then(controllers =>{
+          controllers.sidebarRight.writeContent(
+            <ArticleContents 
+              markdown={data.content} 
+              titleTopOffsets={titleTopOffsets}
+            />
+          )
         })
       })
   }

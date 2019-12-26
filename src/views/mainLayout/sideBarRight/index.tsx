@@ -6,23 +6,17 @@ import createRouter from '~/utils/createRouter'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
-  getContextValue?: React.MutableRefObject<any>
 }
 
-export interface SideBarRightRef {
+export interface SidebarRightRef {
   setVisible (val: boolean): void
   setDisabledResizeHandler (val: boolean): void
+  writeContent (content?: JSX.Element | null): void
 }
-
-export interface SideBarRightContext {
-  setContent: React.Dispatch<React.SetStateAction<FC<{}>>>
-}
-
-export const SideBarRightContext = createContext<SideBarRightContext | null>(null)
 
 type FinalProps = Props & UserConnectedProps
 
-function SideBarRight(props: PropsWithChildren<FinalProps>){
+function SidebarRight(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(), 
     router = createRouter(),
@@ -30,8 +24,11 @@ function SideBarRight(props: PropsWithChildren<FinalProps>){
     [Content, setContent] = useState<FC | null>(null)
   let disabledResizeHandler = false
 
-  if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler }
-  if(props.getContextValue) props.getContextValue.current = { setContent }
+  if(props.getRef) props.getRef.current = { 
+    setVisible, 
+    setDisabledResizeHandler,
+    writeContent: (content = null) => setContent(() => content ? () => content : null)  
+  }
 
   useEffect(() =>{
     const resizeHandler = () =>{
@@ -48,24 +45,33 @@ function SideBarRight(props: PropsWithChildren<FinalProps>){
 
   return (
     visible ?
-      <div className={classes.root}>
-        {Content ? 
-          <Content />
-        :
-          <div>1234</div>  
-        }
-      </div>
+      <>
+        <div className={classes.root}>
+          {Content ? 
+            <Content />
+          :
+            <div>1234</div>  
+          }
+        </div>
+
+        <div style={{ width: 200 }} />
+      </>
     : null
   )
 }
 
 export default resetComponentProps<Props>(
-  userHOC(SideBarRight)
+  userHOC(SidebarRight)
 ) 
 
 const useStyles = makeStyles({
   root: {
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+    right: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    width: 200
+    width: 200,
+    paddingTop: 70,
   }
 })

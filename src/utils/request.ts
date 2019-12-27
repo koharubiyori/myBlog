@@ -21,7 +21,7 @@ function requestDataHandler(req: AxiosRequestConfig){
   }
 
   if(req.headers.upload === 1){
-    let formData = new FormData
+    let formData = new FormData()
     for(let key in req.data){
       formData.append(key, req.data[key])
     }

@@ -8,9 +8,9 @@ import mountNotifyMethod from './utils/mountNotifyMethod'
 import init from './init'
 import styleVars from './styles/styleVars'
 import { Provider as KeepAliveProvider } from 'react-keep-alive'
-import { navigate } from '@reach/router'
 import MyConfirm, { MyConfirmRef } from './components/dialog/Confirm'
 import './utils/mouseClick'
+import createRouter from './utils/createRouter'
 
 const theme = createMuiTheme({
   palette: {
@@ -24,6 +24,7 @@ const theme = createMuiTheme({
 })
 
 export default function App(){
+  const router = createRouter()
   const refs = {
     snackbar: useRef(),
     myConfirm: useRef<MyConfirmRef>()
@@ -43,7 +44,7 @@ export default function App(){
 
   useEffect(() =>{
     if(window.location.pathname === '/'){
-      navigate(basePath)
+      router.replace('/')
     }
   }, [])
 

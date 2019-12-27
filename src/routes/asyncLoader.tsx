@@ -1,5 +1,5 @@
 import React from 'react'
-import { default as loadable, DefaultComponent} from '@loadable/component'
+import { default as loadable } from '@loadable/component'
 import { CircularProgress } from '@material-ui/core'
 
 export default function(path: string){

@@ -45,10 +45,7 @@ function Home(props: PropsWithChildren<FinalProps>){
   function load(page = 1, keyword?: string){
     if(articleList.status === 2){ return }
     
-    setArticleList(prevVal =>{
-      console.log(prevVal)
-      return ({ ...prevVal, status: 2 })
-    })
+    setArticleList(prevVal => ({ ...prevVal, status: 2 }))
     article.search({ page, keyword })
       .then(data =>{ 
         let status = 3

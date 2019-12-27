@@ -1995,6 +1995,11 @@ amdefine@>=0.0.4:
   resolved "https://registry.npm.taobao.org/amdefine/download/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
+animated-scroll-to@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.npm.taobao.org/animated-scroll-to/download/animated-scroll-to-2.0.5.tgz#475fcf742ee38de0a969920182a6aaba319771b4"
+  integrity sha1-R1/PdC7jjeCpaZIBgqaqujGXcbQ=
+
 ansi-colors@^3.0.0:
   version "3.2.4"
   resolved "https://registry.npm.taobao.org/ansi-colors/download/ansi-colors-3.2.4.tgz#e3a3da4bfbae6c86a9c285625de124a234026fbf"
@@ -3210,14 +3215,6 @@ content-type@~1.0.4:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/content-type/download/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
   integrity sha1-4TjMdeBAxyexlm/l5fjJruJW/js=
-
-contents@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npm.taobao.org/contents/download/contents-5.0.0.tgz#4310b7304509659779adc1686bfde940310a063e"
-  integrity sha1-QxC3MEUJZZd5rcFoa/3pQDEKBj4=
-  dependencies:
-    lodash "^4.17.10"
-    sister "^3.0.1"
 
 convert-css-length@^2.0.1:
   version "2.0.1"
@@ -6889,7 +6886,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.npm.taobao.org/lodash.uniq/download/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5, lodash@~4.17.10:
+"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5, lodash@~4.17.10:
   version "4.17.15"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha1-tEf2ZwoEVbv+7dETku/zMOoJdUg=
@@ -6982,14 +6979,6 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
-
-markdown-contents@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.npm.taobao.org/markdown-contents/download/markdown-contents-1.0.11.tgz#e184d5143a2a4d86da3eac3d27ae8a194ca8f2eb"
-  integrity sha1-4YTVFDoqTYbaPqw9J66KGUyo8us=
-  dependencies:
-    contents "^5.0.0"
-    lodash "^4.17.10"
 
 markdown-it@^9.0.0:
   version "9.1.0"
@@ -9950,11 +9939,6 @@ simple-swizzle@^0.2.2:
   integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
   dependencies:
     is-arrayish "^0.3.1"
-
-sister@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.npm.taobao.org/sister/download/sister-3.0.2.tgz#bb3e39f07b1f75bbe1945f29a27ff1e5a2f26be4"
-  integrity sha1-uz458HsfdbvhlF8pon/x5aLya+Q=
 
 sisteransi@^1.0.3:
   version "1.0.4"

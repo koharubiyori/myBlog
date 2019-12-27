@@ -13,5 +13,11 @@ export default {
     padding: 20,
     borderRadius: 1,
     boxShadow: `0 0 3px white`
+  },
+
+  textLimit: {
+    whiteSpace: 'nowrap' as any,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   }
 }

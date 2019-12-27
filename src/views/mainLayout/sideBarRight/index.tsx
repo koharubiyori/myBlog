@@ -54,7 +54,7 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
           }
         </div>
 
-        <div style={{ width: 200 }} />
+        <div style={{ width: 220 }} />
       </>
     : null
   )
@@ -71,7 +71,7 @@ const useStyles = makeStyles({
     bottom: 0,
     right: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    width: 200,
-    paddingTop: 70,
+    width: 220,
+    paddingTop: 60
   }
 })

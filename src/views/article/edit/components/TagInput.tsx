@@ -6,7 +6,7 @@ import { CSSTransition } from 'react-transition-group'
 import ClearIcon from '@material-ui/icons/Clear'
 import { flex, transition } from '~/styles'
 import styleVars from '~/styles/styleVars'
-import TagIcon from '~/components/icons/tag'
+import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 
 export interface Props {
   tags: string[]

@@ -49,7 +49,7 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
     return (
       <>
         <MyAppBar />
-        <BgImg uri={'https://i.loli.net/2019/11/19/1tconZNSjgXROA7.png'} />
+        {/* <BgImg uri={'https://i.loli.net/2019/12/29/6PeLfzWnEdNJ1B9.png'} /> */}
         <div className={c(flex.row)}>
           <Sidebar theme={theme} />
 

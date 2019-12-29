@@ -3,6 +3,7 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '
 import HomeIcon from '@material-ui/icons/Home'
 import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
+import { appBarHeight } from '../myAppBar'
 
 export interface Props {
   theme: ApiData.Theme
@@ -22,7 +23,7 @@ function Sidebar(props: PropsWithChildren<FinalProps>){
         className={classes.root}
       >
         {/* 给toolbar让出位置 */}
-        <div style={{ height: 70 }} />
+        <div style={{ height: appBarHeight + 10 }} />
 
         <img src={props.theme.avatar || require('~/images/sub/akari.jpg')} alt="icon" className={classes.avatar} />
         <div className={classes.info}>

@@ -9,7 +9,7 @@ import WatchLaterIcon from '@material-ui/icons/WatchLater'
 import ForumIcon from '@material-ui/icons/Forum'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import StarsIcon from '@material-ui/icons/Stars'
-import TagIcon from '~/components/icons/tag'
+import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 
 export interface Props {
   articleData: ApiData.SearchResult
@@ -59,7 +59,7 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
         
         <div className="tags">{tagNames.map(tagName =>
           <div className="tag" key={tagName}>
-            <TagIcon color="white" style={{ marginRight: 5 }} />
+            <TagIcon className={classes.tagIcon} />
             <span>{tagName}</span>
           </div>  
         )}</div>
@@ -180,4 +180,13 @@ const useStyles = makeStyles({
       },
     }
   },
+
+  tagIcon: {
+    width: 13, 
+    height: 13, 
+    marginRight: 5, 
+    fill: 'white',
+    position: 'relative',
+    top: 1
+  }
 })

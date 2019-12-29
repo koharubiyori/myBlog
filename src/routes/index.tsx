@@ -1,6 +1,7 @@
 import React from 'react'
 import { Router } from '@reach/router'
 import asyncLoader from './asyncLoader'
+import Route from './Route'
 import MainLayout from '~/views/mainLayout'
 import Home from '~/views/home'
 
@@ -24,7 +25,7 @@ export default function Routes(){
   return (
     <Router basepath={basePath}>
       <MainLayout path="/">
-        {Object.keys(routeMaps).map(path => React.createElement((routeMaps as any)[path], { path, key: path }))}
+        {Object.keys(routeMaps).map(path => <Route key={path} path={path} component={(routeMaps as any)[path]} />)}
         <Home path="/" />
       </MainLayout>
     </Router>

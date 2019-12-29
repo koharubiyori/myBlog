@@ -8,6 +8,8 @@ import resetComponentProps from '~/utils/resetComponentProps'
 import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 
+export const appBarHeight = 55
+
 export interface Props {
   
 }
@@ -62,6 +64,12 @@ const useStyles = makeStyles({
   
     '@global [class*="root"]:not(foo)': {
       color: 'white',
+    },
+
+    '@global': {
+      '.MuiToolbar-regular': {
+        minHeight: appBarHeight
+      }
     }
   },
   

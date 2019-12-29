@@ -74,7 +74,7 @@ function flatten(root: TreeCommentData[]): FlattenedTree[]{
     return childrenCopy.reduce((prev, next) =>{
       let children = next.children || []
       delete next.children
-      return prev.concat(through(children).reverse(), [next])
+      return prev.concat(through(children), [next])
     }, [] as FlattenedTree[])
   }
 

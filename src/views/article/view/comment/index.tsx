@@ -11,9 +11,13 @@ import CommentItem from './components/Item'
 import _ from 'lodash'
 import reducer from './redux/commentList'
 
+export interface ArticleCommentRef {
+  load (): void
+}
 
 export interface Props {
-  articleData: ApiData.Article
+  articleId: string
+  getRef?: React.MutableRefObject<any>
 }
 
 type FinalProps = Props & UserConnectedProps
@@ -26,13 +30,15 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
       original: [],
       flattenedTree: [], 
     })
+  
+  if(props.getRef) props.getRef.current = { load }
 
   useEffect(() =>{
     load()
   }, [])
 
   function load(){
-    comment.get({ articleId: props.articleData._id })
+    comment.get({ articleId: props.articleId })
       .then(data =>{
         commentListDispatch({ type: 'set', data })
       })
@@ -77,13 +83,13 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
   function submitComment(){
     if(!commentValue) return $notify('评论内容不能为空')
     comment.post({
-      articleId: props.articleData._id,
+      articleId: props.articleId,
       content: commentValue
     })
       .then(data =>{
         commentListIncrement({
           _id: data.commentId,
-          articleId: props.articleData._id,
+          articleId: props.articleId,
           userId: props.state.user._id,
           parentId: '',
           content: commentValue,
@@ -95,6 +101,8 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
         $notify.success('发表成功')
       })
   }
+
+  console.log(commentListState)
 
   return (
     <Box boxShadow={2} className={classes.container}>
@@ -120,7 +128,7 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
         <CommentItem 
           key={item._id}
           commentData={item} 
-          articleId={props.articleData._id}
+          articleId={props.articleId}
           commentListIncrement={commentListIncrement}
           userData={props.state.user}
           onClickDelete={delComment}
@@ -129,7 +137,7 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
             <CommentItem
               key={item._id}
               commentData={item}
-              articleId={props.articleData._id}
+              articleId={props.articleId}
               commentListIncrement={commentListIncrement}
               userData={props.state.user}
               onClickDelete={delComment}

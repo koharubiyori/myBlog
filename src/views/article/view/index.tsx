@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, PropsWithChildren, useContext } from 'react'
-import { makeStyles, Box } from '@material-ui/core'
+import { makeStyles, Box, Tooltip } from '@material-ui/core'
 import EditorViewer from 'tui-editor/dist/tui-editor-Viewer'
 import 'tui-editor/dist/tui-editor.css' // editor's ui
 import 'tui-editor/dist/tui-editor-contents.css' // editor's content
@@ -11,16 +11,21 @@ import WatchLaterIcon from '@material-ui/icons/WatchLater'
 import ForumIcon from '@material-ui/icons/Forum'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import StarsIcon from '@material-ui/icons/Stars'
-import TagIcon from '~/components/icons/tag'
+import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import idToMoment from '~/utils/idToMoment'
 import { flex } from '~/styles'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
-import styleVars from '~/styles/styleVars'
-import ArticleComment from './comment'
+import styleVars, { createTransition } from '~/styles/styleVars'
+import ArticleComment, { ArticleCommentRef } from './comment'
 import ArticleContents from './Contents'
 import { MainLayoutContext } from '~/views/mainLayout'
 import parseTitles from './utils/parseTitles'
+import trimArticleContent from './utils/trimArticleContent'
+import useArticleContentStyles from './styles/articleContent'
+import qs from 'qs'
+import animatedScrollTo from 'animated-scroll-to'
+import { CSSTransition } from 'react-transition-group'
 
 export interface Props {
   
@@ -30,19 +35,29 @@ interface RouteSearchParams {
   articleId: string
 }
 
+interface ArticleCache {
+  [articleId: string]: {
+    data: ApiData.Article
+    scroll: number
+  }
+}
+
 type FinalProps = Props & DataConnectedProps
 
 function ArticleView(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    articleContentStyles = useArticleContentStyles(),
     router = createRouter<RouteSearchParams>(),
     mainLayoutControllersPromise = useContext(MainLayoutContext),
-    [articleData, setArticleData] = useState<ApiData.Article>(),
+    [visible, setVisible] = useState(false),
+    [articleData, setArticleData] = useState<ApiData.Article>(null as any),
     refs = {
-      editor: useRef<HTMLDivElement>()
+      editor: useRef<HTMLDivElement>(),
+      comment: useRef<ArticleCommentRef>()
     },
-    editor = useRef<EditorViewer>()
-
+    editor = useRef<EditorViewer>(),
+    articleCache = useRef<ArticleCache>({})
 
   useEffect(() =>{
     loadArticle(router.params.search.articleId)
@@ -54,24 +69,66 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
     }
   }, [])
 
-  function loadArticle(articleId: string){
-    article.get({ articleId })
-      .then(data =>{
-        setArticleData(data)
-        props.$data.getTags().then(tagList => tagList)
-        editor.current = new EditorViewer({
-          el: refs.editor.current!,
-          initialValue: data.content
+  useEffect(() =>{
+    return router.listen(({location, action}) =>{
+      if(location.pathname === router.location.pathname){
+        // 加载新的文章时，缓存上一篇文章的进度条位置
+        setArticleData(prevVal =>{
+          if(prevVal){
+            articleCache.current[prevVal._id].scroll = window.scrollY
+          }
+          
+          return prevVal
         })
 
-        let titles = parseTitles(refs.editor.current!)
-
-        mainLayoutControllersPromise.then(controllers =>{
-          controllers.sidebarRight.writeContent(
-            <ArticleContents titles={titles} />
-          )
+        animatedScrollTo(0, { maxDuration: 500, minDuration: 500, speed: 2000 })
+          .then(() =>{
+            loadArticle(qs.parse(location.search.split('?')[1]).articleId)
+            refs.comment.current!.load()
+          })
+      }
+    })
+  }, [])
+  
+  function loadArticle(articleId: string, force = false){    
+    if(!force && articleCache.current[articleId]){
+      const {data, scroll} = articleCache.current[articleId]
+      writeContent(data)
+      setTimeout(() => window.scrollTo(0, scroll))
+    }else{
+      setVisible(false)
+      article.get({ articleId })
+        .then(data =>{
+          setVisible(true)
+          writeContent(data)
         })
+    }
+  }
+
+  function writeContent(articleData: ApiData.Article){
+    articleCache.current[articleData._id] = {
+      data: articleData,
+      scroll: 0
+    }
+
+    setArticleData(articleData)
+    setTimeout(() =>{
+      props.$data.getTags().then(tagList => tagList)
+      editor.current = new EditorViewer({
+        el: refs.editor.current!,
+        initialValue: articleData.content
       })
+
+      let titles = parseTitles(refs.editor.current!)
+
+      mainLayoutControllersPromise.then(controllers =>{
+        controllers.sidebarRight.writeContent(
+          <ArticleContents titles={titles} />
+        )
+      })
+
+      trimArticleContent(refs.editor.current!)
+    })
   }
 
   function tagNames(tagIds: string[]): string[]{
@@ -83,47 +140,82 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
   if(!articleData) return null
   return (
     <div>
-      <header>
-        <h2 className={classes.title}>{articleData.title}</h2>
-        <div className={c(flex.row, flex.center, classes.info)}>
-          <div>
-            <WatchLaterIcon />
-            <span>{idToMoment(articleData._id).format('YYYY年MM月DD日')}</span>
-          </div>
-          
-          <div>
-            <VisibilityIcon />
-            <span>{articleData.readNum} 次浏览</span>
-          </div>
-          
-          <div>
-            <ForumIcon />
-            <span>{articleData.commentTotal} 条评论</span>
+      <CSSTransition unmountOnExit in={visible} timeout={600} classNames={classes.fadeHeader}>
+        <header>
+          <h2 className={classes.title}>{articleData.title}</h2>
+          <div className={c(flex.row, flex.center, classes.info)}>
+            <div className={classes.infoBox} style={{ backgroundColor: '#007FFF' }}>
+              <WatchLaterIcon />
+              <span>{idToMoment(articleData._id).format('YYYY年MM月DD日')}</span>
+            </div>
+            
+            <div className={classes.infoBox} style={{ backgroundColor: '#04B431' }}>
+              <VisibilityIcon />
+              <span>{articleData.readNum} 次浏览</span>
+            </div>
+            
+            <div className={classes.infoBox} style={{ backgroundColor: '#370B5F' }}>
+              <ForumIcon />
+              <span>{articleData.commentTotal} 条评论</span>
+            </div>
+
+            <div className={classes.infoBox} style={{ backgroundColor: '#B40486' }}>
+              <StarsIcon />
+              <span>{articleData.collectTotal} 人收藏</span>
+            </div>
           </div>
 
-          <div>
-            <StarsIcon />
-            <span>{articleData.collectTotal} 人收藏</span>
-          </div>
-        </div>
-
-        <div className={c(flex.row, flex.crossCenter, classes.tags)}>{tagNames(articleData.tags).map(tagName =>
-          <div className="tag" key={tagName} title={`查看“${tagName}”分类下所有文章`}>
-            <TagIcon style={{ marginRight: 5 }} />
-            <span>{tagName}</span>
-          </div>  
-        )}</div>
-      </header>
+          <div className={c(flex.row, flex.crossCenter, classes.tags)}>{tagNames(articleData.tags).map(tagName =>
+            <div className="tag" key={tagName} title={`查看“${tagName}”分类下所有文章`}>
+              <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
+              <span>{tagName}</span>
+            </div>  
+          )}</div>
+        </header>
+      </CSSTransition>
      
-      <Box boxShadow={2} className={classes.container}>
-        <img src={articleData.headImg} className={classes.headImg} alt="headImg" />
-        <div className={classes.content}>
-          <div className={classes.profile}>{articleData.profile}</div>
-          <div ref={refs.editor as any} className={classes.markdownViewer} />
-        </div>
-      </Box>
+      <CSSTransition unmountOnExit in={visible} timeout={700} classNames={classes.fadeMain}>
+        <main>
+          <Box boxShadow={2} className={classes.container}>
+            <img src={articleData.headImg} className={classes.headImg} alt="headImg" />
+            <div className={classes.content}>
+              <div className={classes.profile}>{articleData.profile}</div>
+              <div ref={refs.editor as any} className={c(articleContentStyles.main)} />
+            </div>
+          </Box>
 
-      <ArticleComment articleData={articleData} />
+          <div className={c(flex.row, flex.between)}>
+            {articleData.lastArticle ? 
+              <Tooltip 
+                title={articleData.lastArticle.title} 
+                placement="right"
+                classes={{ tooltip: classes.toolTip }}
+              >
+                <div 
+                  className={classes.lastNextBtn} 
+                  onClick={() => router.push('/article/view', { search: { articleId: articleData.lastArticle._id } })}
+                >上一篇</div>
+              </Tooltip>
+
+            : <div />}
+
+            {articleData.nextArticle ? 
+              <Tooltip 
+                title={articleData.nextArticle.title} 
+                placement="left"
+                classes={{ tooltip: classes.toolTip }}
+              >
+                <div 
+                  className={classes.lastNextBtn} 
+                  onClick={() => router.push('/article/view', { search: { articleId: articleData.nextArticle._id } })}
+                >上一篇</div>
+              </Tooltip>
+            : <div />}
+          </div>
+
+          <ArticleComment articleId={router.params.search.articleId} getRef={refs.comment} />
+        </main>
+      </CSSTransition>
     </div>
   )
 }
@@ -141,7 +233,7 @@ const useStyles = makeStyles({
   },
 
   info: {
-    fontSize: 14,
+    fontSize: 13,
 
     '@global': {
       '> div': {
@@ -154,6 +246,12 @@ const useStyles = makeStyles({
         verticalAlign: 'text-bottom',
       }
     }
+  },
+
+  infoBox: {
+    borderRadius: 5,
+    padding: '5px 7px',
+    color: 'white',
   },
 
   tags: {
@@ -182,7 +280,7 @@ const useStyles = makeStyles({
   },
 
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 5,
     overflow: 'hidden',
     marginTop: 10
@@ -203,7 +301,47 @@ const useStyles = makeStyles({
     margin: '10px 0',
   },
 
-  markdownViewer: {
+  lastNextBtn: {
+    display: 'inline-block',
+    padding: '10px 20px',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 20,
+    boxShadow: '0 0 5px white',
+    marginTop: 20,
+    fontSize: 14,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
 
-  }
+    '&:hover': {
+      backgroundColor: 'white'
+    }
+  },
+
+  toolTip: {
+    fontSize: 13
+  },
+
+  fadeHeader: createTransition(
+    {
+      opacity: 0,
+      transform: 'translateY(-30px)'
+    }, {
+      transition: 'all 0.6s'
+    }, {
+      opacity: 1,
+      transform: 'initial'
+    }
+  ),
+
+  fadeMain: createTransition(
+    {
+      opacity: 0,
+      transform: 'translateY(30px)'
+    }, {
+      transition: 'all 0.7s'
+    }, {
+      opacity: 1,
+      transform: 'initial'
+    }
+  )
 })

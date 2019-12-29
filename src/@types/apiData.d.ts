@@ -27,6 +27,8 @@ declare namespace ApiData {
     createdMonth: number
     commentTotal: number
     collectTotal: number
+    lastArticle: ApiData.Article
+    nextArticle: ApiData.Article
   }
 
   type SearchResult = Omit<Article, 'content'>

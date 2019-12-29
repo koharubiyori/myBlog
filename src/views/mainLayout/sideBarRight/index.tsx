@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import createRouter from '~/utils/createRouter'
+import { appBarHeight } from '../myAppBar'
+import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -50,7 +52,8 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
           {Content ? 
             <Content />
           :
-            <div>1234</div>  
+            // <div>1234</div>  
+            <TagIcon style={{ width: 10, height: 10 }} />
           }
         </div>
 
@@ -70,8 +73,9 @@ const useStyles = makeStyles({
     top: 0,
     bottom: 0,
     right: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     width: 220,
-    paddingTop: 60
+    paddingTop: appBarHeight,
+    boxShadow: '0 0 5px #666'
   }
 })

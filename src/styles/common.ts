@@ -15,8 +15,4 @@ export default createClasses('com', {
   pointer: {
     cursor: 'pointer'
   },
-
-  aaa: {
-    backgroundColor: 'red'
-  }
 })

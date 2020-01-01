@@ -9,6 +9,9 @@ import './styles/global'
 // 用于拼接class
 window.c = (...args: string[]) => args.join(' ')
 
+window._GLOBAL = {
+  homeRefreshMark: false
+}
 
 nProgress.configure({ showSpinner: false })
 

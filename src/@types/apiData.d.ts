@@ -29,6 +29,7 @@ declare namespace ApiData {
     collectTotal: number
     lastArticle: ApiData.Article
     nextArticle: ApiData.Article
+    isTop: boolean
   }
 
   type SearchResult = Omit<Article, 'content'>

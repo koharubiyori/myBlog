@@ -35,10 +35,11 @@ function Home(props: PropsWithChildren<FinalProps>){
     [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>(initList())
 
   useKeepAliveEffect(() =>{
-    if(router.params.state.reload){
+    if(router.params.state.reload || _GLOBAL.homeRefreshMark){
       setArticleList(initList())
-      load()
+      load(1, true)
       router.clearState()
+      _GLOBAL.homeRefreshMark = false
     }
   })
 
@@ -48,14 +49,14 @@ function Home(props: PropsWithChildren<FinalProps>){
     load()
   }, [])
 
-  function load(page = 1, keyword?: string){
+  function load(page = 1, force = false){
     if(articleList.status === 2){ return }
     
     setArticleList(prevVal => ({ ...prevVal, status: 2 }))
-    if(articleList.cache[page]){
+    if(articleList.cache[page] && !force){
       setArticleList(prevVal => ({ ...prevVal, currentPage: page, status: 3 }))
     }else{
-      article.search({ page, keyword })
+      article.search({ page, exceptTop: true })
         .then(data =>{ 
           setArticleList(prevVal => ({
             total: data.total,

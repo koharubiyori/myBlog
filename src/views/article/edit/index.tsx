@@ -7,7 +7,7 @@ import 'tui-editor/dist/tui-editor-contents.css' // editor's content
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
 import 'tui-color-picker/dist/tui-color-picker.css'
-import { Button, TextField, makeStyles } from '@material-ui/core'
+import { Button, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, FormLabel } from '@material-ui/core'
 import ImageIcon from '@material-ui/icons/Image'
 import article from '~/api/article'
 import { getTags } from '~/redux/data/HOC'
@@ -41,6 +41,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     [tags, setTags] = useState<string[]>([]),
     [tagInput, setTagInput] = useState(''),
     [headImg, setHeadImg] = useState(''),
+    [isTop, setIsTop] = useState(false),
     [headImgStatus, setHeadImgStatus] = useState(1),
     refs = {
       editor: useRef<HTMLElement>()
@@ -60,6 +61,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
           setTitle(data.title)
           setProfile(data.profile)
           setHeadImg(data.headImg)
+          setIsTop(data.isTop)
           setHeadImgStatus(3)
           getTags().then(tagList =>{
             setTags(data.tags.map((tagId: string) => tagList.find(tag => tag._id === tagId)!.name))
@@ -67,6 +69,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
           editor.current!.setMarkdown(data.content)
           editor.current!.moveCursorToStart()
+          window.scrollTo(0, 0)
         })
     }
   }, [])
@@ -145,14 +148,15 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
       })
       .then(tagIds =>{
         return article.publish({
-          title, profile, content, headImg,
+          title, profile, content, headImg, isTop,
           tags: tagIds as string[],
           ...(type === 1 ? { articleId: router.params.state.articleId } : {})
         })
       })
       .then(() =>{
         $notify.success(`文章${type === 0 ? '发布' : '修改'}成功`)
-        type === 0 && router.replace('/', { state: { reload: true } })
+        _GLOBAL.homeRefreshMark = true
+        type === 0 && router.replace('/')
       })
       .catch(e =>{
         console.log(e)
@@ -163,7 +167,13 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
   return (
     <div>
       <BgImg hidden />
-      <h2 className={com.mainTitle} style={{ marginBottom: 40 }}>{type === 0 ? '新建' : '修改'}文章</h2>
+      <h2 className={c(com.mainTitle, flex.row, flex.between, flex.crossCenter)} style={{ marginBottom: 40 }}>
+        <span>{type === 0 ? '新建' : '修改'}文章</span>
+        <FormControlLabel
+          control={<Checkbox color="primary" checked={isTop} onChange={() => setIsTop(prevVal => !prevVal)} />}
+          label="文章置顶"
+        />
+      </h2>
       <div>
         <div className={c(flex.row, flex.crossCenter)}>
           <TextField

@@ -6,6 +6,7 @@ export namespace Api {
     content: string
     tags: string[]
     headImg: string
+    isTop: boolean
   }
 
   interface Get {
@@ -17,6 +18,7 @@ export namespace Api {
     keyword?: string
     page?: number
     limit?: number
+    exceptTop?: boolean
   }
 
   interface SearchByTag {

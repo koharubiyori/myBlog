@@ -8,6 +8,8 @@ export default {
 
   searchByTag: get<Api.SearchByTag, PageData<ApiData.SearchResult>>('article/searchByTag', { loading: true, fail: true }),
 
+  searchTop: get<undefined, ApiData.SearchResult>('article/searchTop'),
+
   publish: post<Api.Publish>('article/publish', { loading: true, fail: true }),
 
   delete: post<Api.Delete>('article/delete', { loading: true, fail: true }),

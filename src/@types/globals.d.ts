@@ -22,10 +22,15 @@ declare interface Window {
 
     hide (): void
   }
+
+  _GLOBAL: {
+    homeRefreshMark: boolean
+  }
 }
 
 declare let $notify: Window['$notify']
 declare let $confirm: Window['$confirm']
+declare let _GLOBAL: Window['_GLOBAL']
 declare const __REDUX_DEVTOOLS_EXTENSION__: any
 
 declare interface ResponseData<ApiData = {}> {

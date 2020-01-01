@@ -14,8 +14,14 @@ export interface Title{
   offset: number
 }
 
+
 export interface Props {
   titles: Title[]
+  getRef?: React.MutableRefObject<any>
+}
+
+export interface ArticleContentsRef {
+  setWindowScrollY (val: number): void
 }
 
 type FinalProps = Props
@@ -23,12 +29,13 @@ type FinalProps = Props
 function ArticleContents(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
-
     [windowScrollY, setWindowScrollY] = useState(window.scrollY),
     scrollLock = useRef(false),
     closeScrollLockTimeoutKey = useRef(0)
   let isMaxLevel2 = !props.titles.some(item => item.level === 1)    // 判断如果没有level为1的，那么认定最高标题等级为2(不考虑只有3级标题的情况)
     
+  if(props.getRef) props.getRef.current = { setWindowScrollY }
+
   useEffect(() =>{
     const windowScrollHandler = () =>{
       setWindowScrollY(window.scrollY)

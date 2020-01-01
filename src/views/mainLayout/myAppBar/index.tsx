@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useState, useEffect } from 'react'
 import { AppBar, Toolbar, Typography, InputBase, IconButton, Button, makeStyles } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import NotificationsIcon from '@material-ui/icons/Notifications'
@@ -7,6 +7,8 @@ import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
+import qs from 'qs'
+import { basePath } from '~/routes'
 
 export const appBarHeight = 55
 
@@ -14,12 +16,29 @@ export interface Props {
   
 }
 
+interface RouteSearchParams {
+  keyword?: string
+}
+
 type FinalProps = Props & UserConnectedProps
 
 function MyAppBar(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
-    router = createRouter()
+    router = createRouter<RouteSearchParams>(),
+    [searchInput, setSearchInput] = useState('')
+
+  useEffect(() =>{
+    if(router.location.pathname === `${basePath}/search`){
+      setSearchInput(router.params.search.keyword || '')
+    }
+  }, [])
+
+  function pressEnterToSearch(keyCode: number){
+    if(keyCode !== 13){ return }
+    if(searchInput === '') return $notify('搜索关键词不能为空')
+    router.push('/search', { search: { keyword: searchInput } })
+  }
 
   return (
     <AppBar className={classes.appBar}>
@@ -31,6 +50,9 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
           classes={{ focused: classes.searchInputFocused }}
           placeholder="搜索..."
           startAdornment={<SearchIcon style={{ marginRight: 20 }} />}
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value.trim())}
+          onKeyDown={e => pressEnterToSearch(e.keyCode)}
         />
         
         <Button variant="outlined" style={{ borderColor: '#eee', marginRight: 20 }}>关于我</Button>

@@ -74,6 +74,13 @@ export default resetComponentProps<Props>(
 
 const _transition = 'all 0.3s'
 const useStyles = makeStyles({
+  '@global @keyframes fadeSink': {
+    from: {
+      opacity: 0,
+      transform: 'translateY(-30px)'
+    }
+  },
+  
   container: {
     position: 'relative',
     height: 300,
@@ -81,6 +88,7 @@ const useStyles = makeStyles({
     color: 'white',
     cursor: 'pointer',
     overflow: 'hidden',
+    animation: 'fadeSink 0.7s',
 
     '&:hover': {
       '@global': {

@@ -44,9 +44,10 @@ declare interface PageData<Data = any> {
 }
 
 declare interface PageState<ListData = any> {
+  total: number
   pageTotal: number
   currentPage: number
-  list: ListData[],
+  cache: { [key: number]: ListData[] },
   status: number
 }
 

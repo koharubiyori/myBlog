@@ -1,6 +1,5 @@
-import { Component } from 'react'
+import { FC } from 'react'
 
 export default function <Props = {}>(component: any){
-  class ResetPropsComponent extends Component<Props> {}
-  return component as typeof ResetPropsComponent
+  return component as FC<Props>
 }

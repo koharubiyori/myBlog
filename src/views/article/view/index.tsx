@@ -13,12 +13,12 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import StarsIcon from '@material-ui/icons/Stars'
 import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import idToMoment from '~/utils/idToMoment'
-import { flex } from '~/styles'
+import { flex, transition } from '~/styles'
 import resetComponentProps from '~/utils/resetComponentProps'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import styleVars, { createTransition } from '~/styles/styleVars'
-import ArticleComment, { ArticleCommentRef } from './comment'
-import ArticleContents from './Contents'
+import ArticleComment, { ArticleCommentRef } from './components/comment'
+import ArticleContents, { ArticleContentsRef } from './Contents'
 import { MainLayoutContext } from '~/views/mainLayout'
 import parseTitles from './utils/parseTitles'
 import trimArticleContent from './utils/trimArticleContent'
@@ -54,7 +54,8 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
     [articleData, setArticleData] = useState<ApiData.Article>(null as any),
     refs = {
       editor: useRef<HTMLDivElement>(),
-      comment: useRef<ArticleCommentRef>()
+      comment: useRef<ArticleCommentRef>(),
+      contents: useRef<ArticleContentsRef>(),
     },
     editor = useRef<EditorViewer>(),
     articleCache = useRef<ArticleCache>({})
@@ -94,13 +95,16 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
     if(!force && articleCache.current[articleId]){
       const {data, scroll} = articleCache.current[articleId]
       writeContent(data)
-      setTimeout(() => window.scrollTo(0, scroll))
+      setTimeout(() =>{
+        window.scrollTo(0, scroll)
+        refs.contents.current!.setWindowScrollY(scroll)
+      })
     }else{
       setVisible(false)
       article.get({ articleId })
         .then(data =>{
-          setVisible(true)
           writeContent(data)
+          setVisible(true)
         })
     }
   }
@@ -123,7 +127,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
 
       mainLayoutControllersPromise.then(controllers =>{
         controllers.sidebarRight.writeContent(
-          <ArticleContents titles={titles} />
+          <ArticleContents titles={titles} getRef={refs.contents} />
         )
       })
 
@@ -131,90 +135,98 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
     })
   }
 
-  function tagNames(tagIds: string[]): string[]{
+  function tags(tagIds: string[]): ApiData.Tag[]{
     const {tags} = props.state.data
     if(!tags) return []
-    return tagIds.map(tagId => tags.find(tagObj => tagObj._id === tagId)!.name)
+    return tagIds.map(tagId => tags.find(tagObj => tagObj._id === tagId)!)
   }
   
-  if(!articleData) return null
   return (
     <div>
-      <CSSTransition unmountOnExit in={visible} timeout={600} classNames={classes.fadeHeader}>
-        <header>
-          <h2 className={classes.title}>{articleData.title}</h2>
-          <div className={c(flex.row, flex.center, classes.info)}>
-            <div className={classes.infoBox} style={{ backgroundColor: '#007FFF' }}>
-              <WatchLaterIcon />
-              <span>{idToMoment(articleData._id).format('YYYY年MM月DD日')}</span>
-            </div>
-            
-            <div className={classes.infoBox} style={{ backgroundColor: '#04B431' }}>
-              <VisibilityIcon />
-              <span>{articleData.readNum} 次浏览</span>
-            </div>
-            
-            <div className={classes.infoBox} style={{ backgroundColor: '#370B5F' }}>
-              <ForumIcon />
-              <span>{articleData.commentTotal} 条评论</span>
+      <CSSTransition unmountOnExit in={visible} timeout={600} classNames={transition.fadeSink}>
+        {visible ? 
+          <header>
+            <h2 className={classes.title}>{articleData.title}</h2>
+            <div className={c(flex.row, flex.center, classes.info)}>
+              <div className={classes.infoBox} style={{ backgroundColor: '#007FFF' }}>
+                <WatchLaterIcon />
+                <span>{idToMoment(articleData._id).format('YYYY年MM月DD日')}</span>
+              </div>
+              
+              <div className={classes.infoBox} style={{ backgroundColor: '#04B431' }}>
+                <VisibilityIcon />
+                <span>{articleData.readNum} 次浏览</span>
+              </div>
+              
+              <div className={classes.infoBox} style={{ backgroundColor: '#370B5F' }}>
+                <ForumIcon />
+                <span>{articleData.commentTotal} 条评论</span>
+              </div>
+
+              <div className={classes.infoBox} style={{ backgroundColor: '#B40486' }}>
+                <StarsIcon />
+                <span>{articleData.collectTotal} 人收藏</span>
+              </div>
             </div>
 
-            <div className={classes.infoBox} style={{ backgroundColor: '#B40486' }}>
-              <StarsIcon />
-              <span>{articleData.collectTotal} 人收藏</span>
-            </div>
-          </div>
-
-          <div className={c(flex.row, flex.crossCenter, classes.tags)}>{tagNames(articleData.tags).map(tagName =>
-            <div className="tag" key={tagName} title={`查看“${tagName}”分类下所有文章`}>
-              <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
-              <span>{tagName}</span>
-            </div>  
-          )}</div>
-        </header>
+            <div className={c(flex.row, flex.crossCenter, classes.tags)}>{tags(articleData.tags).map(tag =>
+              <div 
+                className="tag" 
+                key={tag._id} 
+                title={`查看“${tag.name}”分类下所有文章`}
+                onClick={() => router.push('/search/byTag', { search: { tagId: tag._id } })}
+              >
+                <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
+                <span>{tag.name}</span>
+              </div>  
+            )}</div>
+          </header>
+        : <div />}
       </CSSTransition>
      
-      <CSSTransition unmountOnExit in={visible} timeout={700} classNames={classes.fadeMain}>
-        <main>
-          <Box boxShadow={2} className={classes.container}>
-            <img src={articleData.headImg} className={classes.headImg} alt="headImg" />
-            <div className={classes.content}>
-              <div className={classes.profile}>{articleData.profile}</div>
-              <div ref={refs.editor as any} className={c(articleContentStyles.main)} />
+      <CSSTransition unmountOnExit in={visible} timeout={700} classNames={transition.fadeFloat}>
+        {visible ? 
+          <main>
+            <Box boxShadow={2} className={classes.container}>
+              <img src={articleData.headImg} className={classes.headImg} alt="headImg" />
+              <div className={classes.content}>
+                <div className={classes.profile}>{articleData.profile}</div>
+                <div ref={refs.editor as any} className={c(articleContentStyles.main)} />
+              </div>
+            </Box>
+
+            <div className={c(flex.row, flex.between)}>
+              {articleData.lastArticle ? 
+                <Tooltip 
+                  title={articleData.lastArticle.title} 
+                  placement="right"
+                  classes={{ tooltip: classes.toolTip }}
+                >
+                  <div 
+                    className={classes.lastNextBtn} 
+                    onClick={() => router.push('/article/view', { search: { articleId: articleData.lastArticle._id } })}
+                  >上一篇</div>
+                </Tooltip>
+
+              : <div />}
+
+              {articleData.nextArticle ? 
+                <Tooltip 
+                  title={articleData.nextArticle.title} 
+                  placement="left"
+                  classes={{ tooltip: classes.toolTip }}
+                >
+                  <div 
+                    className={classes.lastNextBtn} 
+                    onClick={() => router.push('/article/view', { search: { articleId: articleData.nextArticle._id } })}
+                  >上一篇</div>
+                </Tooltip>
+              : <div />}
             </div>
-          </Box>
-
-          <div className={c(flex.row, flex.between)}>
-            {articleData.lastArticle ? 
-              <Tooltip 
-                title={articleData.lastArticle.title} 
-                placement="right"
-                classes={{ tooltip: classes.toolTip }}
-              >
-                <div 
-                  className={classes.lastNextBtn} 
-                  onClick={() => router.push('/article/view', { search: { articleId: articleData.lastArticle._id } })}
-                >上一篇</div>
-              </Tooltip>
-
-            : <div />}
-
-            {articleData.nextArticle ? 
-              <Tooltip 
-                title={articleData.nextArticle.title} 
-                placement="left"
-                classes={{ tooltip: classes.toolTip }}
-              >
-                <div 
-                  className={classes.lastNextBtn} 
-                  onClick={() => router.push('/article/view', { search: { articleId: articleData.nextArticle._id } })}
-                >上一篇</div>
-              </Tooltip>
-            : <div />}
-          </div>
-
-          <ArticleComment articleId={router.params.search.articleId} getRef={refs.comment} />
-        </main>
+            
+            <ArticleComment articleId={router.params.search.articleId} getRef={refs.comment} />
+          </main>
+        : <div />}
       </CSSTransition>
     </div>
   )
@@ -319,29 +331,5 @@ const useStyles = makeStyles({
 
   toolTip: {
     fontSize: 13
-  },
-
-  fadeHeader: createTransition(
-    {
-      opacity: 0,
-      transform: 'translateY(-30px)'
-    }, {
-      transition: 'all 0.6s'
-    }, {
-      opacity: 1,
-      transform: 'initial'
-    }
-  ),
-
-  fadeMain: createTransition(
-    {
-      opacity: 0,
-      transform: 'translateY(30px)'
-    }, {
-      transition: 'all 0.7s'
-    }, {
-      opacity: 1,
-      transform: 'initial'
-    }
-  )
+  }
 })

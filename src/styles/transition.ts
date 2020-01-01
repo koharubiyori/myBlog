@@ -1,25 +1,28 @@
 import createClasses from '~/utils/createClasses'
+import { createTransition } from './styleVars'
 
 export default createClasses('transition', {
-  fade: {
-    [`&-enter,
-      &-exit-active
-    `]: {
-      opacity: 0
-    },
-
-    [`&-enter-active,
-      &-exit-active
-    `]: {
-      transition: 'all 0.2s',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%'
-    },
-
-    '&-enter-active': {
-      opacity: 1
+  fadeSink: createTransition(
+    {
+      opacity: 0,
+      transform: 'translateY(-30px)'
+    }, {
+      transition: 'all 0.6s'
+    }, {
+      opacity: 1,
+      transform: 'initial'
     }
-  }
+  ),
+
+  fadeFloat: createTransition(
+    {
+      opacity: 0,
+      transform: 'translateY(30px)'
+    }, {
+      transition: 'all 0.7s'
+    }, {
+      opacity: 1,
+      transform: 'initial'
+    }
+  )
 })

@@ -2,20 +2,19 @@ import React, { PropsWithChildren, useState, useEffect } from 'react'
 import article from '~/api/article'
 import { com } from '~/styles'
 import { makeStyles } from '@material-ui/styles'
-import ArticleBox from '~/components/ArticleBox'
 import keepAlive from '~/components/HOC/keepAlive'
 import createRouter from '~/utils/createRouter'
-import { useKeepAliveEffect } from 'react-keep-alive'
 import Pagination from '~/components/Pagination'
 import animatedScrollTo from 'animated-scroll-to'
 import useSaveScroll from '~/hooks/useSaveScroll'
+import ArticleBoxPlain from '~/components/ArticleBoxPlain'
 
 export interface Props extends RouteComponent {
   
 }
 
-interface RouteStateParams {
-  reload?: boolean
+interface RouteSearchParams {
+  keyword?: string
 }
 
 type FinalProps = Props
@@ -28,24 +27,16 @@ const initList = () =>({
   status: 1
 })
 
-function Home(props: PropsWithChildren<FinalProps>){
+function SearchResult(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
-    router = createRouter<{}, RouteStateParams>(),
+    router = createRouter<RouteSearchParams, {}>(),
     [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>(initList())
-
-  useKeepAliveEffect(() =>{
-    if(router.params.state.reload){
-      setArticleList(initList())
-      load()
-      router.clearState()
-    }
-  })
 
   useSaveScroll()
 
   useEffect(() =>{
-    load()
+    load(1, router.params.search.keyword)
   }, [])
 
   function load(page = 1, keyword?: string){
@@ -58,8 +49,8 @@ function Home(props: PropsWithChildren<FinalProps>){
       article.search({ page, keyword })
         .then(data =>{ 
           setArticleList(prevVal => ({
-            total: data.total,
             currentPage: page,
+            total: data.total,
             pageTotal: data.pageTotal,
             cache: {
               ...prevVal.cache,
@@ -83,21 +74,21 @@ function Home(props: PropsWithChildren<FinalProps>){
   return (
     <div>
       <header>
-        <h2 className={com.mainTitle}>小春日和の小窝</h2>
-        <p>明日もきっと、こはるびよりなんです。</p>
+        <h2 className={com.mainTitle}>搜索结果</h2>
+        <p>共搜索到{articleList.total}篇文章</p>
       </header>
 
       <main>
         {articleList.status === 3 ? 
           <div className={classes.articleList}>{articleList.cache[articleList.currentPage].map(item =>
-            <ArticleBox key={item._id} 
+            <ArticleBoxPlain key={item._id} 
               articleData={item} 
               onClick={() => router.push('/article/view', { search: { articleId: item._id } })} 
             />
           )}</div>
         : null}
 
-        {articleList.status === 3 ?
+        {articleList.status === 3 && articleList.total !== 0 ?
           <Pagination 
             style={{ animation: 'fadeSink 0.2s' }}
             pageTotal={articleList.pageTotal}
@@ -110,7 +101,7 @@ function Home(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(Home)
+export default keepAlive(SearchResult)
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {
@@ -125,6 +116,6 @@ const useStyles = makeStyles({
   },
   
   articleList: {
-    marginTop: 50
+    marginTop: 10
   }
 })

@@ -19,6 +19,12 @@ export namespace Api {
     limit?: number
   }
 
+  interface SearchByTag {
+    tagId: string
+    page?: number
+    limit?: number
+  }
+
   interface Delete {
     articleId: string
   }

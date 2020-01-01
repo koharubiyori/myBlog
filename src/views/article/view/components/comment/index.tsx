@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, PropsWithChildren, useReducer, Children } from 'react'
+import React, { useState, useEffect, useRef, PropsWithChildren, useReducer } from 'react'
 import { makeStyles, Box } from '@material-ui/core'
 import CommentEditor from './components/Editor'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
@@ -102,8 +102,6 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
       })
   }
 
-  console.log(commentListState)
-
   return (
     <Box boxShadow={2} className={classes.container}>
       <p style={{ marginTop: 0 }}>共{commentListState.original.length}条评论</p>
@@ -124,27 +122,33 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
 
       <hr style={{ backgroundColor: '#ccc' }} />
 
-      <div className={classes.comments}>{commentListState.flattenedTree.map(item =>
-        <CommentItem 
-          key={item._id}
-          commentData={item} 
-          articleId={props.articleId}
-          commentListIncrement={commentListIncrement}
-          userData={props.state.user}
-          onClickDelete={delComment}
-        >
-          {item.children.map(item =>
-            <CommentItem
+      <div className={classes.comments}>
+        {commentListState.flattenedTree.length === 0 ?
+            <div style={{ textAlign: 'center', margin: '40px 0 30px', color: styleVars.subtext }}>暂无评论</div>
+          :
+          commentListState.flattenedTree.map(item =>
+            <CommentItem 
               key={item._id}
-              commentData={item}
+              commentData={item} 
               articleId={props.articleId}
               commentListIncrement={commentListIncrement}
               userData={props.state.user}
               onClickDelete={delComment}
-            />
-          )}
-        </CommentItem>
-      )}</div>
+            >
+              {item.children.map(item =>
+                <CommentItem
+                  key={item._id}
+                  commentData={item}
+                  articleId={props.articleId}
+                  commentListIncrement={commentListIncrement}
+                  userData={props.state.user}
+                  onClickDelete={delComment}
+                />
+              )}
+            </CommentItem>
+          )
+        }
+      </div>
     </Box>
   )
 }

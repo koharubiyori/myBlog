@@ -9,6 +9,9 @@ import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
 
+export const containerMaxWidth = 800
+export const containerMinWidth = 600
+
 export interface Props extends RouteComponent {
   
 }
@@ -75,8 +78,8 @@ const useStyles = makeStyles({
   },
 
   '@global .mainLayout-content': {
-    maxWidth: 800,
-    minWidth: 600,
+    maxWidth: containerMaxWidth,
+    minWidth: containerMinWidth,
     margin: '0 auto',
     paddingBottom: 20,
   }

@@ -4,7 +4,7 @@ export const prodApi = ''
 
 const config: AxiosRequestConfig = {
   baseURL: process.env.NODE_ENV === 'production' ? prodApi : '/',
-  timeout: 7000,
+  timeout: 10000,
 }
 
 const axiosInstance = axios.create(config)

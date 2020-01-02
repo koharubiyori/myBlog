@@ -7,7 +7,7 @@ import nProgress from 'nprogress'
 import './styles/global'
 
 // 用于拼接class
-window.c = (...args: string[]) => args.join(' ')
+window.c = (...args: (string | null | undefined)[]) => args.join(' ')
 
 window._GLOBAL = {
   homeRefreshMark: false

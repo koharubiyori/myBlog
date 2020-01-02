@@ -10,9 +10,13 @@ import ForumIcon from '@material-ui/icons/Forum'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import StarsIcon from '@material-ui/icons/Stars'
 import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
+import { CSSProperties } from '@material-ui/core/styles/withStyles'
 
 export interface Props {
+  style?: CSSProperties
+  className?: string
   articleData: ApiData.SearchResult
+  noInfoText?: boolean
   onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void
 }
 
@@ -28,7 +32,12 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
   let tagNames = articleData.tags.map(tagId => tags.find(tagObj => tagObj._id === tagId)!.name)
 
   return (
-    <Box boxShadow={1} className={classes.container} onClick={props.onClick}>
+    <Box 
+      boxShadow={1} 
+      className={c(classes.container, props.className)} 
+      style={{ ...props.style }}
+      onClick={props.onClick} 
+    >
       <img alt="articleBoxBg" src={articleData.headImg} className="bgImg" />
       <big className="title">{articleData.title}</big>
       <div className="info" style={{ wordBreak: 'break-word' }}>
@@ -43,17 +52,17 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
           
           <div>
             <VisibilityIcon />
-            <span>{articleData.readNum} 次浏览</span>
+            <span>{articleData.readNum}{props.noInfoText ? '' : '  次浏览'}</span>
           </div>
           
           <div>
             <ForumIcon />
-            <span>{articleData.commentTotal} 条评论</span>
+            <span>{articleData.commentTotal}{props.noInfoText ? '' : ' 条评论'}</span>
           </div>
 
           <div>
             <StarsIcon />
-            <span>{articleData.collectTotal} 人收藏</span>
+            <span>{articleData.collectTotal}{props.noInfoText ? '' : ' 人收藏'}</span>
           </div>
         </div>
         

@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef, PropsWithChildren, useReducer } from 'react'
+import React, { useState, useEffect, useRef, PropsWithChildren, useReducer, FC } from 'react'
 import { makeStyles, Box } from '@material-ui/core'
 import CommentEditor from './components/Editor'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import { Link } from '@reach/router'
 import styleVars from '~/styles/styleVars'
-import resetComponentProps from '~/utils/resetComponentProps'
 import { basePath } from '~/routes'
 import comment from '~/api/comment'
 import CommentItem from './components/Item'
@@ -153,9 +152,7 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default resetComponentProps<Props>(
-  userHOC(ArticleComment)
-)
+export default userHOC(ArticleComment) as FC<Props>
 
 const useStyles = makeStyles({
   container: {

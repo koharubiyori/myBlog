@@ -9,7 +9,6 @@ import animatedScrollTo from 'animated-scroll-to'
 import useSaveScroll from '~/hooks/useSaveScroll'
 import ArticleBoxPlain from '~/components/ArticleBoxPlain'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
-import resetComponentProps from '~/utils/resetComponentProps'
 
 export interface Props extends RouteComponent {
   
@@ -106,11 +105,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(
-  resetComponentProps<Props>(
-    dataHOC(SearchByTagResult)
-  )
-)
+export default keepAlive(dataHOC(SearchByTagResult))
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

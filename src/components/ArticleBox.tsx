@@ -1,6 +1,5 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, FC } from 'react'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
-import resetComponentProps from '~/utils/resetComponentProps'
 import { Box } from '@material-ui/core'
 import idToMoment from '~/utils/idToMoment'
 import { makeStyles } from '@material-ui/styles'
@@ -16,7 +15,7 @@ export interface Props {
   style?: CSSProperties
   className?: string
   articleData: ApiData.SearchResult
-  noInfoText?: boolean
+  top?: boolean
   onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void
 }
 
@@ -36,7 +35,8 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
       boxShadow={1} 
       className={c(classes.container, props.className)} 
       style={{ ...props.style }}
-      onClick={props.onClick} 
+      onClick={props.onClick}
+      data-top={props.top}
     >
       <img alt="articleBoxBg" src={articleData.headImg} className="bgImg" />
       <big className="title">{articleData.title}</big>
@@ -52,34 +52,36 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
           
           <div>
             <VisibilityIcon />
-            <span>{articleData.readNum}{props.noInfoText ? '' : '  次浏览'}</span>
+            <span>{articleData.readNum}{props.top ? '' : '  次浏览'}</span>
           </div>
           
           <div>
             <ForumIcon />
-            <span>{articleData.commentTotal}{props.noInfoText ? '' : ' 条评论'}</span>
+            <span>{articleData.commentTotal}{props.top ? '' : ' 条评论'}</span>
           </div>
 
           <div>
             <StarsIcon />
-            <span>{articleData.collectTotal}{props.noInfoText ? '' : ' 人收藏'}</span>
+            <span>{articleData.collectTotal}{props.top ? '' : ' 人收藏'}</span>
           </div>
         </div>
         
-        <div className="tags">{tagNames.map(tagName =>
-          <div className="tag" key={tagName}>
-            <TagIcon className={classes.tagIcon} />
-            <span>{tagName}</span>
-          </div>  
-        )}</div>
+        <div className={c(flex.row, 'tags')}>
+          {tagNames.filter((_, index) => index < 5).map(tagName =>
+            <div className="tag" style={{ marginRight: 10 }} key={tagName}>
+              <TagIcon className={classes.tagIcon} />
+              <span>{tagName}</span>
+            </div>  
+          )}
+
+          {tagNames.length > 5 ? <div>...</div> : null}
+        </div>
       </div>
     </Box>
   )
 }
 
-export default resetComponentProps<Props>(
-  dataHOC(ArticleBox)
-) 
+export default dataHOC(ArticleBox) as FC<Props>
 
 const _transition = 'all 0.3s'
 const useStyles = makeStyles({
@@ -99,10 +101,25 @@ const useStyles = makeStyles({
     overflow: 'hidden',
     animation: 'fadeSink 0.7s',
 
+    '&[data-top=true]::before': {
+      content: '"置顶"',
+      position: 'absolute',
+      top: 10,
+      left: 10,
+      backgroundColor: '#FF3636',
+      color: 'white',
+      padding: '5px 10px',
+      borderRadius: 3,
+      zIndex: 1,
+      fontSize: 13,
+      fontWeight: 'bold',
+      textShadow: '0 0 1px #666'
+    },
+
     '&:hover': {
       '@global': {
         '.bgImg': {
-          filter: 'brightness(0.5)',
+          filter: 'brightness(0.6)',
           transform: 'scale(1.1)'
         },
 
@@ -125,7 +142,7 @@ const useStyles = makeStyles({
         top: 0,
         left: 0,
         objectFit: 'cover',
-        filter: 'brightness(0.65)',
+        filter: 'brightness(0.7)',
         transition: _transition
       },
       

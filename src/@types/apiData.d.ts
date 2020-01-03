@@ -40,12 +40,19 @@ declare namespace ApiData {
   }
 
   interface Comment {
-    _id?: ObjectID
-    articleId: ObjectID
-    userId: ObjectID 
-    parentId: ObjectID | ''
+    _id: string
+    articleId: string
+    userId: string 
+    parentId: string
     content: string
     deleted: boolean
     userData: Omit<ApiData.User, 'account'> 
+  }
+
+  interface Settings {
+    _id: string
+    title: string
+    subtitle: string
+    bgImg: string
   }
 }

@@ -5,6 +5,7 @@ import {
 } from './index'
 import store from '~/redux'
 import tag from '~/api/tag'
+import settings from '~/api/settings'
 
 const { dispatch, getState } = store
 
@@ -20,11 +21,21 @@ export const getTags = (forceUpdate = false) =>{
   })
 }
 
+export const getSettings = (forceUpdate = false) =>{
+  let {data} = getState()
+  if(data.settings && forceUpdate) return Promise.resolve(data.settings)
+  return settings.get().then(data =>{
+    set('settings', data)
+    return data
+  })
+} 
+
 interface ConnectedDispatch {
   '$data': {
     set: typeof set
     remove: typeof remove
     getTags: typeof getTags
+    getSettings: typeof getSettings
   }
 }
 
@@ -35,6 +46,6 @@ export type DataConnectedProps = ConnectedDispatch & {
 export const dataHOC = connect(
   (state: object) => ({ state }),
   (): ConnectedDispatch => ({
-    $data: { set, remove, getTags }
+    $data: { set, remove, getTags, getSettings }
   })
 )

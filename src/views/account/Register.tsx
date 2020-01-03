@@ -6,6 +6,7 @@ import textChecker from '~/utils/textChecker'
 import { com, flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
+import controlReqStatus from '~/utils/controlReqStatus'
 
 export interface Props {
   
@@ -48,16 +49,16 @@ function Register(props: PropsWithChildren<FinalProps>){
     if(!textChecker.name(name)) return $notify('昵称中包含非法字符')
     if(!textChecker.password(password)) return $notify('密码中包含非法字符')
 
-    setRegisterStatus(2)
-    user.register({ account, name, password: md5(password), code })
+    controlReqStatus(
+      setRegisterStatus,
+      user.register({ account, name, password: md5(password), code })
+    )
       .then(() =>{
-        setRegisterStatus(3)
         $notify.success('注册成功，即将前往登录')
         setTimeout(() => router.replace('/account/login'), 1500)
       })
       .catch(e =>{
         console.log(e)
-        setRegisterStatus(0)
       })
   }
 
@@ -72,7 +73,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         placeholder="8-16位的字母、数字、下划线"
         variant="outlined" 
         value={account} 
-        onChange={e => setAccount(e.target.value)}
+        onChange={e => setAccount(e.target.value.trim())}
       />
 
       <TextField fullWidth 
@@ -81,7 +82,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         placeholder="奇怪的颜文字是不行的哦_(:з」∠)_"
         variant="outlined" 
         value={name} 
-        onChange={e => setName(e.target.value)}
+        onChange={e => setName(e.target.value.trim())}
       />
       
       <TextField fullWidth 
@@ -92,7 +93,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         variant="outlined" 
         type="password" 
         value={password} 
-        onChange={e => setPassword(e.target.value)}
+        onChange={e => setPassword(e.target.value.trim())}
       />
 
       <div className={c(flex.row, flex.between, flex.crossEnd)} style={{ marginTop: 40 }}>
@@ -100,7 +101,7 @@ function Register(props: PropsWithChildren<FinalProps>){
           label="验证码" 
           variant="filled" 
           value={RSCode}
-          onChange={e => setRSCode(e.target.value)}
+          onChange={e => setRSCode(e.target.value.trim())}
           onKeyDown={e => e.keyCode === 13 && register()}
         />
 

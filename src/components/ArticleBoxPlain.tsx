@@ -1,6 +1,5 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, FC } from 'react'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
-import resetComponentProps from '~/utils/resetComponentProps'
 import { Box } from '@material-ui/core'
 import idToMoment from '~/utils/idToMoment'
 import { makeStyles } from '@material-ui/styles'
@@ -63,21 +62,23 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
             </div>
           </div>
           
-          <div className="tags" style={{ marginTop: 5 }}>{tagNames.map(tagName =>
-            <div className="tag" key={tagName}>
-              <TagIcon className={classes.tagIcon} />
-              <span>{tagName}</span>
-            </div>  
-          )}</div>
+          <div className={c(flex.row, 'tags')}>
+            {tagNames.filter((_, index) => index < 5).map(tagName =>
+              <div className="tag" style={{ marginRight: 10 }} key={tagName}>
+                <TagIcon className={classes.tagIcon} />
+                <span>{tagName}</span>
+              </div>  
+            )}
+
+            {tagNames.length > 5 ? <div>...</div> : null}
+          </div>
         </div>
       </main>
     </Box>
   )
 }
 
-export default resetComponentProps<Props>(
-  dataHOC(ArticleBox)
-) 
+export default dataHOC(ArticleBox) as FC<Props>
 
 const useStyles = makeStyles({
   '@global @keyframes fadeSink': {
@@ -152,7 +153,7 @@ const useStyles = makeStyles({
       },
 
       '.tags': {
-        
+        marginTop: 5
       },
     }
   },

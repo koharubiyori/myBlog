@@ -1,13 +1,12 @@
-import React, { PropsWithChildren, useState, useEffect } from 'react'
+import React, { PropsWithChildren, useState, useEffect, FC } from 'react'
 import { AppBar, Toolbar, Typography, InputBase, IconButton, Button, makeStyles } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import SettingsIcon from '@material-ui/icons/Settings'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
-import resetComponentProps from '~/utils/resetComponentProps'
 import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
-import qs from 'qs'
 import { basePath } from '~/routes'
 
 export const appBarHeight = 55
@@ -62,22 +61,26 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
         </IconButton>
 
         {props.state.user.account ? 
-          <IconButton onClick={() => router.push('/account/userInfo')}>
+          <IconButton onClick={() => router.navigate('/account/userInfo')}>
             <img src={props.state.user.avatar || require('~/images/sub/akari.jpg')} alt="icon" style={{ width: 24, height: 24, borderRadius: '50%' }} />
           </IconButton>
         :
-          <IconButton onClick={() => router.push('/account/register')}>
+          <IconButton onClick={() => router.navigate('/account/register')}>
             <AccountCircleIcon />
           </IconButton>
         }
+
+        {props.$user.getRole() === 'admin' ? 
+          <IconButton onClick={() => router.navigate('/settings')}>
+            <SettingsIcon />
+          </IconButton>
+        : null}
       </Toolbar>
     </AppBar>
   )
 }
 
-export default resetComponentProps<Props>(
-  userHOC(MyAppBar)
-) 
+export default userHOC(MyAppBar) as FC<Props>
 
 const useStyles = makeStyles({
   appBar: {

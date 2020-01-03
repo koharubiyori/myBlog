@@ -7,6 +7,7 @@ import { com, flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import styleVars from '~/styles/styleVars'
 import BgImg from '~/components/BgImg'
+import controlReqStatus from '~/utils/controlReqStatus'
 
 export interface Props {
   
@@ -26,17 +27,17 @@ function Login(props: PropsWithChildren<FinalProps>){
     if(!accountOrName) return $notify('帐号或昵称不能为空')
     if(!password) return $notify('密码不能为空')
 
-    setLoginStatus(2)
-    user.login({ accountOrName, password: md5(password) })
+    controlReqStatus(
+      setLoginStatus, 
+      user.login({ accountOrName, password: md5(password) })
+    )
       .then(data =>{
-        setLoginStatus(3)
         $notify.success('登录成功')
         setUserInfo(data)
         router.replace('/')
       })
       .catch(e => {
         console.log(e)
-        setLoginStatus(0)
       })
   }
 
@@ -49,7 +50,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         label="帐号或昵称" 
         variant="outlined" 
         value={accountOrName} 
-        onChange={e => setAccountOrName(e.target.value)}
+        onChange={e => setAccountOrName(e.target.value.trim())}
       />
       
       <TextField fullWidth 
@@ -59,7 +60,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         variant="outlined" 
         type="password" 
         value={password} 
-        onChange={e => setPassword(e.target.value)}
+        onChange={e => setPassword(e.target.value.trim())}
         onKeyDown={e => e.keyCode === 13 && login()}
       />
 

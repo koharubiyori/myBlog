@@ -1,5 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect, useRef } from 'react'
-import resetComponentProps from '~/utils/resetComponentProps'
+import React, { PropsWithChildren, useState, useEffect, useRef, FC } from 'react'
 import SpeedDial from '@material-ui/lab/SpeedDial'
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon'
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction'
@@ -170,9 +169,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default resetComponentProps<Props>(
-  userHOC(ActionsButton)
-) 
+export default userHOC(ActionsButton) as FC<Props>
 
 const useStyles = makeStyles({
   '@global': {

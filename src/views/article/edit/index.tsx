@@ -7,7 +7,7 @@ import 'tui-editor/dist/tui-editor-contents.css' // editor's content
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
 import 'tui-color-picker/dist/tui-color-picker.css'
-import { Button, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, FormLabel } from '@material-ui/core'
+import { Button, TextField, makeStyles, FormControlLabel, Checkbox } from '@material-ui/core'
 import ImageIcon from '@material-ui/icons/Image'
 import article from '~/api/article'
 import { getTags } from '~/redux/data/HOC'
@@ -69,7 +69,6 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
           editor.current!.setMarkdown(data.content)
           editor.current!.moveCursorToStart()
-          window.scrollTo(0, 0)
         })
     }
   }, [])
@@ -90,6 +89,8 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
           cb(data.fileUrl)
         })
     })
+
+    window.scrollTo(0, 0)
   }, [])
 
   function uploadHeadImg(event: ChangeEvent<HTMLInputElement>){
@@ -275,6 +276,7 @@ const useStyles = makeStyles({
         alignItems: 'center',
         color: styleVars.subtext,
         fontSize: 14,
+        transition: 'all 0.2s',
       }
     },
   

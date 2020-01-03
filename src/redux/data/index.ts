@@ -5,10 +5,12 @@ export const REMOVE = Symbol()
 
 export interface State {
   tags: ApiData.Tag[]
+  settings: Omit<ApiData.Settings, '_id'>
 }
 
 const reducer: ReduxReducer<State> = (state = {
-  tags: null as any
+  tags: null as any,
+  settings: null as any
 }, action) =>{
   switch(action.type){
     case SET: {

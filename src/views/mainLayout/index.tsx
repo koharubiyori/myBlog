@@ -1,4 +1,4 @@
-import React, { useState, useEffect, PropsWithChildren, createContext, useRef } from 'react'
+import React, { useState, useEffect, PropsWithChildren, createContext, useRef, FC } from 'react'
 import MyAppBar from './myAppBar'
 import Sidebar from './sidebar'
 import { default as SidebarRight, SidebarRightRef } from './sidebarRight'
@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core'
 import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
+import { dataHOC } from '~/redux/data/HOC'
 
 export const containerMaxWidth = 800
 export const containerMinWidth = 600
@@ -68,7 +69,7 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
     )
 }
 
-export default MainLayout
+export default dataHOC(MainLayout) as FC<Props>
 
 const useStyles = makeStyles({
   contentContainer: {

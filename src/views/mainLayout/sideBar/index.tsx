@@ -30,7 +30,7 @@ function Sidebar(props: PropsWithChildren<FinalProps>){
           <div className="name">小春日和</div>
         </div>
         <List className={classes.drawer}>
-          <ListItem button onClick={() => router.push('/')}>
+          <ListItem button onClick={() => router.navigate('/')}>
             <ListItemIcon>
               <HomeIcon style={{ color: '#C5C5C5' }} />
             </ListItemIcon>

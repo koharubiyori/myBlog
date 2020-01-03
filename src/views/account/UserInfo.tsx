@@ -1,12 +1,12 @@
-import React, { useState, PropsWithChildren, ChangeEvent } from 'react'
+import React, { useState, PropsWithChildren, ChangeEvent, FC } from 'react'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
-import resetComponentProps from '~/utils/resetComponentProps'
 import { TextField, Button, makeStyles } from '@material-ui/core'
 import user from '~/api/user'
 import textChecker from '~/utils/textChecker'
 import { com } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import BgImg from '~/components/BgImg'
+import controlReqStatus from '~/utils/controlReqStatus'
 
 export interface Props {
   
@@ -42,19 +42,19 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
 
     if(name === props.state.user.name && avatar === props.state.user.avatar) return $notify('信息没有变化')
 
-    setSaveStatus(2)
-    user.setUserInfo({
-      ...(name ? { name } : {}),
-      ...(avatar ? { avatar }: {})
-    })
+    controlReqStatus(
+      setSaveStatus,
+      user.setUserInfo({
+        ...(name ? { name } : {}),
+        ...(avatar ? { avatar }: {})
+      })
+    )
       .then(() =>{
-        setSaveStatus(3)
         props.$user.set({ name, avatar })
         $notify.success('信息已保存')
       })
       .catch(e =>{
         console.log(e)
-        setSaveStatus(0)
       })
   }
 
@@ -84,9 +84,7 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default resetComponentProps(
-  userHOC(UserInfo)
-) 
+export default userHOC(UserInfo) as FC<Props>
 
 const transition = 'all 0.25s'
 const useStyles = makeStyles({

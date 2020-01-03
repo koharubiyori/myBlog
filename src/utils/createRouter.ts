@@ -18,6 +18,7 @@ export interface MyRouter<SearchParams, StateParams> {
 
   push: MyNavigateFn
   replace: MyNavigateFn
+  navigate: MyNavigateFn
   back: History['back']
   clearState (): void
   listen (listener: HistoryListener): HistoryUnsubscribe
@@ -27,22 +28,25 @@ export interface MyRouter<SearchParams, StateParams> {
 export default function createRouter<SearchParams = {}, StateParams = {}>(): Readonly<MyRouter<SearchParams, StateParams>>{  
   const {location, navigate} = globalHistory
   
+  const myNavigate = (path: string, args = {} as { search?: {}, state?: {} }, replace = false) =>{
+    let toPath = basePath + path
+    if(args.search) toPath += '?' + qs.stringify(args.search)
+    return navigate(toPath, { state: args.state, replace })
+  }
+
   return {
+    push: myNavigate,
+
     params: {
       search: qs.parse(location!.search.split('?')[1]),
       state: location!.state || {}
     },
 
-    push: (path, args = {}) =>{
-      let toPath = basePath + path
-      if(args.search) toPath += '?' + qs.stringify(args.search)
-      return navigate(toPath, { state: args.state })
-    },
+    replace: (path, args = {}) => myNavigate(path, args, true),
 
-    replace: (path, args = {}) =>{
-      let toPath = basePath + path
-      if(args.search) toPath += '?' + qs.stringify(args.search)
-      return navigate(toPath, { state: args.state, replace: true })
+    navigate: (path, args = {}) =>{
+      if(window.location.pathname === basePath + path) return Promise.reject()
+      return myNavigate(path, args)
     },
 
     back: window.history.back,

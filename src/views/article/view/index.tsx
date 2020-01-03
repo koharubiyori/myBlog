@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, PropsWithChildren, useContext } from 'react'
+import React, { useState, useEffect, useRef, PropsWithChildren, useContext, FC } from 'react'
 import { makeStyles, Box, Tooltip } from '@material-ui/core'
 import EditorViewer from 'tui-editor/dist/tui-editor-Viewer'
 import 'tui-editor/dist/tui-editor.css' // editor's ui
@@ -14,7 +14,6 @@ import StarsIcon from '@material-ui/icons/Stars'
 import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import idToMoment from '~/utils/idToMoment'
 import { flex, transition } from '~/styles'
-import resetComponentProps from '~/utils/resetComponentProps'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import styleVars, { createTransition } from '~/styles/styleVars'
 import ArticleComment, { ArticleCommentRef } from './components/comment'
@@ -169,7 +168,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
               </div>
             </div>
 
-            <div className={c(flex.row, flex.crossCenter, classes.tags)}>{tags(articleData.tags).map(tag =>
+            <div className={c(flex.row, flex.crossCenter, flex.wrap, classes.tags)}>{tags(articleData.tags).map(tag =>
               <div 
                 className="tag" 
                 key={tag._id} 
@@ -232,10 +231,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default resetComponentProps<Props>(
-  dataHOC(ArticleView)
-)
-
+export default dataHOC(ArticleView) as FC<Props>
 
 const useStyles = makeStyles({
   title: {
@@ -274,6 +270,7 @@ const useStyles = makeStyles({
       transition: 'all 0.2s',
       borderRadius: 5,
       padding: 5,
+      marginTop: 5,
       marginRight: 10,
       backgroundColor: styleVars.main,
       fill: 'white',

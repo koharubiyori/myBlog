@@ -1,6 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect, FC, createContext } from 'react'
 import { makeStyles } from '@material-ui/core'
-import resetComponentProps from '~/utils/resetComponentProps'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import createRouter from '~/utils/createRouter'
 import { appBarHeight } from '../myAppBar'
@@ -63,9 +62,7 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default resetComponentProps<Props>(
-  userHOC(SidebarRight)
-) 
+export default userHOC(SidebarRight) as FC<Props>
 
 const useStyles = makeStyles({
   root: {

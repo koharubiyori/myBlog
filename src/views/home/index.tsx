@@ -9,6 +9,7 @@ import { useKeepAliveEffect } from 'react-keep-alive'
 import Pagination from '~/components/Pagination'
 import animatedScrollTo from 'animated-scroll-to'
 import useSaveScroll from '~/hooks/useSaveScroll'
+import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 
 export interface Props extends RouteComponent {
   
@@ -18,7 +19,7 @@ interface RouteStateParams {
   reload?: boolean
 }
 
-type FinalProps = Props
+type FinalProps = Props & DataConnectedProps
 
 const initList = () =>({
   currentPage: 1,
@@ -88,15 +89,17 @@ function Home(props: PropsWithChildren<FinalProps>){
       .then(() => load(page))
   }
 
+  if(!props.state.data.settings) return <div />
+
   return (
     <div>
       <header>
-        <h2 className={com.mainTitle}>小春日和の小窝</h2>
-        <p>明日もきっと、こはるびよりなんです。</p>
+        <h2 className={com.mainTitle}>{props.state.data.settings.title}</h2>
+        <p>{props.state.data.settings.title}</p>
 
         {topArticles ? 
           <div className={classes.topArticles}>{topArticles.map(item =>
-            <ArticleBox noInfoText key={item._id} style={{ margin: 0 }}
+            <ArticleBox top key={item._id} style={{ margin: 0 }}
               articleData={item}
               onClick={() => router.push('/article/view', { search: { articleId: item._id } })}
             />
@@ -127,7 +130,7 @@ function Home(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(Home)
+export default keepAlive(dataHOC(Home))
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {
@@ -144,7 +147,7 @@ const useStyles = makeStyles({
   topArticles: {
     display: 'grid',
     gridTemplateRows: 'repeat(auto-fill, 300px)',
-    gridTemplateColumns: 'repeat(2, 50%)',
+    gridTemplateColumns: 'repeat(2, calc(50% - 5px))',
     gridRowGap: 10,
     gridColumnGap: 10
   },

@@ -16,8 +16,11 @@ export const routeMaps = {
 
   '/article/edit': l('article/edit'),
   '/article/view': l('article/view'),
+
   '/search': l('search'),
-  '/search/byTag': l('search/byTag')
+  '/search/byTag': l('search/byTag'),
+  
+  '/settings': l('settings')
 }
 
 export type RoutePaths = keyof (typeof routeMaps & { '/': any })

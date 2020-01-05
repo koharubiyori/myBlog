@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef, PropsWithChildren, ChangeEvent, FC } from 'react'
-import { makeStyles, TextField } from '@material-ui/core'
+import { makeStyles, TextField, Tooltip } from '@material-ui/core'
 import useHideSidebarRight from '~/hooks/useHideSidebarRight'
 import ImageIcon from '@material-ui/icons/Image'
-import { com } from '~/styles'
+import { com, flex } from '~/styles'
 import settings from '~/api/settings'
 import styleVars from '~/styles/styleVars'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
+import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
+import CloseIcon from '@material-ui/icons/Close'
+import article from '~/api/article'
 
 export interface Props {
   
@@ -20,7 +23,7 @@ function Settings(props: PropsWithChildren<FinalProps>){
     [subtitle, setSubtitle] = useState(''),
     [bgImg, setBgImg] = useState(''),
     [bgImgStatus, setBgImgStatus] = useState(1),
-    [tags, setTags] = useState()
+    [articleTotalForActiveTag, setArticleTotalForActiveTag] = useState<number>(-1)
 
   useHideSidebarRight()
 
@@ -47,7 +50,27 @@ function Settings(props: PropsWithChildren<FinalProps>){
         setBgImgStatus(1)
       })
   }
-  
+
+  function getArticleTotalByTag(tagId: string){
+    setArticleTotalForActiveTag(-1)
+    article.searchByTag({ tagId })
+      .then(data => setArticleTotalForActiveTag(data.total))
+  }
+
+  function setTagName(tag: ApiData.Tag){
+    // $confirm({
+    //   input: true,
+    //   title: '修改标签名',
+
+    // })
+  }
+
+  function removeTag(tagId: string){
+
+  }
+
+  if(!props.state.data.tags) return <div />
+
   return (
     <div className={classes.container}>
       <h2 className={com.mainTitle}>页面设置</h2>
@@ -66,7 +89,7 @@ function Settings(props: PropsWithChildren<FinalProps>){
         onChange={e => setSubtitle(e.target.value.trim())}
       />
 
-      <div style={{ margin: '20px auto', maxWidth: 800 }}>           
+      <div style={{ margin: '40px auto', maxWidth: 800 }}>           
         <label className={classes.upload} data-status={bgImgStatus}>
           {bgImgStatus === 3 ?
             <img alt="headImg" src={bgImg} />
@@ -78,6 +101,29 @@ function Settings(props: PropsWithChildren<FinalProps>){
           }
           <input type="file" style={{ position: 'fixed', left: -9999 }} onChange={uploadBgImg} />
         </label>
+      </div>
+
+      <div>
+        <h3 style={{ fontWeight: 'initial', marginBottom: 0 }}>标签管理</h3>
+        <p className={com.subTitle} style={{ marginTop: 5 }}>对标签的操作是立即生效的</p>
+        <div className={c(flex.row, flex.crossCenter, flex.wrap, classes.tags)}>{props.state.data.tags.map(tag =>
+          <Tooltip
+            title={articleTotalForActiveTag === -1 ? '加载中' : `标签下共有${articleTotalForActiveTag}篇文章`} 
+            placement="top"
+            classes={{ tooltip: classes.toolTip }}
+            onMouseEnter={() => getArticleTotalByTag(tag._id)}
+          >
+            <div 
+              className="tag" 
+              key={tag._id} 
+              onClick={() => setTagName(tag)}
+            >
+              <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
+              <span>{tag.name}</span>
+              <CloseIcon className={classes.removeTagBtn} onClick={() => removeTag(tag._id)} />
+            </div>  
+          </Tooltip>
+        )}</div>
       </div>
     </div>
   )
@@ -99,7 +145,7 @@ const useStyles = makeStyles({
   },
 
   upload: {
-    height: 300,
+    height: 350,
     borderRadius: 3,
     border: '1px #C4C4C4 solid',
     transition: 'all 0.2s',
@@ -170,5 +216,47 @@ const useStyles = makeStyles({
         cursor: 'pointer',
       }
     }
+  },
+
+  tags: {
+    fontSize: 13,
+    marginTop: 10,
+
+    '@global .tag': {
+      transition: 'all 0.2s',
+      borderRadius: 5,
+      padding: 5,
+      marginTop: 5,
+      marginRight: 10,
+      backgroundColor: styleVars.main,
+      fill: 'white',
+      color: 'white',
+      cursor: 'pointer',
+      
+      '&:hover': {
+        backgroundColor: styleVars.dark
+      },
+
+      '& svg': {
+        position: 'relative',
+        top: -1
+      }
+    }
+  },
+
+  removeTagBtn: {
+    fontSize: 16, 
+    verticalAlign: 'middle', 
+    marginLeft: 5,
+    borderRadius: '50%',
+    transition: 'all 0.2s',
+
+    '&:hover': {
+      backgroundColor: styleVars.light
+    }
+  },
+
+  toolTip: {
+    fontSize: 13
   }
 })

@@ -137,7 +137,9 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
   function tags(tagIds: string[]): ApiData.Tag[]{
     const {tags} = props.state.data
     if(!tags) return []
-    return tagIds.map(tagId => tags.find(tagObj => tagObj._id === tagId)!)
+    return tagIds
+      .filter(tagId => tags.some(item => item._id === tagId))
+      .map(tagId => tags.find(tagObj => tagObj._id === tagId)!)
   }
   
   return (

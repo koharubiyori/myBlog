@@ -11,6 +11,7 @@ import { Provider as KeepAliveProvider } from 'react-keep-alive'
 import MyConfirm, { MyConfirmRef } from './components/dialog/Confirm'
 import './utils/mouseClick'
 import createRouter from './utils/createRouter'
+import { bindContext as bindNotifyContext } from '~/externalContexts/notify'
 
 const theme = createMuiTheme({
   palette: {
@@ -31,6 +32,7 @@ export default function App(){
   }
 
   useEffect(() =>{
+    bindNotifyContext((refs.snackbar.current as any).enqueueSnackbar)
     mountNotifyMethod((refs.snackbar.current as any).enqueueSnackbar)
     
     setTimeout(() =>{

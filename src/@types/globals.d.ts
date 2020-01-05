@@ -2,20 +2,13 @@ declare function c(...args: (string | undefined | null)[]): string
 
 // type SnackbarPosition = ['top' | 'bottom', 'left' | 'center' | 'right']
 declare interface Window {
-  $notify: {
-    (message: string, position?: SnackbarPosition): void
-    success (message: string, position?: SnackbarPosition): void
-    info (message: string, position?: SnackbarPosition): void
-    warning (message: string, position?: SnackbarPosition): void
-    error (message: string, position?: SnackbarPosition): void
-  }
-
   $confirm: {
     (params: {
       title?: string
       content: string
       checkText?: string
       closeText?: string
+      input?: boolean
       onCheck?: Function | null
       onClose?: Function | null
     }): void
@@ -28,7 +21,6 @@ declare interface Window {
   }
 }
 
-declare let $notify: Window['$notify']
 declare let $confirm: Window['$confirm']
 declare let _GLOBAL: Window['_GLOBAL']
 declare const __REDUX_DEVTOOLS_EXTENSION__: any

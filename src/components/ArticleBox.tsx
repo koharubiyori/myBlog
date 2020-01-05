@@ -28,7 +28,9 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
 
   let {articleData} = props
   let dateStr = idToMoment(articleData._id).format('YYYY年MM月DD日')
-  let tagNames = articleData.tags.map(tagId => tags.find(tagObj => tagObj._id === tagId)!.name)
+  let tagNames = articleData.tags
+    .filter(tagId => tags.some(tag => tag._id === tagId))
+    .map(tagId => tags.find(tagObj => tagObj._id === tagId)!.name)
 
   return (
     <Box 

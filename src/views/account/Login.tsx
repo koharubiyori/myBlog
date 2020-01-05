@@ -8,6 +8,7 @@ import createRouter from '~/utils/createRouter'
 import styleVars from '~/styles/styleVars'
 import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   
@@ -19,20 +20,21 @@ function Login(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter(),
+    notify = getNotify(),
     [accountOrName, setAccountOrName] = useState(''),
     [password, setPassword] = useState(''),
     [loginStatus, setLoginStatus] = useState(1)
 
   function login(): void{
-    if(!accountOrName) return $notify('帐号或昵称不能为空')
-    if(!password) return $notify('密码不能为空')
+    if(!accountOrName) return notify('帐号或昵称不能为空')
+    if(!password) return notify('密码不能为空')
 
     controlReqStatus(
       setLoginStatus, 
       user.login({ accountOrName, password: md5(password) })
     )
       .then(data =>{
-        $notify.success('登录成功')
+        notify.success('登录成功')
         setUserInfo(data)
         router.replace('/')
       })

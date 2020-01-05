@@ -1,21 +1,23 @@
-import { WithSnackbarProps } from "notistack"
+import { WithSnackbarProps } from 'notistack'
 
 export type NotifyType = 'default' | 'info' | 'success' | 'warning' | 'error'
 export type NotifyPositions = ['top' | 'bottom', 'left' | 'center' | 'right']
 
-export interface Window {
-  $notify: {
-    (message: string, position?: NotifyPositions): void
-    success (message: string, position?: NotifyPositions): void
-    info (message: string, position?: NotifyPositions): void
-    warning (message: string, position?: NotifyPositions): void
-    error (message: string, position?: NotifyPositions): void
-  }
+export interface Notify {
+  (message: string, position?: NotifyPositions): void
+  success (message: string, position?: NotifyPositions): void
+  info (message: string, position?: NotifyPositions): void
+  warning (message: string, position?: NotifyPositions): void
+  error (message: string, position?: NotifyPositions): void
 }
 
-export let $notify: Window['$notify']
+const context = {
+  current: undefined as any as Notify
+}
 
-export default function(enqueueSnackbar: WithSnackbarProps['enqueueSnackbar']){
+export default () => context.current
+
+export function bindContext(enqueueSnackbar: WithSnackbarProps['enqueueSnackbar']){
   const msg = enqueueSnackbar
   const createOptions = (
     type: NotifyType = 'default', 
@@ -31,5 +33,6 @@ export default function(enqueueSnackbar: WithSnackbarProps['enqueueSnackbar']){
   notify.success = (message: any, position?: any) => msg(message, createOptions('success', position))
   notify.warning = (message: any, position?: any) => msg(message, createOptions('warning', position))
   notify.error = (message: any, position?: any) => msg(message, createOptions('error', position))
-  window.$notify = notify
+
+  context.current = notify
 }

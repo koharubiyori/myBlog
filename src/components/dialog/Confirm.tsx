@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
-import { makeStyles, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core'
+import { makeStyles, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField } from '@material-ui/core'
 import styleVars from '~/styles/styleVars'
+import { TextFieldProps } from '@material-ui/core/TextField'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -16,8 +17,11 @@ interface Params {
   content: string
   checkText?: string
   closeText?: string
+  input?: boolean
+  inputProps?: TextFieldProps
   onCheck?: Function | null
   onClose?: Function | null
+  onChangeInputText?: Function | null
 }
 
 type FinalProps = Props
@@ -31,8 +35,10 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
       content: '',
       checkText: '',
       closeText: '',
+      input: false,
       onCheck: null,
-      onClose: null
+      onClose: null,
+      onChangeInputText: null
     })
 
   if(props.getRef) props.getRef.current = { show, hide }
@@ -63,6 +69,13 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
       <DialogTitle>{params.title || '提示'}</DialogTitle>
       <DialogContent>
         <DialogContentText>{params.content}</DialogContentText>
+        {params.input ?
+          <TextField autoFocus fullWidth
+            margin="dense"
+            label="Email Address"
+            {...params.inputProps}
+          />
+        : null}
       </DialogContent>
       <DialogActions>
         <Button onClick={handlerCheck} color="primary" autoFocus style={{ fontWeight: 'bold' }}>{params.checkText || '确定'}</Button>

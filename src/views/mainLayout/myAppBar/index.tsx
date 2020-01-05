@@ -8,6 +8,7 @@ import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import { basePath } from '~/routes'
+import getNotify from '~/externalContexts/notify'
 
 export const appBarHeight = 55
 
@@ -24,6 +25,7 @@ type FinalProps = Props & UserConnectedProps
 function MyAppBar(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    notify = getNotify(),
     router = createRouter<RouteSearchParams>(),
     [searchInput, setSearchInput] = useState('')
 
@@ -35,7 +37,7 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
 
   function pressEnterToSearch(keyCode: number){
     if(keyCode !== 13){ return }
-    if(searchInput === '') return $notify('搜索关键词不能为空')
+    if(searchInput === '') return notify('搜索关键词不能为空')
     router.push('/search', { search: { keyword: searchInput } })
   }
 

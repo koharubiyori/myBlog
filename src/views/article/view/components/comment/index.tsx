@@ -9,6 +9,8 @@ import comment from '~/api/comment'
 import CommentItem from './components/Item'
 import _ from 'lodash'
 import reducer from './redux/commentList'
+import getNotify from '~/externalContexts/notify'
+import getConfirm from '~/externalContexts/confirm'
 
 export interface ArticleCommentRef {
   load (): void
@@ -24,6 +26,8 @@ type FinalProps = Props & UserConnectedProps
 function ArticleComment(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    notify = getNotify(),
+    confirm = getConfirm(),
     [commentValue, setCommentValue] = useState(''),
     [commentListState, commentListDispatch] = useReducer(reducer, { 
       original: [],
@@ -44,14 +48,14 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
   }
 
   function delComment(commentId: string){
-    $confirm({
+    confirm({
       content: '确定要删除这条评论及其回复吗？',
       onCheck (){
         let ids = getChildrenIds(commentId)
         comment.delete({ commentIds: ids })
           .then(() =>{
             commentListDispatch({ type: 'delete', ids })
-            $notify.success('删除成功')
+            notify.success('删除成功')
           })
       }
     })
@@ -80,7 +84,7 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
   }
   
   function submitComment(){
-    if(!commentValue) return $notify('评论内容不能为空')
+    if(!commentValue) return notify('评论内容不能为空')
     comment.post({
       articleId: props.articleId,
       content: commentValue
@@ -97,7 +101,7 @@ function ArticleComment(props: PropsWithChildren<FinalProps>){
         })
 
         setCommentValue('')
-        $notify.success('发表成功')
+        notify.success('发表成功')
       })
   }
 

@@ -4,7 +4,6 @@ import { Provider as ReduxProvider } from 'react-redux'
 import store from './redux'
 import Routes, { basePath } from './routes'
 import { SnackbarProvider } from 'notistack'
-import mountNotifyMethod from './utils/mountNotifyMethod'
 import init from './init'
 import styleVars from './styles/styleVars'
 import { Provider as KeepAliveProvider } from 'react-keep-alive'
@@ -12,6 +11,7 @@ import MyConfirm, { MyConfirmRef } from './components/dialog/Confirm'
 import './utils/mouseClick'
 import createRouter from './utils/createRouter'
 import { bindContext as bindNotifyContext } from '~/externalContexts/notify'
+import { bindContext as bindConfirmContext } from '~/externalContexts/confirm'
 
 const theme = createMuiTheme({
   palette: {
@@ -33,12 +33,9 @@ export default function App(){
 
   useEffect(() =>{
     bindNotifyContext((refs.snackbar.current as any).enqueueSnackbar)
-    mountNotifyMethod((refs.snackbar.current as any).enqueueSnackbar)
     
     setTimeout(() =>{
-      let confirm: any = refs.myConfirm.current!.show
-      confirm.hide = refs.myConfirm.current!.hide
-      window.$confirm = confirm
+      bindConfirmContext(refs.myConfirm.current!)
     })
     
     init()

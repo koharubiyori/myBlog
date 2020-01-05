@@ -7,6 +7,7 @@ import { com } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   
@@ -17,6 +18,7 @@ type FinalProps = Props & UserConnectedProps
 function UserInfo(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
+    notify = getNotify(),
     [name, setName] = useState(props.state.user.name),
     [avatar, setAvatar] = useState(props.state.user.avatar),
     [imgUploadStatus, setImgUploadStatus] = useState(1),
@@ -37,10 +39,10 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
   }
 
   function save(){
-    if(!name) return $notify('昵称不能为空')
-    if(!textChecker.name(name)) return $notify('昵称包含非法字符')
+    if(!name) return notify('昵称不能为空')
+    if(!textChecker.name(name)) return notify('昵称包含非法字符')
 
-    if(name === props.state.user.name && avatar === props.state.user.avatar) return $notify('信息没有变化')
+    if(name === props.state.user.name && avatar === props.state.user.avatar) return notify('信息没有变化')
 
     controlReqStatus(
       setSaveStatus,
@@ -51,7 +53,7 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
     )
       .then(() =>{
         props.$user.set({ name, avatar })
-        $notify.success('信息已保存')
+        notify.success('信息已保存')
       })
       .catch(e =>{
         console.log(e)

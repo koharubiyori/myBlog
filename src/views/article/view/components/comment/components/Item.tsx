@@ -8,6 +8,7 @@ import store from '~/redux'
 import CloseIcon from '@material-ui/icons/Close'
 import { FlattenedTree, CommentWithParentUserData } from '../redux/commentList'
 import _ from 'lodash'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   commentData: FlattenedTree | CommentWithParentUserData
@@ -22,16 +23,17 @@ type FinalProps = Props
 function CommentItem(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    notify = getNotify(),
     [visibleEditor, setVisibleEditor] = useState(false),
     [replyValue, setReplyValue] = useState('')
 
   function showReplyEditor(){
-    if(!store.getState().user._id) return $notify('未登录无法进行回复')
+    if(!store.getState().user._id) return notify('未登录无法进行回复')
     setVisibleEditor(true)
   }
   
   function submitReply(){
-    if(!replyValue) return $notify('回复内容不能为空')
+    if(!replyValue) return notify('回复内容不能为空')
     comment.post({
       articleId: props.articleId,
       targetId: props.commentData._id,
@@ -51,7 +53,7 @@ function CommentItem(props: PropsWithChildren<FinalProps>){
           userData: _.omit(props.userData, 'account')
         })
 
-        $notify.success('回复成功')
+        notify.success('回复成功')
       })
   }
 

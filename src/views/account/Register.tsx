@@ -7,6 +7,7 @@ import { com, flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   
@@ -18,6 +19,7 @@ function Register(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter(),
+    notify = getNotify(),
     [account, setAccount] = useState(''),
     [name, setName] = useState(''),
     [password, setPassword] = useState(''),
@@ -31,7 +33,7 @@ function Register(props: PropsWithChildren<FinalProps>){
   }, [])
 
   function getRegisterSecurityCode (): void{
-    if(RSCodeGetCount >= 3) return $notify('点的这么快，人家都忙不过来啦  >_<')
+    if(RSCodeGetCount >= 3) return notify('点的这么快，人家都忙不过来啦  >_<')
     user.getRegisterSecurityCode().then(data => setRSCodeSvg(data.svg))
     setRSCodeGetCount(prevVal => prevVal + 1)
     setTimeout(() => setRSCodeGetCount(prevVal => prevVal - 1), 10000)
@@ -40,21 +42,21 @@ function Register(props: PropsWithChildren<FinalProps>){
   function register (): void{
     let code = RSCode
 
-    if(!account) return $notify('帐号不能为空')
-    if(!name) return $notify('昵称不能为空')
-    if(!password) return $notify('密码不能为空')
-    if(!code) return $notify('验证码不能为空')
+    if(!account) return notify('帐号不能为空')
+    if(!name) return notify('昵称不能为空')
+    if(!password) return notify('密码不能为空')
+    if(!code) return notify('验证码不能为空')
 
-    if(!textChecker.account(account)) return $notify('帐号中包含非法字符')
-    if(!textChecker.name(name)) return $notify('昵称中包含非法字符')
-    if(!textChecker.password(password)) return $notify('密码中包含非法字符')
+    if(!textChecker.account(account)) return notify('帐号中包含非法字符')
+    if(!textChecker.name(name)) return notify('昵称中包含非法字符')
+    if(!textChecker.password(password)) return notify('密码中包含非法字符')
 
     controlReqStatus(
       setRegisterStatus,
       user.register({ account, name, password: md5(password), code })
     )
       .then(() =>{
-        $notify.success('注册成功，即将前往登录')
+        notify.success('注册成功，即将前往登录')
         setTimeout(() => router.replace('/account/login'), 1500)
       })
       .catch(e =>{

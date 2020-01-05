@@ -2,26 +2,11 @@ declare function c(...args: (string | undefined | null)[]): string
 
 // type SnackbarPosition = ['top' | 'bottom', 'left' | 'center' | 'right']
 declare interface Window {
-  $confirm: {
-    (params: {
-      title?: string
-      content: string
-      checkText?: string
-      closeText?: string
-      input?: boolean
-      onCheck?: Function | null
-      onClose?: Function | null
-    }): void
-
-    hide (): void
-  }
-
   _GLOBAL: {
     homeRefreshMark: boolean
   }
 }
 
-declare let $confirm: Window['$confirm']
 declare let _GLOBAL: Window['_GLOBAL']
 declare const __REDUX_DEVTOOLS_EXTENSION__: any
 

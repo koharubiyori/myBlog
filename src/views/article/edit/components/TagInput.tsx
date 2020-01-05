@@ -7,6 +7,7 @@ import ClearIcon from '@material-ui/icons/Clear'
 import { flex, transition } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   tags: string[]
@@ -21,6 +22,7 @@ type FinalProps = Props
 function TagInput(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
+    notify = getNotify(),
     [tagInputFocused, setTagInputFocused] = useState(false),  
     [selectedHint, setSelectedHint] = useState(-1),      // -1代表选中的为输入栏
     refs = {
@@ -67,7 +69,7 @@ function TagInput(props: PropsWithChildren<FinalProps>){
     if(e.keyCode === 13){
       if(props.value === ''){ return }
       let selectedTag = filteredTags[selectedHint] ? filteredTags[selectedHint].name : props.value
-      if(props.tags.includes(selectedTag)) return $notify('标签已存在') 
+      if(props.tags.includes(selectedTag)) return notify('标签已存在') 
       props.onSelectHint(selectedTag) 
     }
 

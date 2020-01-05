@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
 import { makeStyles, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField } from '@material-ui/core'
 import styleVars from '~/styles/styleVars'
-import { TextFieldProps } from '@material-ui/core/TextField'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -14,14 +13,13 @@ export interface MyConfirmRef {
 
 interface Params {
   title?: string
-  content: string
+  content?: string
   checkText?: string
   closeText?: string
   input?: boolean
-  inputProps?: TextFieldProps
-  onCheck?: Function | null
-  onClose?: Function | null
-  onChangeInputText?: Function | null
+  inputLabel?: string
+  onCheck? (inputValue?: string): void
+  onClose? (): void
 }
 
 type FinalProps = Props
@@ -30,21 +28,19 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
     [visible, setVisible] = useState(false),
+    [inputValue, setInputValue] = useState(''),
     [params, setParams] = useState<Params>({
       title: '',
       content: '',
       checkText: '',
       closeText: '',
       input: false,
-      onCheck: null,
-      onClose: null,
-      onChangeInputText: null
     })
 
   if(props.getRef) props.getRef.current = { show, hide }
   
   function handlerCheck(){
-    params.onCheck && params.onCheck()
+    params.onCheck && params.onCheck(params.input ? inputValue : undefined)
     setVisible(false)
   }
 
@@ -68,12 +64,16 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
     >
       <DialogTitle>{params.title || '提示'}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{params.content}</DialogContentText>
+        {params.content ? 
+          <DialogContentText>{params.content}</DialogContentText>
+        : null}
+
         {params.input ?
           <TextField autoFocus fullWidth
             margin="dense"
-            label="Email Address"
-            {...params.inputProps}
+            label={params.inputLabel}
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value.trim())}
           />
         : null}
       </DialogContent>

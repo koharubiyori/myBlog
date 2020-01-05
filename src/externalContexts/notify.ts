@@ -15,7 +15,9 @@ const context = {
   current: undefined as any as Notify
 }
 
-export default () => context.current
+export default function getNotify(){
+  return context.current
+}
 
 export function bindContext(enqueueSnackbar: WithSnackbarProps['enqueueSnackbar']){
   const msg = enqueueSnackbar

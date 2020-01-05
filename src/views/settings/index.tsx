@@ -9,6 +9,7 @@ import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import CloseIcon from '@material-ui/icons/Close'
 import article from '~/api/article'
+import getConfirm from '~/externalContexts/confirm'
 
 export interface Props {
   
@@ -19,6 +20,7 @@ type FinalProps = Props & DataConnectedProps
 function Settings(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    confirm = getConfirm(),
     [title, setTitle] = useState(''),
     [subtitle, setSubtitle] = useState(''),
     [bgImg, setBgImg] = useState(''),
@@ -58,11 +60,11 @@ function Settings(props: PropsWithChildren<FinalProps>){
   }
 
   function setTagName(tag: ApiData.Tag){
-    // $confirm({
-    //   input: true,
-    //   title: '修改标签名',
-
-    // })
+    confirm({
+      input: true,
+      inputLabel: '新标签名',
+      title: '修改标签名',
+    })
   }
 
   function removeTag(tagId: string){

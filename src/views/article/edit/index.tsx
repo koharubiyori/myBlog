@@ -20,6 +20,7 @@ import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   
@@ -36,6 +37,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter<{}, RouteStateParams>(),
+    notify = getNotify(),
     [title, setTitle] = useState(''),
     [profile, setProfile] = useState(''),
     [tags, setTags] = useState<string[]>([]),
@@ -115,11 +117,11 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
   function publish(){
     let content = editor.current!.getMarkdown()
 
-    if(!title) return $notify('标题不能为空')
-    if(!profile) return $notify('简介不能为空')
-    if(!content) return $notify('内容不能为空')
-    if(!tags.length) return $notify('至少需要一个标签')
-    if(!headImg) return $notify('头图不能为空')
+    if(!title) return notify('标题不能为空')
+    if(!profile) return notify('简介不能为空')
+    if(!content) return notify('内容不能为空')
+    if(!tags.length) return notify('至少需要一个标签')
+    if(!headImg) return notify('头图不能为空')
 
     nProgress.start()
     getTags()
@@ -155,13 +157,13 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         })
       })
       .then(() =>{
-        $notify.success(`文章${type === 0 ? '发布' : '修改'}成功`)
+        notify.success(`文章${type === 0 ? '发布' : '修改'}成功`)
         _GLOBAL.homeRefreshMark = true
         type === 0 && router.replace('/')
       })
       .catch(e =>{
         console.log(e)
-        $notify.error('网络错误')
+        notify.error('网络错误')
       })
   }
 

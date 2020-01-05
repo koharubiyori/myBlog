@@ -14,6 +14,8 @@ import { RoutePaths, basePath } from '~/routes'
 import _ from 'lodash'
 import qs from 'qs'
 import article from '~/api/article'
+import getNotify from '~/externalContexts/notify'
+import getConfirm from '~/externalContexts/confirm'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -66,6 +68,8 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter(),
+    notify = getNotify(),
+    confirm = getConfirm(),
     [open, setOpen] = useState(false),
     [visible, setVisible] = useState(true),
     [actions, setActions] = useState<Action[]>([]),
@@ -121,12 +125,12 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
       }
 
       case '删除': {
-        $confirm({
+        confirm({
           content: '确定要删除这篇文章？',
           onCheck (){
             article.delete({ articleId: qs.parse(router.location.search.split('?')[1]).articleId })
               .then(() =>{
-                $notify.success('操作成功')
+                notify.success('操作成功')
                 router.replace('/', { state: { reload: true } })
               })
           }

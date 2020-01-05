@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from 'axios'
 import request from './request'
 import nProgress from 'nprogress'
+import getNotify from '~/externalContexts/notify'
 
 interface RequesterOptions {
   loading?: boolean
@@ -33,12 +34,12 @@ const createRequester: CreateRequester = (method) => <RequestParams, ApiData = {
           resolve(data.data as ApiData)
         }else{
           reject(data)
-          fail && $notify(data.message)
+          fail && getNotify()(data.message)
         }
       }).catch(e =>{
         console.log(e)
         reject()
-        fail && $notify(typeof fail === 'string' ? fail : '网络错误')
+        fail && getNotify()(typeof fail === 'string' ? fail : '网络错误')
       })
   })
 }

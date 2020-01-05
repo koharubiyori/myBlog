@@ -12,6 +12,7 @@ import article from '~/api/article'
 import getConfirm from '~/externalContexts/confirm'
 import tag from '~/api/tag'
 import getNotify from '~/externalContexts/notify'
+import BgImg from '~/components/BgImg'
 
 export interface Props {
   
@@ -134,6 +135,7 @@ function Settings(props: PropsWithChildren<FinalProps>){
 
   return (
     <div className={classes.container}>
+      <BgImg hidden />
       <div className={c(flex.row, flex.crossCenter, flex.between)}>
         <h2 className={com.mainTitle}>页面设置</h2> 
         <Button

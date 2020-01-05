@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core'
 import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
-import { dataHOC } from '~/redux/data/HOC'
+import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 
 export const containerMaxWidth = 800
 export const containerMinWidth = 600
@@ -27,7 +27,7 @@ export interface MainLayoutControllers {
 let mainLayoutControllersResolve: (value: MainLayoutControllers) => void 
 export const MainLayoutContext = createContext<Promise<MainLayoutControllers>>(new Promise(resolve => mainLayoutControllersResolve = resolve))
 
-type FinalProps = Props
+type FinalProps = Props & DataConnectedProps
 
 function MainLayout(props: PropsWithChildren<FinalProps>){
   const 
@@ -53,7 +53,9 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
     return (
       <>
         <MyAppBar />
-        {/* <BgImg uri={'https://i.loli.net/2019/12/29/6PeLfzWnEdNJ1B9.png'} /> */}
+        {props.state.data.settings ? 
+          <BgImg uri={props.state.data.settings.bgImg} />
+        : null}
         <div className={c(flex.row)}>
           <Sidebar theme={theme} />
 

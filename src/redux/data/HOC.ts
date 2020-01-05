@@ -9,8 +9,8 @@ import settings from '~/api/settings'
 
 const { dispatch, getState } = store
 
-export const set = (name: string, data: any) => dispatch({ type: SET, name, data })
-export const remove = () => dispatch({ type: REMOVE })
+export const set = <Name extends keyof State>(name: Name, data: State[Name]) => dispatch({ type: SET, name, data })
+export const remove = (name: keyof State) => dispatch({ type: REMOVE, name })
 
 export const getTags = (forceUpdate = false) =>{
   let {data} = getState()

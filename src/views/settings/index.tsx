@@ -124,7 +124,10 @@ function Settings(props: PropsWithChildren<FinalProps>){
 
   function save(){
     settings.set({ title, subtitle, bgImg })
-      .then(() => notify.success('报存成功'))
+      .then(() =>{
+        notify.success('保存成功')
+        _GLOBAL.homeRefreshMark = true
+      })
   }
 
   if(!props.state.data.tags) return <div />

@@ -1,6 +1,5 @@
 declare function c(...args: (string | undefined | null)[]): string
 
-// type SnackbarPosition = ['top' | 'bottom', 'left' | 'center' | 'right']
 declare interface Window {
   _GLOBAL: {
     homeRefreshMark: boolean

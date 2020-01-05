@@ -17,6 +17,7 @@ interface Params {
   checkText?: string
   closeText?: string
   input?: boolean
+  inputValue?: string
   inputLabel?: string
   onCheck? (inputValue?: string): void
   onClose? (): void
@@ -47,6 +48,7 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
   function show(params: Params){
     setParams(params)
     setVisible(true)
+    if(params.inputValue) setInputValue(params.inputValue)
   }
 
   function hide(){

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, PropsWithChildren, ChangeEvent, FC } from 'react'
-import { makeStyles, TextField, Tooltip } from '@material-ui/core'
+import { makeStyles, TextField, Tooltip, Button } from '@material-ui/core'
 import useHideSidebarRight from '~/hooks/useHideSidebarRight'
 import ImageIcon from '@material-ui/icons/Image'
 import { com, flex } from '~/styles'
@@ -10,6 +10,8 @@ import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import CloseIcon from '@material-ui/icons/Close'
 import article from '~/api/article'
 import getConfirm from '~/externalContexts/confirm'
+import tag from '~/api/tag'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   
@@ -20,6 +22,7 @@ type FinalProps = Props & DataConnectedProps
 function Settings(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    notify = getNotify(),
     confirm = getConfirm(),
     [title, setTitle] = useState(''),
     [subtitle, setSubtitle] = useState(''),
@@ -35,6 +38,7 @@ function Settings(props: PropsWithChildren<FinalProps>){
         setTitle(data.title)
         setSubtitle(data.subtitle)
         setBgImg(data.bgImg)
+        if(data.bgImg) setBgImgStatus(3)
       })
   }, [])
 
@@ -59,25 +63,85 @@ function Settings(props: PropsWithChildren<FinalProps>){
       .then(data => setArticleTotalForActiveTag(data.total))
   }
 
-  function setTagName(tag: ApiData.Tag){
+  function setTagName(tagObj: ApiData.Tag){
     confirm({
       input: true,
+      inputValue: tagObj.name,
       inputLabel: '新标签名',
       title: '修改标签名',
+      onCheck (inputValue){
+        tag.set({ tagId: tagObj._id, name: inputValue! })
+          .then(() =>{
+            notify.success('修改成功')
+            let {tags} = props.state.data
+            tags.forEach(item =>{
+              if(item._id === tagObj._id) item.name = inputValue!
+            })
+
+            props.$data.set('tags', tags)
+          })
+      },
     })
   }
 
   function removeTag(tagId: string){
+    article.searchByTag({ tagId })
+      .then(({total}) =>{
+        if(total !== 0) return notify('该标签下还有文章，无法删除')
 
+        confirm({
+          content: '确定要删除这个标签？',
+          onCheck (){
+            tag.delete({ tagId })
+              .then(() =>{
+                notify.success('删除成功')
+                let {tags} = props.state.data
+                props.$data.set('tags', tags.filter(item => item._id !== tagId))
+              })
+          }
+        })
+      })
+  }
+
+  function addTag(){
+    confirm({
+      input: true,
+      title: '添加标签',
+      inputLabel: '标签名',
+      onCheck (inputValue){
+        tag.set({ name: inputValue! })
+          .then(data =>{
+            let {tags} = props.state.data
+            let newTag = {
+              _id: data.tagId,
+              name: inputValue!
+            }
+            props.$data.set('tags', tags.concat([newTag]))
+          })
+      }
+    })
+  }
+
+  function save(){
+    settings.set({ title, subtitle, bgImg })
+      .then(() => notify.success('报存成功'))
   }
 
   if(!props.state.data.tags) return <div />
 
   return (
     <div className={classes.container}>
-      <h2 className={com.mainTitle}>页面设置</h2>
+      <div className={c(flex.row, flex.crossCenter, flex.between)}>
+        <h2 className={com.mainTitle}>页面设置</h2> 
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={save}
+        >保存</Button>
+      </div>
 
       <TextField fullWidth 
+        style={{ marginTop: 20 }}
         label="首页标题" 
         variant="outlined" 
         value={title}
@@ -106,10 +170,21 @@ function Settings(props: PropsWithChildren<FinalProps>){
       </div>
 
       <div>
-        <h3 style={{ fontWeight: 'initial', marginBottom: 0 }}>标签管理</h3>
-        <p className={com.subTitle} style={{ marginTop: 5 }}>对标签的操作是立即生效的</p>
+        <div className={c(flex.row, flex.between, flex.crossCenter)}>
+          <div>
+            <h3 style={{ fontWeight: 'initial', marginBottom: 0 }}>标签管理</h3>
+            <p className={com.subTitle} style={{ marginTop: 5 }}>对标签的操作将立即生效</p>
+          </div>
+
+          <Button
+            style={{ marginTop: 20 }}
+            variant="outlined"
+            color="primary"
+            onClick={addTag}
+          >添加标签</Button>
+        </div>
         <div className={c(flex.row, flex.crossCenter, flex.wrap, classes.tags)}>{props.state.data.tags.map(tag =>
-          <Tooltip
+          <Tooltip key={tag._id}
             title={articleTotalForActiveTag === -1 ? '加载中' : `标签下共有${articleTotalForActiveTag}篇文章`} 
             placement="top"
             classes={{ tooltip: classes.toolTip }}
@@ -122,7 +197,7 @@ function Settings(props: PropsWithChildren<FinalProps>){
             >
               <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
               <span>{tag.name}</span>
-              <CloseIcon className={classes.removeTagBtn} onClick={() => removeTag(tag._id)} />
+              <CloseIcon className={classes.removeTagBtn} onClick={e =>{ e.stopPropagation(); removeTag(tag._id) }} />
             </div>  
           </Tooltip>
         )}</div>
@@ -160,7 +235,7 @@ const useStyles = makeStyles({
       '> img': {
         width: '100%',
         height: '100%',
-        objectFit: 'cover',
+        objectFit: 'contain',
         transition: 'all 0.2s',
       },
       

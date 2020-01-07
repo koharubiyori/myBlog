@@ -9,6 +9,7 @@ import animatedScrollTo from 'animated-scroll-to'
 import useSaveScroll from '~/hooks/useSaveScroll'
 import ArticleBoxPlain from '~/components/ArticleBoxPlain'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
+import { createPageListLoader, PageListState, initPageList } from '~/utils/pageList'
 
 export interface Props extends RouteComponent {
   
@@ -20,19 +21,11 @@ interface RouteSearchParams {
 
 type FinalProps = Props & DataConnectedProps
 
-const initList = () =>({
-  currentPage: 1,
-  total: 0,
-  pageTotal: 1,
-  cache: {},
-  status: 1
-})
-
 function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter<RouteSearchParams, {}>(),
-    [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>(initList())
+    [articleList, setArticleList] = useState<PageListState<ApiData.SearchResult>>(initPageList())
 
   useSaveScroll()
 
@@ -41,30 +34,9 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   }, [])
 
   function load(tagId: string, page = 1){
-    if(articleList.status === 2){ return }
-    
-    setArticleList(prevVal => ({ ...prevVal, status: 2 }))
-    if(articleList.cache[page]){
-      setArticleList(prevVal => ({ ...prevVal, currentPage: page, status: 3 }))
-    }else{
-      article.searchByTag({ page, tagId })
-        .then(data =>{ 
-          setArticleList(prevVal => ({
-            currentPage: page,
-            total: data.total,
-            pageTotal: data.pageTotal,
-            cache: {
-              ...prevVal.cache,
-              [page]: data.list
-            },
-            status: 3
-          }))      
-        })
-        .catch(e =>{
-          console.log(e)
-          setArticleList(prevVal => ({ ...prevVal, status: 0 }))
-        })
-    }
+    createPageListLoader(articleList, setArticleList, 
+      page => article.searchByTag({ page, tagId })  
+    )(page)
   }
 
   function changePage(page: number){

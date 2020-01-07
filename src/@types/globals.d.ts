@@ -24,14 +24,6 @@ declare interface PageData<Data = any> {
   list: Data[]
 }
 
-declare interface PageState<ListData = any> {
-  total: number
-  pageTotal: number
-  currentPage: number
-  cache: { [key: number]: ListData[] },
-  status: number
-}
-
 declare interface RouteComponent {
   path?: string
 }

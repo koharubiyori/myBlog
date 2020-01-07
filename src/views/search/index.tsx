@@ -8,6 +8,7 @@ import Pagination from '~/components/Pagination'
 import animatedScrollTo from 'animated-scroll-to'
 import useSaveScroll from '~/hooks/useSaveScroll'
 import ArticleBoxPlain from '~/components/ArticleBoxPlain'
+import { PageListState, initPageList, createPageListLoader } from '~/utils/pageList'
 
 export interface Props extends RouteComponent {
   
@@ -19,19 +20,11 @@ interface RouteSearchParams {
 
 type FinalProps = Props
 
-const initList = () =>({
-  currentPage: 1,
-  total: 0,
-  pageTotal: 1,
-  cache: {},
-  status: 1
-})
-
 function SearchResult(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter<RouteSearchParams, {}>(),
-    [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>(initList())
+    [articleList, setArticleList] = useState<PageListState<ApiData.SearchResult>>(initPageList())
 
   useSaveScroll()
 
@@ -40,30 +33,9 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
   }, [])
 
   function load(page = 1, keyword?: string){
-    if(articleList.status === 2){ return }
-    
-    setArticleList(prevVal => ({ ...prevVal, status: 2 }))
-    if(articleList.cache[page]){
-      setArticleList(prevVal => ({ ...prevVal, currentPage: page, status: 3 }))
-    }else{
-      article.search({ page, keyword })
-        .then(data =>{ 
-          setArticleList(prevVal => ({
-            currentPage: page,
-            total: data.total,
-            pageTotal: data.pageTotal,
-            cache: {
-              ...prevVal.cache,
-              [page]: data.list
-            },
-            status: 3
-          }))      
-        })
-        .catch(e =>{
-          console.log(e)
-          setArticleList(prevVal => ({ ...prevVal, status: 0 }))
-        })
-    }
+    createPageListLoader(articleList, setArticleList, 
+      page => article.search({ page, keyword })  
+    )(page)
   }
 
   function changePage(page: number){

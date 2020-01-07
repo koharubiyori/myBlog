@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core'
 import BgImg from '~/components/BgImg'
 import { com } from '~/styles'
 import notification from '~/api/notification'
+import { PageListState, initPageList, createPageListLoader } from '~/utils/pageList'
 
 export interface Props {
   
@@ -10,19 +11,11 @@ export interface Props {
 
 type FinalProps = Props
 
-const initList = () =>({
-  currentPage: 1,
-  total: 0,
-  pageTotal: 1,
-  cache: {},
-  status: 1
-})
-
 function MyNotification(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
     [uncheckedNotifications, setUncheckedNotifications] = useState<ApiData.Notification[]>([]),
-    [notifications, setNotifications] = useState<PageState<ApiData.Notification>>(initList())
+    [notifications, setNotifications] = useState<PageListState<ApiData.Notification>>(initPageList())
   
   useEffect(() =>{
     loadUnchecked()
@@ -31,11 +24,13 @@ function MyNotification(props: PropsWithChildren<FinalProps>){
     
   function loadUnchecked(){
     notification.load({ isChecked: false })
-      .then(setUncheckedNotifications)
+      .then(data => setUncheckedNotifications(data as ApiData.Notification[]))
   }
 
-  function load(){
-    
+  function load(page = 1, force = false){
+    createPageListLoader(notifications, setNotifications, 
+      page => notification.load({ page }) as Promise<PageData<ApiData.Notification>>
+    )(page, force)
   }
 
   return (

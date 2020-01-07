@@ -10,6 +10,7 @@ import Pagination from '~/components/Pagination'
 import animatedScrollTo from 'animated-scroll-to'
 import useSaveScroll from '~/hooks/useSaveScroll'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
+import { PageListState, initPageList, createPageListLoader } from '~/utils/pageList'
 
 export interface Props extends RouteComponent {
   
@@ -21,24 +22,16 @@ interface RouteStateParams {
 
 type FinalProps = Props & DataConnectedProps
 
-const initList = () =>({
-  currentPage: 1,
-  total: 0,
-  pageTotal: 1,
-  cache: {},
-  status: 1
-})
-
 function Home(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter<{}, RouteStateParams>(),
     [topArticles, setTopArticles] = useState<ApiData.SearchResult[]>(null as any),
-    [articleList, setArticleList] = useState<PageState<ApiData.SearchResult>>(initList())
+    [articleList, setArticleList] = useState<PageListState<ApiData.SearchResult>>(initPageList())
 
   useKeepAliveEffect(() =>{
     if(router.params.state.reload || _GLOBAL.homeRefreshMark){
-      setArticleList(initList())
+      setArticleList(initPageList())
       load(1, true)
       loadTopArticles()
       router.clearState()
@@ -54,30 +47,9 @@ function Home(props: PropsWithChildren<FinalProps>){
   }, [])
 
   function load(page = 1, force = false){
-    if(articleList.status === 2){ return }
-    
-    setArticleList(prevVal => ({ ...prevVal, status: 2 }))
-    if(articleList.cache[page] && !force){
-      setArticleList(prevVal => ({ ...prevVal, currentPage: page, status: 3 }))
-    }else{
-      article.search({ page, exceptTop: true })
-        .then(data =>{ 
-          setArticleList(prevVal => ({
-            total: data.total,
-            currentPage: page,
-            pageTotal: data.pageTotal,
-            cache: {
-              ...prevVal.cache,
-              [page]: data.list
-            },
-            status: 3
-          }))      
-        })
-        .catch(e =>{
-          console.log(e)
-          setArticleList(prevVal => ({ ...prevVal, status: 0 }))
-        })
-    }
+    createPageListLoader(articleList, setArticleList, 
+      page => article.search({ page, exceptTop: true })  
+    )(page, force)
   }
 
   function loadTopArticles(){

@@ -58,7 +58,7 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
         
         <Button variant="outlined" style={{ borderColor: '#eee', marginRight: 20 }}>关于我</Button>
 
-        <IconButton>
+        <IconButton onClick={() => router.navigate('/notification')}>
           <NotificationsIcon />
         </IconButton>
 

@@ -55,4 +55,13 @@ declare namespace ApiData {
     subtitle: string
     bgImg: string
   }
+
+  interface Notification {
+    _id?: string
+    userId: string
+    operatorId: string
+    type: 'like' | 'system' | 'comment' | 'reply'
+    isChecked: boolean
+    deleted: boolean
+  }
 }

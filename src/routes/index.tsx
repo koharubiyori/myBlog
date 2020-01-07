@@ -20,7 +20,8 @@ export const routeMaps = {
   '/search': l('search'),
   '/search/byTag': l('search/byTag'),
   
-  '/settings': l('settings')
+  '/settings': l('settings'),
+  '/notification': l('notification')
 }
 
 export type RoutePaths = keyof (typeof routeMaps & { '/': any })
@@ -31,7 +32,7 @@ export default function Routes(){
     <Router basepath={basePath}>
       <MainLayout path="/">
         {Object.keys(routeMaps).map(path => <Route key={path} path={path} component={(routeMaps as any)[path]} />)}
-        <Home path="/" />
+        <Route path="/" component={Home} />
       </MainLayout>
     </Router>
   )

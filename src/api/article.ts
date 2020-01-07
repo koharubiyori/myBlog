@@ -8,7 +8,11 @@ export default {
 
   searchByTag: get<Api.SearchByTag, PageData<ApiData.SearchResult>>('article/searchByTag', { loading: true, fail: true }),
 
-  searchTop: get<undefined, ApiData.SearchResult[]>('article/searchTop'),
+  searchTop: get<undefined, ApiData.SearchResult[]>('article/searchTop', { loading: true, fail: true }),
+
+  searchRandom: get<undefined, ApiData.SearchResult[]>('article/searchRandom', { loading: true, fail: true }),
+
+  searchHot: get<undefined, ApiData.SearchResult[]>('article/searchHot', { loading: true, fail: true }),
 
   publish: post<Api.Publish>('article/publish', { loading: true, fail: true }),
 

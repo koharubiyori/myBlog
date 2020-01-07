@@ -1,9 +1,10 @@
 import React, { PropsWithChildren, useState, useEffect, FC, createContext } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Tabs, Tab } from '@material-ui/core'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import createRouter from '~/utils/createRouter'
 import { appBarHeight } from '../myAppBar'
-import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
+import ArticleBox from './components/ArticleBox'
+import article from '~/api/article'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -22,7 +23,11 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
     classes = useStyles(), 
     router = createRouter(),
     [visible, setVisible] = useState(true),
-    [Content, setContent] = useState<FC | null>(null)
+    [Content, setContent] = useState<FC | null>(null),
+    [activeTab, setActiveTab] = useState(0),
+    [randomArticles, setRandomArticles] = useState<ApiData.SearchResult[]>([]),
+    [hotArticles, setHotArticles] = useState<ApiData.SearchResult[]>([])
+
   let disabledResizeHandler = false
 
   if(props.getRef) props.getRef.current = { 
@@ -40,8 +45,21 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
     return () => window.removeEventListener('resize', resizeHandler)
   }, [])
 
+  useEffect(() =>{
+    getRandomArticles()
+    getHotArticles()
+  }, [])
+
   function setDisabledResizeHandler(val: boolean){
     disabledResizeHandler = val
+  }
+
+  function getRandomArticles(){
+    article.searchRandom().then(setRandomArticles)
+  }
+
+  function getHotArticles(){
+    article.searchHot().then(setHotArticles)
   }
 
   return (
@@ -51,8 +69,34 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
           {Content ? 
             <Content />
           :
-            // <div>1234</div>  
-            <TagIcon style={{ width: 10, height: 10 }} />
+            <div>
+              <Tabs
+                variant="fullWidth"
+                value={activeTab}
+                indicatorColor="primary"
+                textColor="primary"
+                onChange={(e, newVal) => setActiveTab(newVal)}
+              >
+                <Tab label="随机文章" style={{ minWidth: 'auto' }} />
+                <Tab label="热门文章" style={{ minWidth: 'auto' }} />
+              </Tabs>
+
+              <div className={classes.tabContent}>
+                {activeTab === 0 ?
+                  randomArticles.map(item => <ArticleBox 
+                    key={item._id}
+                    articleData={item}
+                    onClick={() => router.push('/article/view', { search: { articleId: item._id } })}
+                  />)
+                :
+                  hotArticles.map(item => <ArticleBox 
+                    key={item._id}
+                    articleData={item}
+                    onClick={() => router.push('/article/view', { search: { articleId: item._id } })}
+                  />)
+                }
+              </div>
+            </div>
           }
         </div>
 
@@ -74,5 +118,9 @@ const useStyles = makeStyles({
     width: 220,
     paddingTop: appBarHeight,
     boxShadow: '0 0 5px #666'
+  },
+
+  tabContent: {
+    
   }
 })

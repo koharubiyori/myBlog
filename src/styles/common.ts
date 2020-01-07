@@ -15,4 +15,10 @@ export default createClasses('com', {
   pointer: {
     cursor: 'pointer'
   },
+
+  textLimit: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  }
 })

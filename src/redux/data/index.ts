@@ -10,8 +10,8 @@ export interface State {
 }
 
 const reducer: ReduxReducer<State> = (state = {
-  tags: JSON.parse(localStorage.getItem('data-tags') || '') as any,
-  settings: JSON.parse(localStorage.getItem('data-settings') || '') as any
+  tags: JSON.parse(localStorage.getItem('data-tags') || 'null') as any,
+  settings: JSON.parse(localStorage.getItem('data-settings') || 'null') as any
 }, action) =>{
   switch(action.type){
     case SET: {

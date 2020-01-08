@@ -6,6 +6,6 @@ export namespace Api {
   interface Load {
     page?: number
     limit?: number
-    isChecked?: boolean
+    isUnchecked?: boolean
   }
 }

@@ -57,11 +57,16 @@ declare namespace ApiData {
   }
 
   interface Notification {
-    _id?: string
+    _id: string
     userId: string
     operatorId: string
     type: 'like' | 'system' | 'comment' | 'reply'
     isChecked: boolean
     deleted: boolean
+    userData: ApiData.User
+    operatorUserData: ApiData.User
+
+    commentContent?: string
+    articleTitle?: string
   }
 }

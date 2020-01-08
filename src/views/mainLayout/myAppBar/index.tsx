@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect, FC } from 'react'
-import { AppBar, Toolbar, Typography, InputBase, IconButton, Button, makeStyles } from '@material-ui/core'
+import { AppBar, Toolbar, Typography, InputBase, IconButton, Button, makeStyles, Avatar } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
@@ -64,7 +64,10 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
 
         {props.state.user.account ? 
           <IconButton onClick={() => router.navigate('/account/userInfo')}>
-            <img src={props.state.user.avatar || require('~/images/sub/akari.jpg')} alt="icon" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+            <Avatar 
+              src={props.state.user.avatar} 
+              style={{ width: 25, height: 25, backgroundColor: 'white', color: '#666' }}
+            >{props.state.user.name[0]}</Avatar>
           </IconButton>
         :
           <IconButton onClick={() => router.navigate('/account/register')}>

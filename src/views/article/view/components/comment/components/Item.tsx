@@ -61,11 +61,10 @@ function CommentItem(props: PropsWithChildren<FinalProps>){
     <div className={classes.container}>
       <CloseIcon className={classes.closeBtn} onClick={() => props.onClickDelete && props.onClickDelete(props.commentData._id)} />
       <header className={c(flex.row, flex.crossCenter)}>
-        {props.commentData.userData.avatar ? 
-          <Avatar alt="avatar" src={props.commentData.userData.avatar} />
-        :
-          <Avatar alt="avatar">{props.commentData.userData.name[0]}</Avatar>
-        }
+        <Avatar 
+          src={props.commentData.userData.avatar}
+        >{props.commentData.userData.name[0]}</Avatar>
+        
         <div className={c(flex.column, flex.between, classes.info)}>
           <div className="userName" style={{ fontWeight: 'bold' }}>{props.commentData.userData.name}</div>
           <div className="date">{idToMoment(props.commentData._id).format('YYYY年MM月DD日 HH:mm:ss')}</div>

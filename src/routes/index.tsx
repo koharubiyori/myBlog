@@ -22,7 +22,8 @@ export const routeMaps = {
   
   '/settings': l('settings', { role: ['admin'] }),
   '/notification': l('notification', { role: ['admin', 'user'] }),
-  '/collectList': l('collectList', { role: ['admin', 'user'] })
+  '/collectList': l('collectList', { role: ['admin', 'user'] }),
+  '/aboutMe': l('aboutMe')
 }
 
 export type RoutePaths = keyof (typeof routeMaps & { '/': any })

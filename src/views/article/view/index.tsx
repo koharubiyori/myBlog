@@ -231,7 +231,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
                   <div 
                     className={classes.lastNextBtn} 
                     onClick={() => router.push('/article/view', { search: { articleId: articleData.nextArticle._id } })}
-                  >上一篇</div>
+                  >下一篇</div>
                 </Tooltip>
               : <div />}
             </div>

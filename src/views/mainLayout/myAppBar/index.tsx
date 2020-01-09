@@ -79,7 +79,11 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
           onKeyDown={e => pressEnterToSearch(e.keyCode)}
         />
         
-        <Button variant="outlined" style={{ borderColor: '#eee', marginRight: 20 }}>关于我</Button>
+        <Button 
+          variant="outlined" 
+          style={{ borderColor: '#eee', marginRight: 20 }}
+          onClick={() => router.navigate('/aboutMe')}
+        >关于我</Button>
 
         {props.state.user.account ? 
           <>

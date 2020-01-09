@@ -31,6 +31,10 @@ createClasses('', {
       boxShadow: 'inset 0 0 5px rgba(0,0,0,0.2)'
     },
 
+    'svg.icon.inheritFill > path': {
+      fill: 'inherit'
+    },
+
     '[data-name=mojs-shape]': {
       position: 'fixed !important',
       zIndex: 10000,

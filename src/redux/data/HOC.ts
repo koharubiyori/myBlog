@@ -6,10 +6,11 @@ import {
 import store from '~/redux'
 import tag from '~/api/tag'
 import settings from '~/api/settings'
+import notification from '~/api/notification'
 
 const { dispatch, getState } = store
 
-export const set = <Name extends keyof State>(name: Name, data: State[Name]) => dispatch({ type: SET, name, data })
+export const set = <Name extends keyof State>(name: Name, data: State[Name], notCache = false) => dispatch({ type: SET, name, data, notCache })
 export const remove = (name: keyof State) => dispatch({ type: REMOVE, name })
 
 export const getTags = (forceUpdate = false) =>{
@@ -29,6 +30,14 @@ export const getSettings = (forceUpdate = false) =>{
     return data
   })
 } 
+
+export const getUncheckedNotificationTotal = () =>{
+  return notification.getUncheckedTotal()
+    .then(data =>{
+      set('uncheckedNotificationTotal', data.total, true)
+      return data.total
+    })
+}
 
 interface ConnectedDispatch {
   '$data': {

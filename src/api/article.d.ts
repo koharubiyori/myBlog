@@ -35,4 +35,8 @@ export namespace Api {
     articleId: string
     collect: boolean
   }
+
+  interface GetCollectStatus {
+    articleId: string
+  }
 }

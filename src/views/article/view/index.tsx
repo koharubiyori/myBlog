@@ -25,6 +25,7 @@ import useArticleContentStyles from './styles/articleContent'
 import qs from 'qs'
 import animatedScrollTo from 'animated-scroll-to'
 import { CSSTransition } from 'react-transition-group'
+import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 
 export interface Props {
   
@@ -41,7 +42,7 @@ interface ArticleCache {
   }
 }
 
-type FinalProps = Props & DataConnectedProps
+type FinalProps = Props & DataConnectedProps & UserConnectedProps
 
 function ArticleView(props: PropsWithChildren<FinalProps>){
   const
@@ -115,6 +116,16 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
     }
 
     setArticleData(articleData)
+
+    if(props.$user.getRole() === 'user'){
+      article.getCollectStatus({ articleId: router.params.search.articleId })
+        .then(data =>{
+          mainLayoutControllersPromise.then(controllers =>{
+            controllers.actionsButton.setIsCollected(data.collectStatus)
+          })
+        })
+    }
+
     setTimeout(() =>{
       props.$data.getTags().then(tagList => tagList)
       editor.current = new EditorViewer({
@@ -233,7 +244,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default dataHOC(ArticleView) as FC<Props>
+export default userHOC(dataHOC(ArticleView)) as FC<Props>
 
 const useStyles = makeStyles({
   title: {

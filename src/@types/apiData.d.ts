@@ -63,10 +63,10 @@ declare namespace ApiData {
     type: 'like' | 'system' | 'comment' | 'reply'
     isChecked: boolean
     deleted: boolean
+    
     userData: ApiData.User
     operatorUserData: ApiData.User
-
-    commentContent?: string
-    articleTitle?: string
+    commentData?: ApiData.Comment
+    articleData?: ApiData.Article
   }
 }

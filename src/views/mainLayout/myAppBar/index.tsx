@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect, FC } from 'react'
-import { AppBar, Toolbar, Typography, InputBase, IconButton, Button, makeStyles, Avatar } from '@material-ui/core'
+import { AppBar, Toolbar, Typography, InputBase, IconButton, Button, makeStyles, Avatar, Badge, Menu, MenuItem } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
@@ -9,6 +9,8 @@ import { flex } from '~/styles'
 import createRouter from '~/utils/createRouter'
 import { basePath } from '~/routes'
 import getNotify from '~/externalContexts/notify'
+import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
+import getConfirm from '~/externalContexts/confirm'
 
 export const appBarHeight = 55
 
@@ -20,14 +22,16 @@ interface RouteSearchParams {
   keyword?: string
 }
 
-type FinalProps = Props & UserConnectedProps
+type FinalProps = Props & UserConnectedProps & DataConnectedProps
 
 function MyAppBar(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
     notify = getNotify(),
+    confirm = getConfirm(),
     router = createRouter<RouteSearchParams>(),
-    [searchInput, setSearchInput] = useState('')
+    [searchInput, setSearchInput] = useState(''),
+    [userMenuEl, setUserMenuEl] = useState<HTMLElement | null>(null)
 
   useEffect(() =>{
     if(router.location.pathname === `${basePath}/search`){
@@ -35,10 +39,28 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
     }
   }, [])
 
+  useEffect(() =>{
+    const mousewheelHandler = () => setUserMenuEl(null)
+    window.addEventListener('mousewheel', mousewheelHandler)
+
+    return () => window.removeEventListener('mousewheel', mousewheelHandler)
+  }, [])
+
   function pressEnterToSearch(keyCode: number){
     if(keyCode !== 13){ return }
     if(searchInput === '') return notify('搜索关键词不能为空')
     router.push('/search', { search: { keyword: searchInput } })
+  }
+
+  function logout(){
+    setUserMenuEl(null)
+    confirm({
+      content: '确定要登出吗？',
+      onCheck (){
+        props.$user.clear()
+        notify.success('已登出')
+      }
+    })
   }
 
   return (
@@ -59,18 +81,35 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
         <Button variant="outlined" style={{ borderColor: '#eee', marginRight: 20 }}>关于我</Button>
 
         <IconButton onClick={() => router.navigate('/notification')}>
-          <NotificationsIcon />
+          <Badge 
+            color="error"
+            invisible={props.state.data.uncheckedNotificationTotal === 0}
+            badgeContent={props.state.data.uncheckedNotificationTotal} 
+          >
+            <NotificationsIcon />
+          </Badge>
         </IconButton>
 
         {props.state.user.account ? 
-          <IconButton onClick={() => router.navigate('/account/userInfo')}>
-            <Avatar 
-              src={props.state.user.avatar} 
-              style={{ width: 25, height: 25, backgroundColor: 'white', color: '#666' }}
-            >{props.state.user.name[0]}</Avatar>
-          </IconButton>
+          <>
+            <IconButton onClick={e => setUserMenuEl(e.currentTarget)}>
+              <Avatar 
+                src={props.state.user.avatar} 
+                style={{ width: 25, height: 25, backgroundColor: 'white', color: '#666' }}
+              >{props.state.user.name[0]}</Avatar>
+            </IconButton>
+            <Menu keepMounted
+              anchorEl={userMenuEl}
+              open={!!userMenuEl}
+              onClose={() => setUserMenuEl(null)}
+            >
+              <MenuItem onClick={() => router.navigate('/account/userInfo').then(() => setUserMenuEl(null))}>个人信息</MenuItem>
+              <MenuItem onClick={() => {}}>收藏列表</MenuItem>
+              <MenuItem onClick={logout}>登出</MenuItem>
+            </Menu>
+          </>
         :
-          <IconButton onClick={() => router.navigate('/account/register')}>
+          <IconButton onClick={() => router.navigate('/account/login')}>
             <AccountCircleIcon />
           </IconButton>
         }
@@ -85,7 +124,7 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default userHOC(MyAppBar) as FC<Props>
+export default dataHOC(userHOC(MyAppBar)) as FC<Props>
 
 const useStyles = makeStyles({
   appBar: {

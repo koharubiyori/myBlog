@@ -16,6 +16,7 @@ import qs from 'qs'
 import article from '~/api/article'
 import getNotify from '~/externalContexts/notify'
 import getConfirm from '~/externalContexts/confirm'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -24,11 +25,12 @@ export interface Props {
 export interface ActionsButtonRef {
   setVisible (val: boolean): void
   setDisabledResizeHandler (val: boolean): void
+  setIsCollected (val: boolean): void
 }
 
 type FinalProps = Props & UserConnectedProps
 
-type ActionName = '新建文章' | '分享' | '收藏' | '编辑' | '删除'
+type ActionName = '新建文章' | '分享' | '收藏文章' | '取消收藏' | '编辑' | '删除'
 
 interface Action {
   icon: JSX.Element | null
@@ -40,27 +42,20 @@ const actionMaps: {
 } = {
   '/article/view': {
     admin: [
-      { icon: <ShareIcon />, name: '分享' },
       { icon: <AddIcon />, name: '新建文章' },
       { icon: <DeleteIcon />, name: '删除' },
       { icon: <EditIcon />, name: '编辑' },
     ],
 
     user: [
-      { icon: <ShareIcon />, name: '分享' },
-      { icon: <FavoriteIcon />, name: '收藏' },
-    ],
+      { icon: <FavoriteIcon />, name: '收藏文章' }
+    ]
   },
 
   default: {
     admin: [
-      { icon: <ShareIcon />, name: '分享' },
       { icon: <AddIcon />, name: '新建文章' },
     ],
-
-    user: [
-      { icon: <FavoriteIcon />, name: '收藏' }
-    ]
   }
 }
 
@@ -73,10 +68,11 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     [open, setOpen] = useState(false),
     [visible, setVisible] = useState(true),
     [actions, setActions] = useState<Action[]>([]),
+    [isCollected, setIsCollected] = useState(false),
     lastProps = useRef<FinalProps>(props)
   let disabledResizeHandler = false
 
-  if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler }
+  if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler, setIsCollected }
 
   useEffect(() =>{
     const resizeHandler = () => {
@@ -93,10 +89,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   }, [])
 
   useEffect(() =>{
-    if(lastProps.current.state.user._id === '' && props.state.user._id){
-      loadActions(router.location.pathname)
-    }
-
+    loadActions(router.location.pathname)
     lastProps.current = props
   })
 
@@ -106,6 +99,15 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     const role = props.$user.getRole()
     const roleAction = action![role] || actionMaps.default![role]
     
+    if(roleAction){
+      roleAction.forEach(item =>{
+        if(item.name === '收藏文章' || item.name === '取消收藏'){
+          item.icon = isCollected ? <FavoriteIcon color="error" /> : <FavoriteIcon />
+          item.name = isCollected ? '取消收藏' : '收藏文章'
+        }
+      })
+    }
+
     roleAction && setActions(roleAction.reverse())
   }
 
@@ -135,6 +137,15 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
               })
           }
         })
+        break
+      }
+
+      case '收藏文章': 
+      case '取消收藏': {
+        const {articleId} = qs.parse(router.location.search.split('?')[1])
+        article.setCollectStatus({ articleId, collect: !isCollected })
+        isCollected ? notify('取消收藏') : notify.success('收藏文章')
+        setIsCollected(prevVal => !prevVal)
         break
       }
     }

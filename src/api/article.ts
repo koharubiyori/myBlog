@@ -14,11 +14,13 @@ export default {
 
   searchHot: get<undefined, ApiData.SearchResult[]>('article/searchHot', { loading: true, fail: true }),
 
+  getCollectStatus: get<Api.GetCollectStatus, { collectStatus: boolean }>('article/getCollectStatus'),
+
   publish: post<Api.Publish>('article/publish', { loading: true, fail: true }),
 
   delete: post<Api.Delete>('article/delete', { loading: true, fail: true }),
   
-  setCollectStatus: post<Api.SetCollectStatus>('article/setCollectStatus'),
+  setCollectStatus: post<Api.SetCollectStatus>('article/setCollectStatus', { loading: true, fail: true }),
 
   uploadImg: post<{ file: File }, { fileUrl: string }>('article/uploadImg', { loading: true, fail: '图片上传失败，请重试', upload: true }),
 

@@ -45,7 +45,7 @@ export default function createRouter<SearchParams = {}, StateParams = {}>(): Rea
     replace: (path, args = {}) => myNavigate(path, args, true),
 
     navigate: (path, args = {}) =>{
-      if(window.location.pathname === basePath + path) return Promise.reject()
+      if(window.location.pathname === basePath + path) return Promise.resolve()
       return myNavigate(path, args)
     },
 

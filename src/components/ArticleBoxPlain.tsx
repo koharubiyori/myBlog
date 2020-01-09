@@ -92,6 +92,7 @@ const useStyles = makeStyles({
   
   container: {
     maxWidth: 700,
+    backgroundColor: 'white',
     position: 'relative',
     margin: '30px auto',
     cursor: 'pointer',

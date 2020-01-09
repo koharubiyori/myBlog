@@ -103,7 +103,13 @@ const useStyles = makeStyles({
     overflow: 'hidden',
     animation: 'fadeSink 0.7s',
 
-    '&[data-top=true]::before': {
+    '@media screen and (max-width: 1300px)': {
+      '&[data-top="true"] .totals': {
+        display: 'none'
+      }
+    },
+
+    '&[data-top="true"]::before': {
       content: '"置顶"',
       position: 'absolute',
       top: 10,

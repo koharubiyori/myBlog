@@ -6,16 +6,18 @@ export const REMOVE = Symbol()
 
 export interface State {
   tags: ApiData.Tag[]
-  settings: Omit<ApiData.Settings, '_id'>
+  settings: Omit<ApiData.Settings, '_id'>,
+  uncheckedNotificationTotal: number
 }
 
 const reducer: ReduxReducer<State> = (state = {
   tags: JSON.parse(localStorage.getItem('data-tags') || 'null') as any,
-  settings: JSON.parse(localStorage.getItem('data-settings') || 'null') as any
+  settings: JSON.parse(localStorage.getItem('data-settings') || 'null') as any,
+  uncheckedNotificationTotal: 0
 }, action) =>{
   switch(action.type){
     case SET: {
-      localStorage.setItem('data-' + action.name, JSON.stringify(action.data))
+      !action.notCache && localStorage.setItem('data-' + action.name, JSON.stringify(action.data))
       
       return { 
         ...state,

@@ -8,10 +8,10 @@ export default function controlReqStatus<
   return reqPromise
     .then(data =>{
       setStatus(3)
-      return data
+      return Promise.resolve(data)
     })
     .catch(e =>{
       setStatus(0)
-      return e
+      return Promise.reject(e)
     }) as any
 }

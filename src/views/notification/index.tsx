@@ -23,7 +23,7 @@ function MyNotification(props: PropsWithChildren<FinalProps>){
     router = createRouter(),
     notify = getNotify(),
     [uncheckedNotifications, setUncheckedNotifications] = useState<ApiData.Notification[]>(null as any),
-    [notifications, setNotifications] = useState<PageListState<ApiData.Notification>>(initPageList()),
+    [notifications, setNotifications] = useState(initPageList<ApiData.Notification>()),
     [activeTab, setActiveTab] = useState(0)
   
   useEffect(() =>{

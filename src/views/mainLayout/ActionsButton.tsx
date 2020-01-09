@@ -42,9 +42,10 @@ const actionMaps: {
 } = {
   '/article/view': {
     admin: [
-      { icon: <AddIcon />, name: '新建文章' },
-      { icon: <DeleteIcon />, name: '删除' },
+      { icon: <FavoriteIcon />, name: '收藏文章' },
       { icon: <EditIcon />, name: '编辑' },
+      { icon: <DeleteIcon />, name: '删除' },
+      { icon: <AddIcon />, name: '新建文章' },
     ],
 
     user: [
@@ -68,8 +69,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     [open, setOpen] = useState(false),
     [visible, setVisible] = useState(true),
     [actions, setActions] = useState<Action[]>([]),
-    [isCollected, setIsCollected] = useState(false),
-    lastProps = useRef<FinalProps>(props)
+    [isCollected, setIsCollected] = useState(false)
   let disabledResizeHandler = false
 
   if(props.getRef) props.getRef.current = { setVisible, setDisabledResizeHandler, setIsCollected }
@@ -90,8 +90,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
 
   useEffect(() =>{
     loadActions(router.location.pathname)
-    lastProps.current = props
-  })
+  }, [props.state.user, isCollected])
 
   function loadActions(pathName: string){
     const path: RoutePaths = pathName.replace(new RegExp('^' + _.escapeRegExp(basePath)), '') as any
@@ -108,7 +107,8 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
       })
     }
 
-    roleAction && setActions(roleAction.reverse())
+    console.log(roleAction)
+    roleAction && setActions(roleAction)
   }
 
   function actionHandler (actionName: ActionName){

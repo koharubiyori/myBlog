@@ -25,7 +25,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
     router = createRouter<RouteSearchParams, {}>(),
-    [articleList, setArticleList] = useState<PageListState<ApiData.SearchResult>>(initPageList())
+    [articleList, setArticleList] = useState(initPageList<ApiData.SearchResult>())
 
   useSaveScroll()
 

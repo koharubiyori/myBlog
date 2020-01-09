@@ -117,7 +117,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
 
     setArticleData(articleData)
 
-    if(props.$user.getRole() === 'user'){
+    if(props.$user.getRole() !== 'visitor'){
       article.getCollectStatus({ articleId: router.params.search.articleId })
         .then(data =>{
           mainLayoutControllersPromise.then(controllers =>{

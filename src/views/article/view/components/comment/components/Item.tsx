@@ -9,6 +9,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { FlattenedTree, CommentWithParentUserData } from '../redux/commentList'
 import _ from 'lodash'
 import getNotify from '~/externalContexts/notify'
+import { userHOC } from '~/redux/user/HOC'
 
 export interface Props {
   commentData: FlattenedTree | CommentWithParentUserData
@@ -59,7 +60,10 @@ function CommentItem(props: PropsWithChildren<FinalProps>){
 
   return (
     <div className={classes.container}>
-      <CloseIcon className={classes.closeBtn} onClick={() => props.onClickDelete && props.onClickDelete(props.commentData._id)} />
+      {props.userData.isAdmin ? 
+        <CloseIcon className={classes.closeBtn} onClick={() => props.onClickDelete && props.onClickDelete(props.commentData._id)} />
+      : null}
+      
       <header className={c(flex.row, flex.crossCenter)}>
         <Avatar 
           src={props.commentData.userData.avatar}

@@ -14,6 +14,8 @@ export default {
 
   searchHot: get<undefined, ApiData.SearchResult[]>('article/searchHot', { loading: true, fail: true }),
 
+  searchByUserCollect: get<Api.SearchByUserCollect, PageData<ApiData.SearchResult>>('article/searchByUserCollect', { loading: true, fail: true }),
+
   getCollectStatus: get<Api.GetCollectStatus, { collectStatus: boolean }>('article/getCollectStatus'),
 
   publish: post<Api.Publish>('article/publish', { loading: true, fail: true }),

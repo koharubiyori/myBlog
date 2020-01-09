@@ -27,7 +27,7 @@ function Home(props: PropsWithChildren<FinalProps>){
     classes = useStyles(),
     router = createRouter<{}, RouteStateParams>(),
     [topArticles, setTopArticles] = useState<ApiData.SearchResult[]>(null as any),
-    [articleList, setArticleList] = useState<PageListState<ApiData.SearchResult>>(initPageList())
+    [articleList, setArticleList] = useState(initPageList<ApiData.SearchResult>())
 
   useKeepAliveEffect(() =>{
     if(router.params.state.reload || _GLOBAL.homeRefreshMark){
@@ -67,7 +67,7 @@ function Home(props: PropsWithChildren<FinalProps>){
     <div>
       <header>
         <h2 className={com.mainTitle}>{props.state.data.settings.title}</h2>
-        <p>{props.state.data.settings.title}</p>
+        <p>{props.state.data.settings.subtitle}</p>
 
         {topArticles ? 
           <div className={classes.topArticles}>{topArticles.map(item =>

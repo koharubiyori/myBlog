@@ -39,4 +39,9 @@ export namespace Api {
   interface GetCollectStatus {
     articleId: string
   }
+
+  interface SearchByUserCollect {
+    page?: number
+    limit?: number
+  }
 }

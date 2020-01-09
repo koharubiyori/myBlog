@@ -59,6 +59,7 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
       onCheck (){
         props.$user.clear()
         notify.success('已登出')
+        router.replace('/')
       }
     })
   }
@@ -80,18 +81,18 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
         
         <Button variant="outlined" style={{ borderColor: '#eee', marginRight: 20 }}>关于我</Button>
 
-        <IconButton onClick={() => router.navigate('/notification')}>
-          <Badge 
-            color="error"
-            invisible={props.state.data.uncheckedNotificationTotal === 0}
-            badgeContent={props.state.data.uncheckedNotificationTotal} 
-          >
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-
         {props.state.user.account ? 
           <>
+            <IconButton onClick={() => router.navigate('/notification')}>
+              <Badge 
+                color="error"
+                invisible={props.state.data.uncheckedNotificationTotal === 0}
+                badgeContent={props.state.data.uncheckedNotificationTotal} 
+              >
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+
             <IconButton onClick={e => setUserMenuEl(e.currentTarget)}>
               <Avatar 
                 src={props.state.user.avatar} 
@@ -104,7 +105,7 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
               onClose={() => setUserMenuEl(null)}
             >
               <MenuItem onClick={() => router.navigate('/account/userInfo').then(() => setUserMenuEl(null))}>个人信息</MenuItem>
-              <MenuItem onClick={() => {}}>收藏列表</MenuItem>
+              <MenuItem onClick={() => router.navigate('/collectList').then(() => setUserMenuEl(null))}>收藏列表</MenuItem>
               <MenuItem onClick={logout}>登出</MenuItem>
             </Menu>
           </>

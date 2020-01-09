@@ -8,7 +8,7 @@ export interface PageListState<ListData = any> {
   status: number
 }
 
-export const initPageList = () => ({
+export const initPageList: <ListData = any>() => PageListState<ListData> = () => ({
   currentPage: 1,
   total: 0,
   pageTotal: 1,

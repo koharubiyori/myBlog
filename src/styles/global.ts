@@ -8,7 +8,8 @@ createClasses('', {
   '@global': {
     'html, body': {
       minWidth,
-      margin: 0
+      margin: 0,
+      fontFamily: '微软雅黑'
     },
 
     '::selection': {

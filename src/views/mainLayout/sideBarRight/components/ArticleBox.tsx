@@ -3,6 +3,9 @@ import { makeStyles } from '@material-ui/core'
 import { flex, com } from '~/styles'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 
+const iconLoader = (iconName: string): string => require('~/images/icons/' + iconName + '.png')
+const icons = ('chino cocoa rize syaro maya noel nonoka koharu shione').split(' ').map(iconLoader)
+
 export interface Props {
   articleData: ApiData.SearchResult
   onClick?(): void
@@ -12,7 +15,8 @@ type FinalProps = Props
 
 function SidebarRightArticleBox(props: PropsWithChildren<FinalProps>){
   const
-    classes = useStyles()
+    classes = useStyles(),
+    randomIcon = useRef(icons[Math.floor(Math.random() * icons.length)])
   
   return (
     <div 
@@ -21,7 +25,7 @@ function SidebarRightArticleBox(props: PropsWithChildren<FinalProps>){
       onClick={() => props.onClick && props.onClick()}
     >
       <div className={c(flex.row, flex.center)} style={{ width: 50, marginRight: 10 }}>
-        <img className={classes.icon} />
+        <img src={randomIcon.current} className={classes.icon} alt="icon" />
       </div>
 
       <div className={c(flex.column, flex.around)} style={{ height: 50, overflow: 'hidden' }}>
@@ -50,8 +54,8 @@ const useStyles = makeStyles({
   },
 
   icon: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     borderRadius: '50%',
     backgroundColor: '#ccc'
   },

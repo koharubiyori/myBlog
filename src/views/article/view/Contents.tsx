@@ -64,7 +64,18 @@ function ArticleContents(props: PropsWithChildren<FinalProps>){
     return () => clearInterval(intervalKey)
   }, [])
 
-  // 监听容器的滚动(包括用户滚动和js滚动)，如果滚动则一定时间内不再触发scrollIntoView
+  // 监听sidebarRight容器的滚动(包括用户滚动和js滚动)，如果滚动则2s内不再触发scrollIntoView
+  useEffect(() =>{
+    const handler = () => containerScrollHandlerForScrollLock()
+    const sidebarRightRoot = document.querySelector('.sidebarRight-root')!
+
+    setTimeout(() =>{
+      sidebarRightRoot.addEventListener('scroll', handler)
+    })
+
+    return sidebarRightRoot.removeEventListener('scroll', handler)
+  }, [])
+
   function containerScrollHandlerForScrollLock(sleep = 2000){
     clearTimeout(closeScrollLockTimeoutKey.current)
     scrollLock.current = true
@@ -82,7 +93,7 @@ function ArticleContents(props: PropsWithChildren<FinalProps>){
   }
 
   return (
-    <div className={classes.container} onScroll={() => containerScrollHandlerForScrollLock()}>
+    <div className={classes.container}>
       <p style={{ fontSize: 22 }}>目录</p>
       <div className={classes.titles}>
         {props.titles.map((item, index) =>
@@ -111,9 +122,9 @@ const useStyles = makeStyles({
     boxSizing: 'border-box',
     padding: '0 10px',
     paddingTop: 10,
-    height: 'calc(100vh - 60px)',
-    overflowX: 'hidden',
-    overflowY: 'auto',
+    // height: 'calc(100vh - 60px)',
+    // overflowX: 'hidden',
+    // overflowY: 'auto',
   },
 
   titles: {

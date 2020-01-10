@@ -12,7 +12,7 @@ const { dispatch, getState } = store
 export const set = (data: Partial<State>) => dispatch({ type: SET, data })
 export const clear = () => dispatch({ type: CLEAR })
 
-export const updateUserInfo = () => new Promise((resolve, reject) =>{
+export const updateUserInfo = (): Promise<ApiData.User> => new Promise((resolve, reject) =>{
   if(Cookies.get('userToken')){
     user.getUserInfo()
       .then(data =>{

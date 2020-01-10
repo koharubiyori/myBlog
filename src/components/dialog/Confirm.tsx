@@ -19,6 +19,7 @@ interface Params {
   input?: boolean
   inputValue?: string
   inputLabel?: string
+  disabledAutoHide?: boolean
   onCheck? (inputValue?: string): void
   onClose? (): void
 }
@@ -38,22 +39,25 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
       input: false,
     })
 
+    const test = useRef<HTMLDivElement>(null as any)
+  
   if(props.getRef) props.getRef.current = { show, hide }
   
   function handlerCheck(){
     params.onCheck && params.onCheck(params.input ? inputValue : undefined)
-    setVisible(false)
+    !params.disabledAutoHide && setVisible(false)
   }
 
   function show(params: Params){
     setParams(params)
     setVisible(true)
-    if(params.inputValue) setInputValue(params.inputValue)
+    setInputValue(params.inputValue || '')
+    setTimeout(() => (test.current!.querySelector('.MuiInputBase-input') as any).focus())
   }
 
   function hide(){
-    setVisible(false)
     params.onClose && params.onClose()
+    !params.disabledAutoHide && setVisible(false)
   }
 
   return (
@@ -76,6 +80,8 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
             label={params.inputLabel}
             value={inputValue}
             onChange={e => setInputValue(e.target.value.trim())}
+            onKeyDown={e => e.keyCode === 13 && handlerCheck()}
+            ref={test}
           />
         : null}
       </DialogContent>

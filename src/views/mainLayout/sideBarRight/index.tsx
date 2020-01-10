@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect, FC, createContext } from 'react'
+import React, { PropsWithChildren, useState, useEffect, FC, createContext, useRef } from 'react'
 import { makeStyles, Tabs, Tab } from '@material-ui/core'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import createRouter from '~/utils/createRouter'
@@ -9,6 +9,11 @@ import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import { flex } from '~/styles'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import styleVars from '~/styles/styleVars'
+import katakoto from '~/api/katakoto'
+import idToMoment from '~/utils/idToMoment'
+import animateScrollTo from 'animated-scroll-to'
+
+export const sidebarRightWidth = 240
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -30,7 +35,12 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
     [Content, setContent] = useState<FC | null>(null),
     [activeTab, setActiveTab] = useState(0),
     [randomArticles, setRandomArticles] = useState<ApiData.SearchResult[]>([]),
-    [hotArticles, setHotArticles] = useState<ApiData.SearchResult[]>([])
+    [hotArticles, setHotArticles] = useState<ApiData.SearchResult[]>([]),
+    [katakotos, setKatakotos] = useState<ApiData.Katakoto[]>([]),
+    [katakotoCursor, setKatakotoCursor] = useState(0),
+    refs = {
+      katakotos: useRef<HTMLDivElement>(null)
+    }
 
   let disabledResizeHandler = false
 
@@ -52,7 +62,23 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
   useEffect(() =>{
     getRandomArticles()
     getHotArticles()
+    getKatakotos()
   }, [])
+
+  useEffect(() =>{
+    const key = setInterval(() =>{
+      let katakotos: ApiData.Katakoto[]
+      setKatakotos(prevVal => katakotos = prevVal)
+      setKatakotoCursor(prevVal => prevVal + 1 === katakotos.length ? 0 : prevVal + 1)
+    }, 7000)
+    return () => clearInterval(key) 
+  }, [])
+
+  useEffect(() =>{
+    refs.katakotos.current && animateScrollTo([(sidebarRightWidth - 20) * katakotoCursor, null], { 
+      elementToScroll: refs.katakotos.current
+    })
+  }, [katakotoCursor])
 
   function setDisabledResizeHandler(val: boolean){
     disabledResizeHandler = val
@@ -66,10 +92,15 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
     article.searchHot().then(setHotArticles)
   }
 
+  function getKatakotos(){
+    katakoto.load({ limit: 20 })
+      .then(data => setKatakotos(data.list))
+  }
+
   return (
     visible ?
       <>
-        <div className={classes.root}>
+        <div className={c(classes.root, 'sidebarRight-root')}>
           {Content ? 
             <Content />
           :
@@ -100,26 +131,43 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
                   />)
                 }
               </div>
-
-              <h4 style={{ fontWeight: 'initial', textIndent: 10 }}>内容标签</h4>
-              <div className={c(flex.row, flex.crossCenter, flex.wrap, classes.tags)}>
-                {props.state.data.tags.map(tag =>
-                  <div 
-                    className="tag" 
-                    key={tag._id} 
-                    onClick={() => router.push('/search/byTag', { search: { tagId: tag._id } })}
-                    title="查看标签下文章"
-                  >
-                    <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
-                    <span>{tag.name}</span>
-                  </div>  
-                )}
-              </div>
             </div>
           }
+
+          <h4 style={{ fontWeight: 'initial', textIndent: 10 }}>只言片语</h4>
+          <div className={classes.katakotos} ref={refs.katakotos}>
+            <div className="container">
+              {katakotos.map(item =>
+                <div key={item._id} className="item">
+                  <div style={{ fontSize: 14, marginLeft: 10 }}>{item.content}</div>
+                  <div style={{ textAlign: 'right', fontSize: 13, marginTop: 10 }}>
+                    <span>—— </span> 
+                    <span>{idToMoment(item._id).format(
+                      (idToMoment(item._id).year() === new Date().getFullYear() ? '' : 'YYYY年')
+                    + 'MM月DD日 HH:mm')}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <h4 style={{ fontWeight: 'initial', textIndent: 10 }}>内容标签</h4>
+          <div className={c(flex.row, flex.crossCenter, flex.wrap, classes.tags)}>
+            {props.state.data.tags.map(tag =>
+              <div 
+                className="tag" 
+                key={tag._id} 
+                onClick={() => router.push('/search/byTag', { search: { tagId: tag._id } })}
+                title="查看标签下文章"
+              >
+                <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
+                <span>{tag.name}</span>
+              </div>  
+            )}
+          </div>
         </div>
 
-        <div style={{ width: 240 }} />
+        <div style={{ width: sidebarRightWidth }} />
       </>
     : null
   )
@@ -134,11 +182,31 @@ const useStyles = makeStyles({
     bottom: 0,
     right: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    width: 240,
+    width: sidebarRightWidth,
     paddingTop: appBarHeight,
     boxShadow: '0 0 5px #666',
     overflowY: 'auto',
     overflowX: 'hidden'
+  },
+
+  katakotos: {
+    margin: 10,
+    width: sidebarRightWidth - 20,
+    overflow: 'hidden',
+
+    '@global': {
+      '.container': {
+        width: 'max-content',
+        overflow: 'hidden'
+      },
+      
+      '.item': {
+        width: sidebarRightWidth - 20,
+        float: 'left',
+        paddingRight: 10,
+        boxSizing: 'border-box'
+      }
+    }
   },
 
   tags: {

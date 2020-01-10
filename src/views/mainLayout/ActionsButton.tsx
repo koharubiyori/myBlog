@@ -17,6 +17,7 @@ import article from '~/api/article'
 import getNotify from '~/externalContexts/notify'
 import getConfirm from '~/externalContexts/confirm'
 import styleVars from '~/styles/styleVars'
+import katakoto from '~/api/katakoto'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -109,7 +110,6 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
       })
     }
 
-    console.log(roleAction)
     roleAction && setActions(roleAction)
   }
 
@@ -148,6 +148,26 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
         article.setCollectStatus({ articleId, collect: !isCollected })
         isCollected ? notify('取消收藏') : notify.success('收藏文章')
         setIsCollected(prevVal => !prevVal)
+        break
+      }
+
+      case '只言片语': {
+        confirm({
+          input: true,
+          disabledAutoHide: true,
+          title: '新建只言片语',
+          inputLabel: '内容',
+          onCheck (inputValue){
+            if(inputValue!.length === 0) return notify('内容不能为空')
+            katakoto.add({ content: inputValue! })
+              .then(() =>{
+                notify('提交成功')
+                confirm.hide()
+              })
+          },
+
+          onClose: confirm.hide
+        })
         break
       }
     }

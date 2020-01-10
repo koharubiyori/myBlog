@@ -32,6 +32,19 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
     load(1, router.params.search.keyword)
   }, [])
 
+  useEffect(() =>{
+    return router.listen(({location, action}) =>{
+      if(location.pathname === router.location.pathname){
+        animatedScrollTo(0, { maxDuration: 500, minDuration: 500, speed: 2000 })
+          .then(() =>{
+            const router = createRouter<RouteSearchParams>(location)
+            setArticleList(initPageList())
+            load(1, router.params.search.keyword)
+          })
+      }
+    })
+  }, [])
+
   function load(page = 1, keyword?: string){
     createPageListLoader(articleList, setArticleList, 
       page => article.search({ page, keyword })  

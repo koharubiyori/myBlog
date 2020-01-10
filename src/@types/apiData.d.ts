@@ -69,4 +69,10 @@ declare namespace ApiData {
     commentData?: ApiData.Comment
     articleData?: ApiData.Article
   }
+
+  interface Katakoto {
+    _id: string
+    content: string
+    deleted: boolean
+  }
 }

@@ -84,7 +84,8 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
 
         animatedScrollTo(0, { maxDuration: 500, minDuration: 500, speed: 2000 })
           .then(() =>{
-            loadArticle(qs.parse(location.search.split('?')[1]).articleId)
+            const router = createRouter<RouteSearchParams>(location)
+            loadArticle(router.params.search.articleId)
             refs.comment.current!.load()
           })
       }

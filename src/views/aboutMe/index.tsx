@@ -64,7 +64,7 @@ function AboutMe(props: PropsWithChildren<FinalProps>){
               </a>
             </div>
           </Tooltip>
-          <Tooltip title="500kb+，麻雀虽小五脏俱全"  placement="top">
+          <Tooltip title="500kb+，简洁轻量"  placement="top">
             <div className="box">
               <a rel="noopener norefferrer"  href="https://www.coolapk.com/apk/mark.via" target="_blank">
                 <img src={require('~/images/logo/via.png')} className="icon" style={{ width: 30, height: 'auto' }} alt="icon" />
@@ -328,6 +328,7 @@ const useStyles = makeStyles({
     width: 200,
     height: 200,
     borderRadius: '50%',
+    backgroundColor: 'white',
     border: `5px ${styleVars.main} solid`,
     position: 'absolute',
     top: '50%',

@@ -33,6 +33,19 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
     load(router.params.search.tagId)
   }, [])
 
+  useEffect(() =>{
+    return router.listen(({location, action}) =>{
+      if(location.pathname === router.location.pathname){
+        animatedScrollTo(0, { maxDuration: 500, minDuration: 500, speed: 2000 })
+          .then(() =>{
+            const router = createRouter<RouteSearchParams>(location)
+            setArticleList(initPageList())
+            load(router.params.search.tagId)
+          })
+      }
+    })
+  }, [])
+
   function load(tagId: string, page = 1){
     createPageListLoader(articleList, setArticleList, 
       page => article.searchByTag({ page, tagId })  

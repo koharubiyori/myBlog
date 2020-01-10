@@ -5,9 +5,9 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
-import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import DeleteIcon from '@material-ui/icons/Delete'
+import ShortTextIcon from '@material-ui/icons/ShortText'
 import { makeStyles } from '@material-ui/styles'
 import createRouter from '~/utils/createRouter'
 import { RoutePaths, basePath } from '~/routes'
@@ -30,7 +30,7 @@ export interface ActionsButtonRef {
 
 type FinalProps = Props & UserConnectedProps
 
-type ActionName = '新建文章' | '分享' | '收藏文章' | '取消收藏' | '编辑' | '删除'
+type ActionName = '新建文章' | '分享' | '收藏文章' | '取消收藏' | '编辑' | '删除' | '只言片语'
 
 interface Action {
   icon: JSX.Element | null
@@ -46,6 +46,7 @@ const actionMaps: {
       { icon: <EditIcon />, name: '编辑' },
       { icon: <DeleteIcon />, name: '删除' },
       { icon: <AddIcon />, name: '新建文章' },
+      { icon: <ShortTextIcon />, name: '只言片语' }
     ],
 
     user: [
@@ -56,6 +57,7 @@ const actionMaps: {
   default: {
     admin: [
       { icon: <AddIcon />, name: '新建文章' },
+      { icon: <ShortTextIcon />, name: '只言片语' },
     ],
   }
 }

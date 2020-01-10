@@ -5,6 +5,10 @@ import createRouter from '~/utils/createRouter'
 import { appBarHeight } from '../myAppBar'
 import ArticleBox from './components/ArticleBox'
 import article from '~/api/article'
+import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
+import { flex } from '~/styles'
+import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -16,7 +20,7 @@ export interface SidebarRightRef {
   writeContent (content?: JSX.Element | null): void
 }
 
-type FinalProps = Props & UserConnectedProps
+type FinalProps = Props & UserConnectedProps & DataConnectedProps
 
 function SidebarRight(props: PropsWithChildren<FinalProps>){
   const
@@ -81,7 +85,7 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
                 <Tab label="热门文章" style={{ minWidth: 'auto' }} />
               </Tabs>
 
-              <div className={classes.tabContent}>
+              <div>
                 {activeTab === 0 ?
                   randomArticles.map(item => <ArticleBox 
                     key={item._id}
@@ -96,17 +100,32 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
                   />)
                 }
               </div>
+
+              <h4 style={{ fontWeight: 'initial', textIndent: 10 }}>内容标签</h4>
+              <div className={c(flex.row, flex.crossCenter, flex.wrap, classes.tags)}>
+                {props.state.data.tags.map(tag =>
+                  <div 
+                    className="tag" 
+                    key={tag._id} 
+                    onClick={() => router.push('/search/byTag', { search: { tagId: tag._id } })}
+                    title="查看标签下文章"
+                  >
+                    <TagIcon style={{ marginRight: 5, width: 14, height: 14, fill: 'white', verticalAlign: 'text-bottom' }} />
+                    <span>{tag.name}</span>
+                  </div>  
+                )}
+              </div>
             </div>
           }
         </div>
 
-        <div style={{ width: 220 }} />
+        <div style={{ width: 240 }} />
       </>
     : null
   )
 }
 
-export default userHOC(SidebarRight) as FC<Props>
+export default dataHOC(userHOC(SidebarRight)) as FC<Props>
 
 const useStyles = makeStyles({
   root: {
@@ -115,12 +134,37 @@ const useStyles = makeStyles({
     bottom: 0,
     right: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    width: 220,
+    width: 240,
     paddingTop: appBarHeight,
-    boxShadow: '0 0 5px #666'
+    boxShadow: '0 0 5px #666',
+    overflowY: 'auto',
+    overflowX: 'hidden'
   },
 
-  tabContent: {
-    
-  }
+  tags: {
+    fontSize: 12,
+    margin: 10,
+    marginTop: 0,
+
+    '@global .tag': {
+      transition: 'all 0.2s',
+      borderRadius: 5,
+      padding: 5,
+      marginTop: 5,
+      marginRight: 10,
+      backgroundColor: styleVars.main,
+      fill: 'white',
+      color: 'white',
+      cursor: 'pointer',
+      
+      '&:hover': {
+        backgroundColor: styleVars.dark
+      },
+
+      '& svg': {
+        position: 'relative',
+        top: -1
+      }
+    }
+  },
 })

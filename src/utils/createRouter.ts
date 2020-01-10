@@ -25,8 +25,9 @@ export interface MyRouter<SearchParams, StateParams> {
   location: HistoryLocation
 }
 
-export default function createRouter<SearchParams = {}, StateParams = {}>(): Readonly<MyRouter<SearchParams, StateParams>>{  
-  const {location, navigate} = globalHistory
+export default function createRouter<SearchParams = {}, StateParams = {}>(historyLocation?: HistoryLocation): Readonly<MyRouter<SearchParams, StateParams>>{  
+  const location = historyLocation || globalHistory.location
+  const {navigate} = globalHistory
   
   const myNavigate = (path: string, args = {} as { search?: {}, state?: {} }, replace = false) =>{
     let toPath = basePath + path
@@ -38,8 +39,8 @@ export default function createRouter<SearchParams = {}, StateParams = {}>(): Rea
     push: myNavigate,
 
     params: {
-      search: qs.parse(location!.search.split('?')[1]),
-      state: location!.state || {}
+      search: qs.parse(location.search.split('?')[1]),
+      state: location.state || {}
     },
 
     replace: (path, args = {}) => myNavigate(path, args, true),

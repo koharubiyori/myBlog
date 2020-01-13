@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router } from '@reach/router'
+import { Router, Redirect } from '@reach/router'
 import asyncLoader from './asyncLoader'
 import Route from './Route'
 import MainLayout from '~/views/mainLayout'
@@ -35,6 +35,7 @@ export default function Routes(){
       <MainLayout path="/">
         {Object.keys(routeMaps).map(path => <Route key={path} path={path} route={routeMaps[path as keyof typeof routeMaps]} />)}
         <Route path="/" component={Home} />
+        <Redirect noThrow from="/*" to="/" />
       </MainLayout>
     </Router>
   )

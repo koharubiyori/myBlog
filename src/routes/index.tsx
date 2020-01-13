@@ -5,7 +5,7 @@ import Route from './Route'
 import MainLayout from '~/views/mainLayout'
 import Home from '~/views/home'
 
-export const basePath = '/view'
+export const basePath = ''
 
 const l = asyncLoader
 

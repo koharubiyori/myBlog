@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-export const prodApi = ''
+export const prodApi = '/api'
 
 const config: AxiosRequestConfig = {
   baseURL: process.env.NODE_ENV === 'production' ? prodApi : '/',

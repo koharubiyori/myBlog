@@ -66,8 +66,8 @@ function Home(props: PropsWithChildren<FinalProps>){
   return (
     <div>
       <header>
-        <h2 className={com.mainTitle}>{props.state.data.settings.title}</h2>
-        <p>{props.state.data.settings.subtitle}</p>
+        <h2 className={c(com.mainTitle, classes.title)} style={{ fontSize: 30 }}>{props.state.data.settings.title}</h2>
+        <p className={classes.title}>{props.state.data.settings.subtitle}</p>
 
         {topArticles ? 
           <div className={classes.topArticles}>{topArticles.map(item =>
@@ -114,6 +114,12 @@ const useStyles = makeStyles({
       opacity: 0,
       transform: 'translateY(-30px)'
     }
+  },
+
+  title: {
+    color: 'white',
+    textShadow: '0 0 5px black',
+    textAlign: 'center'
   },
 
   topArticles: {

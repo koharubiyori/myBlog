@@ -32,6 +32,6 @@ const useStyles = makeStyles({
     top: 0,
     left: 0,
     objectFit: 'cover',
-    filter: 'brightness(0.97)'
+    // filter: 'brightness(0.9)'
   }
 })

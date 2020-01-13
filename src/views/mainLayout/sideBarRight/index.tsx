@@ -97,6 +97,8 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
       .then(data => setKatakotos(data.list))
   }
 
+  if(!props.state.data.tags) return <div />
+
   return (
     visible ?
       <>

@@ -1,31 +1,32 @@
-import React, { useState, useEffect, useRef, PropsWithChildren, useContext, FC } from 'react'
-import { makeStyles, Box, Tooltip } from '@material-ui/core'
-import EditorViewer from 'tui-editor/dist/tui-editor-Viewer'
-import 'tui-editor/dist/tui-editor.css' // editor's ui
-import 'tui-editor/dist/tui-editor-contents.css' // editor's content
+import { Box, makeStyles, Tooltip } from '@material-ui/core'
+import ForumIcon from '@material-ui/icons/Forum'
+import StarsIcon from '@material-ui/icons/Stars'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import WatchLaterIcon from '@material-ui/icons/WatchLater'
+import animatedScrollTo from 'animated-scroll-to'
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
+import React, { FC, PropsWithChildren, useContext, useEffect, useRef, useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
+import 'tui-editor/dist/tui-editor-contents.css' // editor's content
+import Editor from 'tui-editor'
+import 'tui-editor/dist/tui-editor.css' // editor's ui
 import article from '~/api/article'
-import createRouter from '~/utils/createRouter'
-import WatchLaterIcon from '@material-ui/icons/WatchLater'
-import ForumIcon from '@material-ui/icons/Forum'
-import VisibilityIcon from '@material-ui/icons/Visibility'
-import StarsIcon from '@material-ui/icons/Stars'
 import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
-import idToMoment from '~/utils/idToMoment'
+import { DataConnectedProps, dataHOC } from '~/redux/data/HOC'
+import { UserConnectedProps, userHOC } from '~/redux/user/HOC'
 import { flex, transition } from '~/styles'
-import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
-import styleVars, { createTransition } from '~/styles/styleVars'
+import styleVars from '~/styles/styleVars'
+import createRouter from '~/utils/createRouter'
+import idToMoment from '~/utils/idToMoment'
+import { MainLayoutContext } from '~/views/mainLayout'
 import ArticleComment, { ArticleCommentRef } from './components/comment'
 import ArticleContents, { ArticleContentsRef } from './Contents'
-import { MainLayoutContext } from '~/views/mainLayout'
 import parseTitles from './utils/parseTitles'
 import trimArticleContent from './utils/trimArticleContent'
-import useArticleContentStyles from './styles/articleContent'
-import qs from 'qs'
-import animatedScrollTo from 'animated-scroll-to'
-import { CSSTransition } from 'react-transition-group'
-import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
+import useArticleContentClasses from '../styles/articleContent'
+import moment from 'moment'
+import getNotify from '~/externalContexts/notify'
 
 export interface Props {
   
@@ -47,8 +48,9 @@ type FinalProps = Props & DataConnectedProps & UserConnectedProps
 function ArticleView(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
-    articleContentStyles = useArticleContentStyles(),
+    articleContentClasses = useArticleContentClasses(),
     router = createRouter<RouteSearchParams>(),
+    notify = getNotify(),
     mainLayoutControllersPromise = useContext(MainLayoutContext),
     [visible, setVisible] = useState(false),
     [articleData, setArticleData] = useState<ApiData.Article>(null as any),
@@ -57,7 +59,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
       comment: useRef<ArticleCommentRef>(),
       contents: useRef<ArticleContentsRef>(),
     },
-    editor = useRef<EditorViewer>(),
+    editor = useRef<Editor | tuiEditor.Viewer>(),
     articleCache = useRef<ArticleCache>({})
 
   useEffect(() =>{
@@ -129,7 +131,8 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
 
     setTimeout(() =>{
       props.$data.getTags().then(tagList => tagList)
-      editor.current = new EditorViewer({
+      editor.current = Editor.factory({
+        viewer: true,
         el: refs.editor.current!,
         initialValue: articleData.content
       })
@@ -144,6 +147,18 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
 
       trimArticleContent(refs.editor.current!)
     })
+  }
+
+  function copyLink(){
+    let input = document.createElement('input')
+    input.value = window.location.href
+    input.style.cssText = 'position:fixed; left:-9999px'
+    document.body.appendChild(input)
+    input.focus()
+    document.execCommand('selectAll')
+    document.execCommand('copy')
+    notify('已复制链接至剪切板')
+    setTimeout(() => document.body.removeChild(input), 1000)
   }
 
   function tags(tagIds: string[]): ApiData.Tag[]{
@@ -204,7 +219,34 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
               <img src={articleData.headImg} className={classes.headImg} alt="headImg" />
               <div className={classes.content}>
                 <div className={classes.profile}>{articleData.profile}</div>
-                <div ref={refs.editor as any} className={c(articleContentStyles.main)} />
+                <div ref={refs.editor as any} className={c(articleContentClasses.main)} />
+
+                <div className={classes.cc}>
+                  <p>版权声明：本文为原创文章，版权归 小春日和 所有</p>
+                  <p>文章链接：
+                    <Tooltip 
+                      title="复制链接至剪切板"
+                      placement="top"
+                      classes={{ tooltip: classes.toolTip }}
+                    >
+                      <span style={{ color: styleVars.main, textDecoration: 'underline', cursor: 'pointer' }} onClick={copyLink}>{window.location.href}</span>
+                    </Tooltip>
+                  </p>
+                  <p>
+                    所有原创文章采用&nbsp;
+                    <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh" 
+                      target="_blank"
+                      style={{ color: styleVars.main }}
+                    >署名-非商业性使用 4.0 国际 (CC BY-NC 4.0)</a>
+                    &nbsp;进行许可。
+                  </p>
+                  <p>您可以自由转载和修改，但必须保证在显著位置注明文章来源，且不能用于商业目的。</p>
+                </div>
+
+                <div className={c(flex.row, flex.between)} style={{ marginTop: 30, fontSize: 12, color: '#666' }}>
+                  <span>最后修改日期：{moment(articleData.updatedAt).format('YYYY年MM月DD日 HH:mm')}</span>
+                  <span>© 著作权归作者所有</span>
+                </div>
               </div>
             </Box>
 
@@ -342,5 +384,14 @@ const useStyles = makeStyles({
 
   toolTip: {
     fontSize: 13
+  },
+
+  cc: {
+    backgroundColor: 'white',
+    boxSizing: 'border-box',
+    borderLeft: `7px ${styleVars.main} solid`,
+    padding: '10px 15px',
+    fontSize: 14,
+    marginTop: 50
   }
 })

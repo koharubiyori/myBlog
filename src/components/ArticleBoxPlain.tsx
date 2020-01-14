@@ -144,7 +144,8 @@ const useStyles = makeStyles({
       },
 
       '.profile': {
-        marginLeft: 10
+        marginLeft: 10,
+        fontSize: 15
       },
 
       '.totals': {

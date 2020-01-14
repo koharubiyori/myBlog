@@ -21,6 +21,9 @@ import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
 import getNotify from '~/externalContexts/notify'
+import useArticleContentClasses from '../styles/articleContent'
+import useRouteLeaveGuard from '~/hooks/useRouteLeaveGuard'
+import getConfirm from '~/externalContexts/confirm'
 
 export interface Props {
   
@@ -36,8 +39,10 @@ type FinalProps = Props
 function ArticleEdit(props: PropsWithChildren<FinalProps>){
   const 
     classes = useStyles(),
+    articleContentClasses = useArticleContentClasses(),
     router = createRouter<{}, RouteStateParams>(),
     notify = getNotify(),
+    confirm = getConfirm(),
     [title, setTitle] = useState(''),
     [profile, setProfile] = useState(''),
     [tags, setTags] = useState<string[]>([]),
@@ -95,10 +100,28 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     window.scrollTo(0, 0)
   }, [])
 
+  useEffect(() =>{
+    if(process.env.NODE_ENV === 'development'){ return }
+     window.onbeforeunload = (e: BeforeUnloadEvent) =>{
+      return '确定要离开编辑页面吗？'
+    }
+
+    return () =>{ window.onbeforeunload = null }
+  }, [])
+
+  useRouteLeaveGuard(next =>{
+    confirm({
+      content: '确定要离开编辑页面吗？',
+      onCheck: () => next(),
+      onClose: () => next(false)
+    })
+  })
+
   function uploadHeadImg(event: ChangeEvent<HTMLInputElement>){
     if(event.target.files!.length === 0){ return }
     let file = event.target.files!.item(0)!
-    
+    event.target.value = ''
+
     setHeadImgStatus(2)
     article.uploadHeadImg({ file })
       .then(data =>{
@@ -226,7 +249,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         </div>
       </div>
 
-      <div ref={refs.editor as any} style={{ backgroundColor: 'white', minHeight: 650 }} />
+      <div ref={refs.editor as any} className={articleContentClasses.main} style={{ backgroundColor: 'white', minHeight: 650 }} />
     </div>
   )
 }

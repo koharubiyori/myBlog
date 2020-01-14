@@ -32,9 +32,16 @@ function Sidebar(props: PropsWithChildren<FinalProps>){
         <List className={classes.drawer}>
           <ListItem button onClick={() => router.navigate('/')}>
             <ListItemIcon>
-              <HomeIcon style={{ color: '#C5C5C5' }} />
+              <HomeIcon className={classes.icon} />
             </ListItemIcon>
             <ListItemText primary="首页" />
+          </ListItem>
+
+          <ListItem button onClick={() => router.navigate('/article/view', { search: { articleId: '5e1d3b7d1879db108875c4fd' } })}>
+            <ListItemIcon>
+              <HomeIcon className={classes.icon} />
+            </ListItemIcon>
+            <ListItemText primary="关于博客" />
           </ListItem>
         </List>
       </Drawer>
@@ -51,8 +58,9 @@ const useStyles = makeStyles({
   root: {
     '@global': {
       '.MuiPaper-root': {
-        backgroundColor: styleVars.black,
-        color: '#C5C5C5'
+        backgroundColor: 'rgba(49, 49, 49, 0.8)',
+        color: '#C5C5C5',
+        boxShadow: '0 0 3px black'
       },
   
       '.MuiListItem-button:hover': {
@@ -89,5 +97,9 @@ const useStyles = makeStyles({
     fontWeight: 'bold',
     marginTop: -20,
     marginBottom: 10
+  },
+
+  icon: {
+    color: '#C5C5C5'
   }
 })

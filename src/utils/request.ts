@@ -1,9 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-export const prodApi = '/api'
-
 const config: AxiosRequestConfig = {
-  baseURL: process.env.NODE_ENV === 'production' ? prodApi : '/',
+  baseURL: '/api',
   timeout: 10000,
 }
 

@@ -58,7 +58,7 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
 
   return (
     <div>
-      <header>
+      <header style={{ color: 'white' }}>
         <h2 className={com.mainTitle}>搜索结果</h2>
         <p>共搜索到{articleList.total}篇文章</p>
       </header>

@@ -218,7 +218,8 @@ const useStyles = makeStyles({
         height: 50,
         display: 'flex',
         alignItems: 'flex-end',
-        marginBottom: 5
+        marginBottom: 5,
+        fontSize: 15
       },
     }
   },

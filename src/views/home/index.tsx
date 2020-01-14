@@ -69,7 +69,7 @@ function Home(props: PropsWithChildren<FinalProps>){
         <h2 className={c(com.mainTitle, classes.title)} style={{ fontSize: 30 }}>{props.state.data.settings.title}</h2>
         <p className={classes.title}>{props.state.data.settings.subtitle}</p>
 
-        {topArticles ? 
+        {topArticles && topArticles.length !== 0 ? 
           <div className={classes.topArticles}>{topArticles.map(item =>
             <ArticleBox top key={item._id} style={{ margin: 0 }}
               articleData={item}

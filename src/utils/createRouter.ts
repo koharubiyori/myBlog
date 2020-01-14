@@ -10,6 +10,14 @@ type MyNavigateFn = (
   }
 ) => Promise<void>
 
+export type NavigateExec = (newPath?: RoutePaths | false) => Promise<void>
+export type NavigateNext = (newPath?: RoutePaths | false) => void
+export type RouteLeaveGuardCb = (guard: NavigateNext) => void
+
+export const routeLeaveGuard: { current: null | RouteLeaveGuardCb } = {
+  current: null
+}
+
 export interface MyRouter<SearchParams, StateParams> {
   params: {
     search: SearchParams
@@ -29,10 +37,23 @@ export default function createRouter<SearchParams = {}, StateParams = {}>(histor
   const location = historyLocation || globalHistory.location
   const {navigate} = globalHistory
   
-  const myNavigate = (path: string, args = {} as { search?: {}, state?: {} }, replace = false) =>{
-    let toPath = basePath + path
-    if(args.search) toPath += '?' + qs.stringify(args.search)
-    return navigate(toPath, { state: args.state, replace })
+  const myNavigate = (path: RoutePaths, args = {} as { search?: {}, state?: {} }, replace = false): Promise<void> =>{
+    const exec: NavigateExec = (newPath?: RoutePaths | false) =>{
+      if(newPath === false) return Promise.resolve()
+      
+      let toPath = basePath + (newPath || path)
+      if(args.search) toPath += '?' + qs.stringify(args.search)
+      return navigate(toPath, { state: args.state, replace })
+    }
+    
+    return new Promise(resolve =>{
+      if(routeLeaveGuard.current){
+        const next: NavigateNext = (newPath?) =>{ exec(newPath).then(resolve) }
+        routeLeaveGuard.current(next)
+      }else{
+        exec().then(resolve)
+      }
+    })
   }
 
   return {

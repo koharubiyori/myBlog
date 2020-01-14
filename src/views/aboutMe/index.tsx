@@ -114,7 +114,7 @@ function AboutMe(props: PropsWithChildren<FinalProps>){
               </a>
             </div>
           </Tooltip>
-          <Tooltip title="TS的代码，一天不写问题多，两天不写走下坡，三天不写没法活">
+          <Tooltip title="TS大法好">
             <div className="box">
               <a rel="noopener norefferrer" href="https://www.tslang.cn" target="_blank">
                 <img src={require('~/images/logo/typescript.png')} className="icon" style={{ width: 27, height: 'auto', position: 'relative', top: 1 }} alt="logo" />
@@ -185,7 +185,7 @@ function AboutMe(props: PropsWithChildren<FinalProps>){
         </div>
 
         <div data-title="编辑器" className="item">
-          <Tooltip title="颜值最高的编辑器" placement="top">
+          <Tooltip title="宇宙第一编辑器" placement="top">
             <div className="box">
               <a rel="noopener norefferrer"  href="https://code.visualstudio.com" target="_blank">
                 <VSCodeIcon className="icon inheritFill" style={{ fill: '#0089D2' }} />

@@ -52,7 +52,7 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
     setParams(params)
     setVisible(true)
     setInputValue(params.inputValue || '')
-    setTimeout(() => (test.current!.querySelector('.MuiInputBase-input') as any).focus())
+    params.input && setTimeout(() => (test.current!.querySelector('.MuiInputBase-input') as any).focus())
   }
 
   function hide(){

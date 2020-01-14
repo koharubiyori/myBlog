@@ -160,7 +160,7 @@ export default userHOC(ArticleComment) as FC<Props>
 
 const useStyles = makeStyles({
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding: 20,
     marginTop: 20,
   },

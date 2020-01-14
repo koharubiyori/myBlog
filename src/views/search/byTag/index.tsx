@@ -62,7 +62,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   const tagName = props.state.data.tags.find(item => item._id === router.params.search.tagId)?.name
   return (
     <div>
-      <header>
+      <header style={{ color: 'white' }}>
         <h2 className={com.mainTitle}>标签“{tagName}”下的文章</h2>
         <p>共有{articleList.total}篇文章</p>
       </header>

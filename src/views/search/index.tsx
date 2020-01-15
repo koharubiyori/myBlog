@@ -94,7 +94,7 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(SearchResult, 'SearchResult')
+export default keepAlive(SearchResult)
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

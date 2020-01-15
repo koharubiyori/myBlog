@@ -98,7 +98,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(dataHOC(SearchByTagResult), 'searchByTagResult')
+export default keepAlive(dataHOC(SearchByTagResult))
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

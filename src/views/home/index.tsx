@@ -102,7 +102,7 @@ function Home(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(dataHOC(Home), 'home')
+export default keepAlive(dataHOC(Home))
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

@@ -16,7 +16,9 @@ import { ReactComponent as WindowsIcon } from '~/images/logo/windows.svg'
 import { ReactComponent as UbuntuIcon } from '~/images/logo/ubuntu.svg'
 import { ReactComponent as VSCodeIcon } from '~/images/logo/vscode.svg'
 import { ReactComponent as AndroidIcon } from '~/images/logo/android.svg'
+import GithubIcon from '@material-ui/icons/GitHub'
 import useESO from '~/hooks/useSEO'
+import { flex } from '~/styles'
 
 export interface Props {
   
@@ -67,7 +69,7 @@ function AboutMe(props: PropsWithChildren<FinalProps>){
               </a>
             </div>
           </Tooltip>
-          <Tooltip title="500kb+，简洁轻量"  placement="top">
+          <Tooltip title="500kb+，简洁轻量" placement="top">
             <div className="box">
               <a rel="noopener norefferrer"  href="https://www.coolapk.com/apk/mark.via" target="_blank">
                 <img src={require('~/images/logo/via.png')} className="icon" style={{ width: 30, height: 'auto' }} alt="icon" />
@@ -168,7 +170,7 @@ function AboutMe(props: PropsWithChildren<FinalProps>){
         </div>
 
         <div data-title="编码习惯" className="item">
-          <Tooltip title="讨厌：使用一键格式化把我代码后面加上分号的同事" placement="top">
+          <Tooltip title="少敲一点是一点" placement="top">
             <div className="box">
               <div style={{ fontSize: 12, marginRight: 10, color: '#666', fontWeight: 'bold', backgroundColor: '#1E1E1E', padding: 5, borderRadius: 5 }}>
                 <span style={{ color: '#9CDCFE' }}>semi:</span>
@@ -221,11 +223,34 @@ function AboutMe(props: PropsWithChildren<FinalProps>){
 
         <hr style={{ backgroundColor: '#ccc', margin: '20px 0' }} />
 
-        <div className={classes.profile}>
-          <p>No Anime No Life.</p>
-          <p>喜欢日语，然而只达到了能推Galgame的程度。</p>
-          <p>喜欢编程，创造自己的小玩具。</p>
-          <p>喜欢一个人，独自一人做自己喜欢的事情。</p>
+        <div className={c(classes.profile, flex.row, flex.between)}>
+          <div>
+            <p>No Anime No Life.</p>
+            <p>喜欢日语，然而只达到了能推Galgame的程度。</p>
+            <p>喜欢编程，创造自己的小玩具。</p>
+            <p>喜欢一个人，独自一人做自己喜欢的事情。</p>
+          </div>
+          <div className={c(classes.accounts)}>
+            <Tooltip title="萌娘百科，万物皆可萌的百科全书！" placement="top">
+              <div className="accountItem" onClick={() => window.open('https://zh.moegirl.org/Mainpage', '_blank')}>
+                  <div className="left">
+                    <img src={require('~/images/logo/moeji.png')} className="icon" alt="logo" />
+                    <span>萌娘百科</span>
+                  </div>
+                  <div className="right">東東君</div>
+              </div>
+            </Tooltip>
+
+            <Tooltip title="世界最大的同♂性交友平台" placement="top">
+              <div className="accountItem" onClick={() => window.open('https://github.com/koharubiyori', '_blank')}>
+                  <div className="left">
+                    <GithubIcon />
+                    <span>Github</span>
+                  </div>
+                  <div className="right">@Inori</div>
+              </div>
+            </Tooltip>
+          </div>
         </div>
       </main>
     </Box>
@@ -243,55 +268,6 @@ const useStyles = makeStyles({
     '@keyframes twist': {
       '@global 50%': {
         transform: 'perspective(400px) rotateY(25deg)'
-      }
-    },
-
-    '.item': {
-      margin: '20px 0',
-
-      '@global .icon': {
-        width: 20,
-        height: 20,
-        marginRight: 5,
-
-        '&.inheritFill': {
-          fill: styleVars.main
-        }
-      },
-      
-      '&:before': {
-        content: 'attr(data-title)',
-        display: 'inline-block',
-        marginRight: 10,
-        width: '4em'
-      },
-
-      '@global > .box': {
-        height: 45,
-        verticalAlign: 'middle',
-        display: 'inline-flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '0 10px',
-        margin: 5,
-        transition: 'all 0.2s',
-        color: '#666',
-        cursor: 'pointer',
-        boxShadow: '0 0 3px #666',
-
-        '&:hover': {
-          backgroundColor: 'rgba(230, 230, 230, 0.3)',
-          animation: 'twist 0.4s'
-        },
-
-        '@global a': {
-          textDecoration: 'none',
-          color: 'inherit',
-
-          '@global > *': {
-            verticalAlign: 'middle'
-          }
-        }
       }
     },
   },
@@ -344,7 +320,56 @@ const useStyles = makeStyles({
     marginTop: -150,
     boxSizing: 'border-box',
     padding: '10px 20px',
-    position: 'relative'
+    position: 'relative',
+
+    '@global .item': {
+      margin: '20px 0',
+
+      '@global .icon': {
+        width: 20,
+        height: 20,
+        marginRight: 5,
+
+        '&.inheritFill': {
+          fill: styleVars.main
+        }
+      },
+      
+      '&:before': {
+        content: 'attr(data-title)',
+        display: 'inline-block',
+        marginRight: 10,
+        width: '4em'
+      },
+
+      '@global > .box': {
+        height: 45,
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '0 10px',
+        margin: 5,
+        transition: 'all 0.2s',
+        color: '#666',
+        cursor: 'pointer',
+        boxShadow: '0 0 3px #666',
+
+        '&:hover': {
+          backgroundColor: 'rgba(230, 230, 230, 0.3)',
+          animation: 'twist 0.4s'
+        },
+
+        '@global a': {
+          textDecoration: 'none',
+          color: 'inherit',
+
+          '@global > *': {
+            verticalAlign: 'middle'
+          }
+        }
+      }
+    },
   },
 
   profile: {
@@ -356,6 +381,51 @@ const useStyles = makeStyles({
 
       '&:first-child': {
         marginTop: 0
+      }
+    }
+  },
+
+  accounts: {
+    width: '300px !important',
+    marginTop: -10,
+    marginRight: 20,
+
+    '@global': {
+      '.icon': {
+        width: 20,
+        height: 20
+      },
+
+      '.accountItem': {
+        cursor: 'pointer',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: 10,
+        borderBottom: '1px #ccc solid',
+        transition: 'all 0.2s',
+        color: '#666',
+        boxShadow: '0 0 3px #666',
+        margin: '10px 0',
+
+        '&:hover': {
+          backgroundColor: '#eee'
+        },
+
+        '@global .left': {
+          '@global :first-child': {
+            marginRight: 10,
+            verticalAlign: 'middle'
+          },
+  
+          '@global :last-child': {
+            verticalAlign: 'middle'
+          }
+        },
+
+        '@global .right': {
+          verticalAlign: 'middle'
+        }
       }
     }
   }

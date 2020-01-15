@@ -30,7 +30,7 @@ function Sidebar(props: PropsWithChildren<FinalProps>){
       >
         {/* 给toolbar让出位置 */}
         <div style={{ height: appBarHeight + 10 }} />
-        {props.state.data.settings.bgImg ?
+        {props.state.data.settings ?
           <img className={classes.blurBg} src={props.state.data.settings.bgImg} alt="blurBg" />
         : null}
 

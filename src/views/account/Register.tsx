@@ -8,6 +8,7 @@ import createRouter from '~/utils/createRouter'
 import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
 import getNotify from '~/externalContexts/notify'
+import useSEO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -31,6 +32,8 @@ function Register(props: PropsWithChildren<FinalProps>){
   useEffect(() =>{
     getRegisterSecurityCode()
   }, [])
+
+  useSEO(setTitle => setTitle('登录', '和我签订契约，成为魔法少女吧！ ／人◕ ‿‿ ◕人＼'))
 
   function getRegisterSecurityCode (): void{
     if(RSCodeGetCount >= 3) return notify('点的这么快，人家都忙不过来啦  >_<')

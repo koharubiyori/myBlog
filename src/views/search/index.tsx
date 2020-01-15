@@ -9,6 +9,8 @@ import animatedScrollTo from 'animated-scroll-to'
 import useSaveScroll from '~/hooks/useSaveScroll'
 import ArticleBoxPlain from '~/components/ArticleBoxPlain'
 import { PageListState, initPageList, createPageListLoader } from '~/utils/pageList'
+import { useKeepAliveEffect } from 'react-keep-alive'
+import { setTitle, resetTitle } from '~/hooks/useSEO'
 
 export interface Props extends RouteComponent {
   
@@ -28,6 +30,11 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
 
   useSaveScroll()
 
+  useKeepAliveEffect(() =>{
+    setTitle('搜索：' + router.params.search.keyword)
+    return resetTitle
+  })
+
   useEffect(() =>{
     load(1, router.params.search.keyword)
   }, [])
@@ -38,6 +45,7 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
         animatedScrollTo(0, { maxDuration: 500, minDuration: 500, speed: 2000 })
           .then(() =>{
             const router = createRouter<RouteSearchParams>(location)
+            setTitle('搜索：' + router.params.search.keyword)
             setArticleList(initPageList())
             load(1, router.params.search.keyword)
           })
@@ -58,7 +66,7 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
 
   return (
     <div>
-      <header style={{ color: 'white' }}>
+      <header>
         <h2 className={com.mainTitle}>搜索结果</h2>
         <p>共搜索到{articleList.total}篇文章</p>
       </header>
@@ -86,7 +94,7 @@ function SearchResult(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(SearchResult)
+export default keepAlive(SearchResult, 'SearchResult')
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

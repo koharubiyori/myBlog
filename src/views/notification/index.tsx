@@ -10,6 +10,7 @@ import createRouter from '~/utils/createRouter'
 import getNotify from '~/externalContexts/notify'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import Pagination from '~/components/Pagination'
+import useSEO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -26,6 +27,8 @@ function MyNotification(props: PropsWithChildren<FinalProps>){
     [notifications, setNotifications] = useState(initPageList<ApiData.Notification>()),
     [activeTab, setActiveTab] = useState(0)
   
+  useSEO(setTitle => setTitle('通知'))
+
   useEffect(() =>{
     loadUnchecked()
     load()

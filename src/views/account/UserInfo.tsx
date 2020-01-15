@@ -8,6 +8,7 @@ import styleVars from '~/styles/styleVars'
 import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
 import getNotify from '~/externalContexts/notify'
+import useSEO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -23,6 +24,8 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
     [avatar, setAvatar] = useState(props.state.user.avatar),
     [imgUploadStatus, setImgUploadStatus] = useState(1),
     [saveStatus, setSaveStatus] = useState(1)
+
+  useSEO(setTitle => setTitle('用户信息'))
 
   function uploadAvatar(e: ChangeEvent<HTMLInputElement>){
     if(e.target.files!.length === 0){ return }

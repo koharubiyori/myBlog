@@ -7,6 +7,7 @@ import Pagination from '~/components/Pagination'
 import { UserConnectedProps, userHOC } from '~/redux/user/HOC'
 import { com } from '~/styles'
 import { createPageListLoader, initPageList } from '~/utils/pageList'
+import useSEO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -19,6 +20,8 @@ function CollectList(props: PropsWithChildren<FinalProps>){
     classes = useStyles(),
     [articleList, setArticleList] = useState(initPageList<ApiData.SearchResult>())
 
+  useSEO(setTitle => setTitle('收藏文章'))
+    
   useEffect(() =>{
     load()
   }, [])

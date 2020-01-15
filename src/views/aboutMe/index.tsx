@@ -16,6 +16,7 @@ import { ReactComponent as WindowsIcon } from '~/images/logo/windows.svg'
 import { ReactComponent as UbuntuIcon } from '~/images/logo/ubuntu.svg'
 import { ReactComponent as VSCodeIcon } from '~/images/logo/vscode.svg'
 import { ReactComponent as AndroidIcon } from '~/images/logo/android.svg'
+import useESO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -29,6 +30,8 @@ function AboutMe(props: PropsWithChildren<FinalProps>){
     [theme, setTheme] = useState<ApiData.Theme>(null as any)
   
   useHideSidebarRight()
+
+  useESO(setTitle => setTitle('关于我'))
 
   useEffect(() =>{
     common.getTheme().then(setTheme)

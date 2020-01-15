@@ -10,6 +10,8 @@ import useSaveScroll from '~/hooks/useSaveScroll'
 import ArticleBoxPlain from '~/components/ArticleBoxPlain'
 import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import { createPageListLoader, PageListState, initPageList } from '~/utils/pageList'
+import { useKeepAliveEffect } from 'react-keep-alive'
+import useSEO, { setTitle, resetTitle } from '~/hooks/useSEO'
 
 export interface Props extends RouteComponent {
   
@@ -27,13 +29,19 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
     router = createRouter<RouteSearchParams, {}>(),
     [articleList, setArticleList] = useState(initPageList<ApiData.SearchResult>())
 
+  const tagName = props.state.data.tags.find(item => item._id === router.params.search.tagId)?.name
+
+  setTitle('搜索标签：' + tagName)
+
+  useKeepAliveEffect(() => resetTitle)
+
   useSaveScroll()
 
   useEffect(() =>{
     load(router.params.search.tagId)
   }, [])
 
-  useEffect(() =>{
+  useKeepAliveEffect(() =>{
     return router.listen(({location, action}) =>{
       if(location.pathname === router.location.pathname){
         animatedScrollTo(0, { maxDuration: 500, minDuration: 500, speed: 2000 })
@@ -44,7 +52,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
           })
       }
     })
-  }, [])
+  })
 
   function load(tagId: string, page = 1){
     createPageListLoader(articleList, setArticleList, 
@@ -59,10 +67,10 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
 
   if(!props.state.data.tags) return <div />
 
-  const tagName = props.state.data.tags.find(item => item._id === router.params.search.tagId)?.name
+  
   return (
     <div>
-      <header style={{ color: 'white' }}>
+      <header>
         <h2 className={com.mainTitle}>标签“{tagName}”下的文章</h2>
         <p>共有{articleList.total}篇文章</p>
       </header>
@@ -90,7 +98,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   )
 }
 
-export default keepAlive(dataHOC(SearchByTagResult))
+export default keepAlive(dataHOC(SearchByTagResult), 'searchByTagResult')
 
 const useStyles = makeStyles({
   '@global .mainLayout-content:not(foo)': {

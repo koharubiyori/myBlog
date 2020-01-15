@@ -24,6 +24,7 @@ import getNotify from '~/externalContexts/notify'
 import useArticleContentClasses from '../styles/articleContent'
 import useRouteLeaveGuard from '~/hooks/useRouteLeaveGuard'
 import getConfirm from '~/externalContexts/confirm'
+import useSEO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -58,6 +59,8 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     type = router.params.state.type
 
   useHideSidebarRight()
+
+  useSEO(setTitle => title && setTitle(title), [title])
 
   useEffect(() =>{
     if(type === 1){

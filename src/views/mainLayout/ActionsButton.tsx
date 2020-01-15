@@ -183,7 +183,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     <>
       {props.state.user.name !== '' ?
         <SpeedDial
-          style={{ position: 'fixed', bottom: 70, right: 200 }}
+          style={{ position: 'fixed', bottom: 70, right: 210 }}
           ariaLabel=""
           hidden={!visible}
           open={open}

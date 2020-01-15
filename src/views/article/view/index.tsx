@@ -27,6 +27,7 @@ import trimArticleContent from './utils/trimArticleContent'
 import useArticleContentClasses from '../styles/articleContent'
 import moment from 'moment'
 import getNotify from '~/externalContexts/notify'
+import useSEO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -62,6 +63,10 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
     editor = useRef<Editor | tuiEditor.Viewer>(),
     articleCache = useRef<ArticleCache>({})
 
+  useSEO((setTitle) =>{
+    articleData && setTitle(articleData.title, articleData.profile)  
+  }, [articleData])
+    
   useEffect(() =>{
     loadArticle(router.params.search.articleId)
 

@@ -9,6 +9,7 @@ import styleVars from '~/styles/styleVars'
 import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
 import getNotify from '~/externalContexts/notify'
+import useSEO from '~/hooks/useSEO'
 
 export interface Props {
   
@@ -24,6 +25,8 @@ function Login(props: PropsWithChildren<FinalProps>){
     [accountOrName, setAccountOrName] = useState(''),
     [password, setPassword] = useState(''),
     [loginStatus, setLoginStatus] = useState(1)
+
+  useSEO(setTitle => setTitle('登录'))
 
   function login(): void{
     if(!accountOrName) return notify('帐号或昵称不能为空')

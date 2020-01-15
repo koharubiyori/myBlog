@@ -67,7 +67,13 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
   return (
     <AppBar className={classes.appBar}>
       <Toolbar>
-        <Typography variant="h6" className={c(flex.grow)}>title</Typography>
+        <div className={flex.grow}>
+          <img src={require('~/images/button/title.png')} 
+            alt="title" 
+            style={{ height: 20, verticalAlign: 'middle', cursor: 'pointer' }}
+            onClick={() => router.navigate('/')}
+          />
+        </div>
         <InputBase 
           style={{ marginRight: 100 }}
           className={classes.searchInput}

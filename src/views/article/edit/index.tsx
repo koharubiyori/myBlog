@@ -50,6 +50,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     [headImg, setHeadImg] = useState(''),
     [isTop, setIsTop] = useState(false),
     [headImgStatus, setHeadImgStatus] = useState(1),
+    [submitted, setSubmitted] = useState(false),
     refs = {
       editor: useRef<HTMLElement>()
     },
@@ -110,7 +111,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
   }, [])
 
   useRouteLeaveGuard(next =>{
-    confirm({
+    submitted ? next() : confirm({
       content: '确定要离开编辑页面吗？',
       onCheck: () => next(),
       onClose: () => next(false)
@@ -182,6 +183,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
       .then(() =>{
         notify.success(`文章${type === 0 ? '发布' : '修改'}成功`)
         _GLOBAL.homeRefreshMark = true
+        setSubmitted(true)
         type === 0 && router.replace('/')
       })
       .catch(e =>{

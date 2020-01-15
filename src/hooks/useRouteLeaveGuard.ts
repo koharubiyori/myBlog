@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { routeLeaveGuard, RouteLeaveGuardCb } from '~/utils/createRouter'
-import { RoutePaths } from '~/routes'
 
 export default function useRouteLeaveGuard(guard: RouteLeaveGuardCb){
   useEffect(() =>{

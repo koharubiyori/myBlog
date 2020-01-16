@@ -44,6 +44,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
     load(router.params.search.tagId)
   }, [])
 
+  // 判断进入时的tagId和上一次加载时的tagId是否一致，不一致则重新加载
   useKeepAliveEffect(() =>{
     const {tagId} = qs.parse(window.location.search.split('?')[1])
     if(tagId !== lastLoadedTagId.current){

@@ -54,6 +54,7 @@ createClasses('', {
       minWidth
     },
 
+    // 进度条样式
     '#nprogress:not(foo)': {
       '@global .bar': {
         zIndex: 10000,
@@ -65,6 +66,11 @@ createClasses('', {
       '@global .peg': {
         boxShadow: `0 0 15px ${nProgressColor}, 0 0 10px ${nProgressColor}, 0 0 5px ${nProgressColor}`
       }
+    },
+
+    // 图片查看器动画时长
+    '.viewer-transition': {
+      transition: 'all 0.2s'
     }
   }
 })

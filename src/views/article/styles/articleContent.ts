@@ -13,7 +13,8 @@ export default makeStyles({
 
         h3: {
           fontWeight: 600,
-          fontSize: 17
+          fontSize: 17,
+          margin: '20px 0'
         },
 
         blockquote: {
@@ -25,6 +26,18 @@ export default makeStyles({
 
         code: {
           fontSize: 14
+        },
+
+        img: {
+          cursor: 'pointer'
+        },
+
+        pre: {
+          '@global': {
+            '.hljs-comment, .hljs-quote': {
+              fontStyle: 'initial'
+            },
+          }
         }
       }
     }

@@ -43,7 +43,6 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     articleContentClasses = useArticleContentClasses(),
     router = createRouter<{}, RouteStateParams>(),
     notify = getNotify(),
-    confirm = getConfirm(),
     [title, setTitle] = useState(''),
     [profile, setProfile] = useState(''),
     [tags, setTags] = useState<string[]>([]),
@@ -115,7 +114,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
   useRouteLeaveGuard(next =>{
     setSubmitted(prevVal =>{
-      prevVal ? next() : confirm({
+      prevVal ? next() : getConfirm()({
         content: '确定要离开编辑页面吗？',
         onCheck: () => next(),
         onClose: () => next(false)

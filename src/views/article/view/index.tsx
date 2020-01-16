@@ -28,6 +28,7 @@ import useArticleContentClasses from '../styles/articleContent'
 import moment from 'moment'
 import getNotify from '~/externalContexts/notify'
 import useSEO from '~/hooks/useSEO'
+import bindImgViewer from './utils/bindImgViewer'
 
 export interface Props {
   
@@ -151,6 +152,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
       })
 
       trimArticleContent(refs.editor.current!)
+      bindImgViewer(refs.editor.current!)
     })
   }
 

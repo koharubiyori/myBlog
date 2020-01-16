@@ -2,7 +2,7 @@ import { getTags, getSettings, getUncheckedNotificationTotal } from '~/redux/dat
 import { getRole } from './redux/user/HOC'
 
 export default function(){
-  getTags()
-  getSettings()
+  getTags(true)
+  getSettings(true)
   getRole() !== 'visitor' && getUncheckedNotificationTotal()
 }

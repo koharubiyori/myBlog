@@ -12,8 +12,8 @@ export interface Props {
   theme: ApiData.Theme
 }
 
-const aboutBlogArticleId = process.env.NODE_ENV === 'development' ? '5e1d3b7d1879db108875c4fd' : '5e1e861bc9f02a467a70ecef'
-const chatroomArticleId = process.env.NODE_ENV === 'development' ? '5e1e8cbe4458a908c86b53a2' : '5e1e87dc93408846cbfd87de'
+const aboutBlogArticleId = process.env.NODE_ENV === 'development' ? '5e1e8cbe4458a908c86b53a2' : '5e1e861bc9f02a467a70ecef'
+const chatroomArticleId = process.env.NODE_ENV === 'development' ? '5e1d3b7d1879db108875c4fd' : '5e1e87dc93408846cbfd87de'
 
 type FinalProps = Props & DataConnectedProps
 

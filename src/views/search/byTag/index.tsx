@@ -12,6 +12,7 @@ import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
 import { createPageListLoader, PageListState, initPageList } from '~/utils/pageList'
 import { useKeepAliveEffect } from 'react-keep-alive'
 import useSEO, { setTitle, resetTitle } from '~/hooks/useSEO'
+import getStates from '~/utils/getStates'
 
 export interface Props extends RouteComponent {
   
@@ -48,6 +49,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
           .then(() =>{
             const router = createRouter<RouteSearchParams>(location)
             setArticleList(initPageList())
+            console.log(true)
             load(router.params.search.tagId)
           })
       }
@@ -55,6 +57,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
   })
 
   function load(tagId: string, page = 1){
+    const [articleList] = getStates<[PageListState<ApiData.SearchResult>]>(setArticleList)
     createPageListLoader(articleList, setArticleList, 
       page => article.searchByTag({ page, tagId })  
     )(page)
@@ -67,7 +70,6 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
 
   if(!props.state.data.tags) return <div />
 
-  
   return (
     <div>
       <header>
@@ -76,7 +78,7 @@ function SearchByTagResult(props: PropsWithChildren<FinalProps>){
       </header>
 
       <main>
-        {articleList.status === 3 ? 
+        {articleList.status === 3 && articleList.cache[articleList.currentPage] ? 
           <div className={classes.articleList}>{articleList.cache[articleList.currentPage].map(item =>
             <ArticleBoxPlain key={item._id} 
               articleData={item} 

@@ -5,11 +5,10 @@ export default function parseTitles(articleRootElement: HTMLElement): Title[]{
     let level = parseInt(item.tagName[1])
     let id = `articleTitle-${index}-${level}`
     let name = item.textContent!
-    let offset = Math.floor(item.getBoundingClientRect().top)
 
     item.setAttribute('id', id)
 
-    return { level, id, name, offset }
+    return { level, id, name, element: item }
   })
 
   // 生成序号

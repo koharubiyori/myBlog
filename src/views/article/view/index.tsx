@@ -145,9 +145,16 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
 
       let titles = parseTitles(refs.editor.current!)
 
+      // 等待所有图片加载完毕，通知contents组件
+      let allImageLoadedPromise = Promise.all(
+        Array.from(refs.editor.current!.querySelectorAll('img')).map(img => new Promise(resolve =>{
+          img.onload = img.onerror = resolve
+        }))
+      )
+
       mainLayoutControllersPromise.then(controllers =>{
         controllers.sidebarRight.writeContent(
-          <ArticleContents titles={titles} getRef={refs.contents} />
+          <ArticleContents titles={titles} getRef={refs.contents} allImageLoadedPromise={allImageLoadedPromise}  />
         )
       })
 

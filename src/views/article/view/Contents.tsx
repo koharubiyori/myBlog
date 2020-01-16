@@ -11,12 +11,14 @@ export interface Title{
   id: string
   name: string
   number: string
-  offset: number
+  element: Element
 }
 
+export type TitleWithOffset = Title & { offset: number }
 
 export interface Props {
   titles: Title[]
+  allImageLoadedPromise: Promise<any>
   getRef?: React.MutableRefObject<any>
 }
 
@@ -30,11 +32,19 @@ function ArticleContents(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
     [windowScrollY, setWindowScrollY] = useState(window.scrollY),
+    [titlesWithOffset, setTitlesWithOffset] = useState(props.titles.map(title => ({ ...title, offset: title.element.getBoundingClientRect().top }))),
     scrollLock = useRef(false),
     closeScrollLockTimeoutKey = useRef(0)
   let isMaxLevel2 = !props.titles.some(item => item.level === 1)    // 判断如果没有level为1的，那么认定最高标题等级为2(不考虑只有3级标题的情况)
     
   if(props.getRef) props.getRef.current = { setWindowScrollY }
+
+  // 文章中所有图片加载完毕后再获取一次offset top
+  useEffect(() =>{
+    props.allImageLoadedPromise.then(() =>{
+      setTitlesWithOffset(props.titles.map(title => ({ ...title, offset: title.element.getBoundingClientRect().top })))
+    })
+  }, [])
 
   useEffect(() =>{
     const windowScrollHandler = () =>{
@@ -82,7 +92,7 @@ function ArticleContents(props: PropsWithChildren<FinalProps>){
     closeScrollLockTimeoutKey.current = setTimeout(() => scrollLock.current = false, sleep) as any as number
   }
 
-  function isSelected(title: Title, nextTitle: Title | null, index: number){
+  function isSelected(title: TitleWithOffset | { offset: number }, nextTitle: TitleWithOffset | null, index: number){
     let titleOffset = title.offset - marginTopForAppBar - marginTopForScrollTo
     if(index === 0 && windowScrollY < titleOffset) return true 
     if(index === props.titles.length - 1 && windowScrollY > titleOffset) return true 
@@ -96,14 +106,14 @@ function ArticleContents(props: PropsWithChildren<FinalProps>){
     <div className={classes.container}>
       <p style={{ fontSize: 22 }}>目录</p>
       <div className={classes.titles}>
-        {props.titles.map((item, index) =>
+        {titlesWithOffset.map((item, index) =>
           <div key={item.id} className={classes.titleWrap}>
             <div
               className={classes.title} 
               style={{ marginLeft: 15 * (item.level - (isMaxLevel2 ? 2 : 1)) }}
               data-level={item.level}
               data-before={item.level < 3 ? item.number : '- '}
-              data-selected={isSelected(item, props.titles[index + 1], index)}
+              data-selected={isSelected(item, titlesWithOffset[index + 1], index)}
               onClick={() => animatedScrollTo(item.offset - marginTopForAppBar)}
             >
               {item.name}

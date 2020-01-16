@@ -10,6 +10,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import StarsIcon from '@material-ui/icons/Stars'
 import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import { CSSProperties } from '@material-ui/core/styles/withStyles'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   style?: CSSProperties
@@ -40,8 +41,11 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
       onClick={props.onClick}
       data-top={props.top}
     >
+      {/* width: props.top ? '9em' : '18em', */}
       <img alt="articleBoxBg" src={articleData.headImg} className="bgImg" />
-      <big className="title">{articleData.title}</big>
+      <big className="title">
+        <span style={{ ...styleVars.textLimit }}>{articleData.title}</span>
+      </big>
       <div className="info" style={{ wordBreak: 'break-word' }}>
         <div className="profile">{articleData.profile}</div>
         <hr />
@@ -166,6 +170,8 @@ const useStyles = makeStyles({
         fontSize: 24,
         textShadow: '0 0 3px white',
         transition: _transition,
+        boxSizing: 'border-box',
+        padding: '0 30px'
       },
     
       '.info': {

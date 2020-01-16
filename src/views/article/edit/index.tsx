@@ -114,10 +114,14 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
   }, [])
 
   useRouteLeaveGuard(next =>{
-    submitted ? next() : confirm({
-      content: '确定要离开编辑页面吗？',
-      onCheck: () => next(),
-      onClose: () => next(false)
+    setSubmitted(prevVal =>{
+      prevVal ? next() : confirm({
+        content: '确定要离开编辑页面吗？',
+        onCheck: () => next(),
+        onClose: () => next(false)
+      })
+      
+      return prevVal
     })
   })
 

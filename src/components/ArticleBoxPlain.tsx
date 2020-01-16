@@ -68,7 +68,7 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
             {tagNames.filter((_, index) => index < 5).map(tagName =>
               <div className="tag" style={{ marginRight: 10 }} key={tagName}>
                 <TagIcon className={classes.tagIcon} />
-                <span>{tagName}</span>
+                <span style={{ fontSize: 13 }}>{tagName}</span>
               </div>  
             )}
 

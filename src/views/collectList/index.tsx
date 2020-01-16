@@ -8,6 +8,7 @@ import { UserConnectedProps, userHOC } from '~/redux/user/HOC'
 import { com } from '~/styles'
 import { createPageListLoader, initPageList } from '~/utils/pageList'
 import useSEO from '~/hooks/useSEO'
+import createRouter from '~/utils/createRouter'
 
 export interface Props {
   
@@ -18,6 +19,7 @@ type FinalProps = Props & UserConnectedProps
 function CollectList(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    router = createRouter(),
     [articleList, setArticleList] = useState(initPageList<ApiData.SearchResult>())
 
   useSEO(setTitle => setTitle('收藏文章'))
@@ -43,7 +45,10 @@ function CollectList(props: PropsWithChildren<FinalProps>){
       {articleList.status === 3 && articleList.total !== 0 ?
         <>
           <div className={classes.container}>{articleList.cache[articleList.currentPage].map(item =>
-            <ArticleBox key={item._id} articleData={item} />
+            <ArticleBox key={item._id} 
+              articleData={item} 
+              onClick={() => router.push('/article/view', { search: { articleId: item._id } })}
+            />
           )}</div>
 
           <Pagination 

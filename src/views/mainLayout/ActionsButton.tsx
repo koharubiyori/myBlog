@@ -55,6 +55,10 @@ const actionMaps: {
     ]
   },
 
+  '/article/edit': {
+    admin: []
+  },
+
   default: {
     admin: [
       { icon: <AddIcon />, name: '新建文章' },
@@ -182,7 +186,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   
   return (
     <>
-      {props.state.user.name !== '' ?
+      {props.state.user.name !== '' && actions.length !== 0 ?
         <SpeedDial
           style={{ position: 'fixed', bottom: 70, right: 210 }}
           ariaLabel=""

@@ -88,12 +88,12 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
   }, [])
 
   useEffect(() =>{
-    router.listen(({location}) => loadActions(location.pathname))
+    return router.listen(({location}) => loadActions(location.pathname))
   }, [])
 
   useEffect(() =>{
     loadActions(router.location.pathname)
-  }, [props.state.user, isCollected])
+  })
 
   function loadActions(pathName: string){
     const path: RoutePaths = pathName.replace(new RegExp('^' + _.escapeRegExp(basePath)), '') as any
@@ -111,6 +111,7 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
     }
 
     roleAction && setActions(roleAction)
+    setVisible(!!roleAction)
   }
 
   function actionHandler (actionName: ActionName){

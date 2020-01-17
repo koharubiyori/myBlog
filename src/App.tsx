@@ -11,7 +11,7 @@ import store from './redux'
 import Routes from './routes'
 import styleVars from './styles/styleVars'
 import createRouter from './utils/createRouter'
-import './utils/mouseClick'
+// import './utils/mouseClick'
 
 // 解决jss生成的class名重复问题
 const generateClassName = createGenerateClassName({

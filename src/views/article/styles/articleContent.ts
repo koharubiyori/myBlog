@@ -7,7 +7,7 @@ export default makeStyles({
       fontSize: 14,
       
       '@global': {
-        'h1, h2, h3, h4, h5, h6, p': {
+        'h1, h2, h3, h4, h5, h6, p, ul': {
           color: 'black'
         },
 
@@ -24,8 +24,13 @@ export default makeStyles({
           padding: 10
         },
 
-        code: {
-          fontSize: 14
+        ':not(pre) code': {
+          fontSize: 14,
+          backgroundColor: '#FFFEFC',
+          borderRadius: 5,
+          margin: '0 3px',
+          padding: '2px 4px',
+          color: '#DF3A01'
         },
 
         img: {
@@ -38,7 +43,7 @@ export default makeStyles({
               fontStyle: 'initial'
             },
           }
-        }
+        },
       }
     }
   }

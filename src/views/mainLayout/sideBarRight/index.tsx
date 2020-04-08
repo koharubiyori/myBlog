@@ -32,7 +32,7 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
     classes = useStyles(), 
     router = createRouter(),
     [visible, setVisible] = useState(true),
-    [Content, setContent] = useState<FC | null>(null),
+    [Content, setContent] = useState<FC | null>(null),    // 用于动态侧栏内容
     [activeTab, setActiveTab] = useState(0),
     [randomArticles, setRandomArticles] = useState<ApiData.SearchResult[]>([]),
     [hotArticles, setHotArticles] = useState<ApiData.SearchResult[]>([]),

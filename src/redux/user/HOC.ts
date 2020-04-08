@@ -37,7 +37,7 @@ export const getRole = () =>{
 }
 
 interface ConnectedDispatch {
-  '$user': {
+  $user: {
     set: typeof set
     clear: typeof clear
     getRole: typeof getRole

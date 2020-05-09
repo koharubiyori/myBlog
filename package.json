@@ -99,7 +99,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "buildzip": "yarn build && del dist.zip && 7z a dist.zip ./build/*",
+    "build:zip": "yarn build && del dist.zip && 7z a dist.zip ./build/*",
     "test": "node scripts/test.js"
   },
   "proxy": "http://localhost:8081",

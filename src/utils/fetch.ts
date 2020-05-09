@@ -31,7 +31,7 @@ const createRequester: CreateRequester = (method) => <RequestParams, ApiData = {
       .finally(nProgress.done)
       .then(({ data }: { data: ResponseData<ApiData> }) =>{
         if(data.result){
-          resolve(data.data as ApiData)
+          resolve(data.data)
         }else{
           reject(data)
           fail && getNotify()(data.message)

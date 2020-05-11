@@ -2,6 +2,7 @@ import React, { useState, PropsWithChildren, ChangeEvent, FC } from 'react'
 import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
 import { TextField, Button, makeStyles } from '@material-ui/core'
 import user from '~/api/user'
+import common from '~/api/common'
 import textChecker from '~/utils/textChecker'
 import { com } from '~/styles'
 import styleVars from '~/styles/styleVars'
@@ -31,7 +32,7 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
     if(e.target.files!.length === 0){ return }
     let file = e.target.files!.item(0)!
     setImgUploadStatus(2)
-    user.uploadAvatar({ file })
+    common.upload({ file })
       .then(data =>{
         setImgUploadStatus(3)
         setAvatar(data.fileUrl)

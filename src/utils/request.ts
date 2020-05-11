@@ -1,7 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
+const DEV_URL = '/api'
+const PRO_URL = 'https://api.koharu.top/blog'
+
+const IMG_URL = 'https://img.koharu.top/upload/blog'
+
 const config: AxiosRequestConfig = {
-  baseURL: '/api',
+  baseURL: process.env.NODE_ENV === 'development' ? DEV_URL : PRO_URL,
   timeout: 10000,
 }
 
@@ -24,6 +29,7 @@ function requestDataHandler(req: AxiosRequestConfig){
       formData.append(key, req.data[key])
     }
 
+    req.baseURL = IMG_URL
     req.data = formData
   }
 

@@ -26,5 +26,5 @@ export default {
 
   uploadImg: post<{ file: File }, { fileUrl: string }>('article/uploadImg', { loading: true, fail: '图片上传失败，请重试', upload: true }),
 
-  uploadHeadImg: post<{ file: File }, { fileUrl: string }>('article/uploadHeadImg', { loading: true, fail: '图片上传失败，请重试', upload: true })
+  // uploadHeadImg: post<{ file: File }, { fileUrl: string }>('article/uploadHeadImg', { loading: true, fail: '图片上传失败，请重试', upload: true })
 }

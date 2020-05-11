@@ -7,7 +7,9 @@ export default function createUploadToken() {
   let selectedNumber = parseInt(timestamp[ran])
   selectedNumber += ran
   if (selectedNumber > 9) selectedNumber -= 9
-  timestamp = timestamp.split('').splice(ran, 1, selectedNumber.toString()).join('')
+
+  const timestampArr = timestamp.split('').splice(ran, 1, selectedNumber.toString())
+  timestamp = timestampArr.join('')
 
   return btoa(ran + btoa(timestamp))
 }

@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import createUploadToken from './createUploadToken'
 
 const DEV_URL = '/api'
 const PRO_URL = 'https://api.koharu.top/blog'
@@ -30,6 +31,7 @@ function requestDataHandler(req: AxiosRequestConfig){
     }
 
     req.baseURL = IMG_URL
+    req.headers.token = createUploadToken()
     req.data = formData
   }
 

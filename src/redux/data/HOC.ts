@@ -24,7 +24,7 @@ export const getTags = (forceUpdate = false) =>{
 
 export const getSettings = (forceUpdate = false) =>{
   let {data} = getState()
-  if(data.settings && forceUpdate) return Promise.resolve(data.settings)
+  if(data.settings && !forceUpdate) return Promise.resolve(data.settings)
   return settings.get().then(data =>{
     set('settings', data)
     return data

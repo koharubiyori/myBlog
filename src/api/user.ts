@@ -2,7 +2,7 @@ import { get, post } from '~/utils/fetch'
 import { Api } from './user.d'
 
 export default {
-  getRegisterCaptcha: get<undefined, { svg: string }>('user/getRegisterCaptcha', { loading: true, fail: true }),
+  getRegisterCaptcha: post<undefined, { svg: string }>('user/getRegisterCaptcha', { loading: true, fail: true }),
   
   getUserInfo: get<undefined, ApiData.User>('user/getUserInfo'),
 

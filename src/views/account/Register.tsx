@@ -30,14 +30,14 @@ function Register(props: PropsWithChildren<FinalProps>){
     [RSCodeGetCount, setRSCodeGetCount] = useState(0)
 
   useEffect(() =>{
-    getRegisterSecurityCode()
+    getRegisterCaptcha()
   }, [])
 
   useSEO(setTitle => setTitle('登录', '和我签订契约，成为魔法少女吧！ ／人◕ ‿‿ ◕人＼'))
 
-  function getRegisterSecurityCode (): void{
+  function getRegisterCaptcha (): void{
     if(RSCodeGetCount >= 3) return notify('点的这么快，人家都忙不过来啦  >_<')
-    user.getRegisterSecurityCode().then(data => setRSCodeSvg(data.svg))
+    user.getRegisterCaptcha().then(data => setRSCodeSvg(data.svg))
     setRSCodeGetCount(prevVal => prevVal + 1)
     setTimeout(() => setRSCodeGetCount(prevVal => prevVal - 1), 10000)
   }
@@ -110,7 +110,7 @@ function Register(props: PropsWithChildren<FinalProps>){
           onKeyDown={e => e.keyCode === 13 && register()}
         />
 
-        <ButtonBase focusRipple onClick={getRegisterSecurityCode}>
+        <ButtonBase focusRipple onClick={getRegisterCaptcha}>
           <div 
             className={com.pointer}
             title="看不清？点击再来一个"

@@ -76,7 +76,6 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
           type="file" accept=".png, .jpg, .jpeg" 
           style={{ position: 'fixed', left: -9999 }} 
           onChange={uploadAvatar} 
-          ref={refs.fileInput}
         />
       </label>
 

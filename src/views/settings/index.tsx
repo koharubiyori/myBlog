@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useRef, PropsWithChildren, ChangeEvent, FC } from 'react'
-import { makeStyles, TextField, Tooltip, Button } from '@material-ui/core'
-import useHideSidebarRight from '~/hooks/useHideSidebarRight'
-import ImageIcon from '@material-ui/icons/Image'
-import { com, flex } from '~/styles'
-import settings from '~/api/settings'
-import styleVars from '~/styles/styleVars'
-import { dataHOC, DataConnectedProps } from '~/redux/data/HOC'
-import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
+import { Button, makeStyles, TextField, Tooltip } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
+import ImageIcon from '@material-ui/icons/Image'
+import React, { ChangeEvent, FC, PropsWithChildren, useEffect, useState } from 'react'
+import common from '~/api/common'
 import article from '~/api/article'
-import getConfirm from '~/externalContexts/confirm'
+import settings from '~/api/settings'
 import tag from '~/api/tag'
-import getNotify from '~/externalContexts/notify'
 import BgImg from '~/components/BgImg'
+import getConfirm from '~/externalContexts/confirm'
+import getNotify from '~/externalContexts/notify'
+import useHideSidebarRight from '~/hooks/useHideSidebarRight'
+import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
+import { DataConnectedProps, dataHOC } from '~/redux/data/HOC'
+import { com, flex } from '~/styles'
+import styleVars from '~/styles/styleVars'
 
 export interface Props {
   
@@ -48,7 +49,7 @@ function Settings(props: PropsWithChildren<FinalProps>){
     let file = event.target.files!.item(0)!
     
     setBgImgStatus(2)
-    settings.uploadBgImg({ file })
+    common.upload({ file })
       .then(data =>{
         setBgImgStatus(3)
         setBgImg(data.fileUrl)

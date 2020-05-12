@@ -10,7 +10,7 @@ export default {
   
   login: post<Api.Login, ApiData.User>('user/login', { loading: true, fail: true }),
 
-  uploadAvatar: post<{ file: File }, { fileUrl: string }>('user/uploadAvatar', { upload: true, loading: true }),
+  // uploadAvatar: post<{ file: File }, { fileUrl: string }>('user/uploadAvatar', { upload: true, loading: true }),
 
   setUserInfo: post<Api.SetUserInfo>('user/setUserInfo', { loading: true, fail: true })
 }

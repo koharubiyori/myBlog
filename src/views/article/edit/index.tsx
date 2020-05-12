@@ -1,30 +1,30 @@
-import React, { useState, useEffect, useRef, PropsWithChildren, ChangeEvent } from 'react'
-import Editor from 'tui-editor'
-import 'tui-editor/dist/tui-editor-extScrollSync'
-import 'tui-editor/dist/tui-editor-extColorSyntax'
-import 'tui-editor/dist/tui-editor.css' // editor's ui
-import 'tui-editor/dist/tui-editor-contents.css' // editor's content
+import { Button, Checkbox, FormControlLabel, makeStyles, TextField } from '@material-ui/core'
+import ImageIcon from '@material-ui/icons/Image'
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
-import 'tui-color-picker/dist/tui-color-picker.css'
-import { Button, TextField, makeStyles, FormControlLabel, Checkbox } from '@material-ui/core'
-import ImageIcon from '@material-ui/icons/Image'
-import article from '~/api/article'
-import { getTags } from '~/redux/data/HOC'
-import _ from 'lodash'
-import TagInput from './components/TagInput'
-import tagApis from '~/api/tag'
 import nProgress from 'nprogress'
+import React, { ChangeEvent, PropsWithChildren, useEffect, useRef, useState } from 'react'
+import 'tui-color-picker/dist/tui-color-picker.css'
+import Editor from 'tui-editor'
+import 'tui-editor/dist/tui-editor-contents.css' // editor's content
+import 'tui-editor/dist/tui-editor-extColorSyntax'
+import 'tui-editor/dist/tui-editor-extScrollSync'
+import 'tui-editor/dist/tui-editor.css' // editor's ui
+import article from '~/api/article'
+import tagApis from '~/api/tag'
+import common from '~/api/common'
+import BgImg from '~/components/BgImg'
+import getConfirm from '~/externalContexts/confirm'
+import getNotify from '~/externalContexts/notify'
 import useHideSidebarRight from '~/hooks/useHideSidebarRight'
+import useRouteLeaveGuard from '~/hooks/useRouteLeaveGuard'
+import useSEO from '~/hooks/useSEO'
+import { getTags } from '~/redux/data/HOC'
 import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
-import BgImg from '~/components/BgImg'
-import getNotify from '~/externalContexts/notify'
 import useArticleContentClasses from '../styles/articleContent'
-import useRouteLeaveGuard from '~/hooks/useRouteLeaveGuard'
-import getConfirm from '~/externalContexts/confirm'
-import useSEO from '~/hooks/useSEO'
+import TagInput from './components/TagInput'
 
 export interface Props {
   
@@ -94,7 +94,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     })
 
     editor.current!.addHook('addImageBlobHook', (file: File, cb: (url: string, text?: string) => void) =>{
-      article.uploadImg({ file })
+      common.upload({ file })
         .then(data =>{
           cb(data.fileUrl)
         })
@@ -130,7 +130,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     event.target.value = ''
 
     setHeadImgStatus(2)
-    article.uploadHeadImg({ file })
+    common.upload({ file })
       .then(data =>{
         setHeadImgStatus(3)
         setHeadImg(data.fileUrl)

@@ -6,5 +6,5 @@ export default {
 
   set: post<Api.Set>('settings/set', { loading: true, fail: true }),
 
-  uploadBgImg: post<{ file: File }, { fileUrl: string }>('settings/uploadBgImg', { upload: true, loading: true })
+  // uploadBgImg: post<{ file: File }, { fileUrl: string }>('settings/uploadBgImg', { upload: true, loading: true })
 }

@@ -47,6 +47,7 @@ function Settings(props: PropsWithChildren<FinalProps>){
   function uploadBgImg(event: ChangeEvent<HTMLInputElement>){
     if(event.target.files!.length === 0){ return }
     let file = event.target.files!.item(0)!
+    event.target.value = ''
     
     setBgImgStatus(2)
     common.upload({ file })

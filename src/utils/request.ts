@@ -8,6 +8,7 @@ const IMG_URL = 'https://img.koharu.top/upload/blog'
 
 const config: AxiosRequestConfig = {
   baseURL: process.env.NODE_ENV === 'development' ? DEV_URL : PRO_URL,
+  // baseURL: PRO_URL,
   timeout: 10000,
   withCredentials: true
 }
@@ -35,6 +36,7 @@ function requestDataHandler(req: AxiosRequestConfig){
     delete req.headers.upload
     req.headers.token = createUploadToken()
     req.data = formData
+    req.timeout = 20000
   }
 
   return req

@@ -1,15 +1,15 @@
-import React, { useState, PropsWithChildren, ChangeEvent, FC } from 'react'
-import { userHOC, UserConnectedProps } from '~/redux/user/HOC'
-import { TextField, Button, makeStyles } from '@material-ui/core'
-import user from '~/api/user'
+import { Button, makeStyles, TextField } from '@material-ui/core'
+import React, { ChangeEvent, FC, PropsWithChildren, useState } from 'react'
 import common from '~/api/common'
-import textChecker from '~/utils/textChecker'
-import { com } from '~/styles'
-import styleVars from '~/styles/styleVars'
+import user from '~/api/user'
 import BgImg from '~/components/BgImg'
-import controlReqStatus from '~/utils/controlReqStatus'
 import getNotify from '~/externalContexts/notify'
 import useSEO from '~/hooks/useSEO'
+import { UserConnectedProps, userHOC } from '~/redux/user/HOC'
+import { com } from '~/styles'
+import styleVars from '~/styles/styleVars'
+import controlReqStatus from '~/utils/controlReqStatus'
+import textChecker from '~/utils/textChecker'
 
 export interface Props {
   
@@ -31,6 +31,7 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
   function uploadAvatar(e: ChangeEvent<HTMLInputElement>){
     if(e.target.files!.length === 0){ return }
     let file = e.target.files!.item(0)!
+    e.target.value = ''
     setImgUploadStatus(2)
     common.upload({ file })
       .then(data =>{
@@ -71,7 +72,12 @@ function UserInfo(props: PropsWithChildren<FinalProps>){
 
       <label className={classes.avatar} data-status={imgUploadStatus}>
         <img alt="avatar" src={avatar || require('~/images/sub/akari.jpg')} />
-        <input type="file" accept=".png, .jpg, .jpeg" style={{ position: 'fixed', left: -9999 }} onChange={uploadAvatar} />
+        <input 
+          type="file" accept=".png, .jpg, .jpeg" 
+          style={{ position: 'fixed', left: -9999 }} 
+          onChange={uploadAvatar} 
+          ref={refs.fileInput}
+        />
       </label>
 
       <TextField fullWidth 

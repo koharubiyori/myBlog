@@ -7,8 +7,8 @@ const PRO_URL = 'https://api.koharu.top/blog'
 const IMG_URL = 'https://img.koharu.top/upload/blog'
 
 const config: AxiosRequestConfig = {
-  baseURL: process.env.NODE_ENV === 'development' ? DEV_URL : PRO_URL,
-  // baseURL: PRO_URL,
+  // baseURL: process.env.NODE_ENV === 'development' ? DEV_URL : PRO_URL,
+  baseURL: PRO_URL,
   timeout: 10000,
   withCredentials: true
 }

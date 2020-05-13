@@ -24,7 +24,7 @@ export default makeStyles({
           padding: 10
         },
 
-        ':not(pre) code': {
+        ':not(pre) > code': {
           fontSize: 14,
           backgroundColor: '#FFFEFC',
           borderRadius: 5,
@@ -38,9 +38,38 @@ export default makeStyles({
         },
 
         pre: {
+          backgroundColor: '#1E1E1E',
+          color: '#ddd',
+          borderRadius: 10,
+          boxShadow: '0px 0px 5px #666, 0px 0px 8px #666',
+          
           '@global': {
             '.hljs-comment, .hljs-quote': {
               fontStyle: 'initial'
+            },
+            
+            '.hljs-tag': {
+              color: '#569CD6',
+
+              '& .hljs-name': {
+                color: '#569CD6'
+              }
+            },
+
+            '.hljs-attr': {
+              color: '#9CDCFE'
+            },
+
+            '.hljs-string': {
+              color: '#CE9178'
+            },
+
+            '.hljs-keyword': {
+              color: '#C586C0',
+            },
+
+            '.hljs-comment': {
+              color: '#6A9955'
             },
           }
         },

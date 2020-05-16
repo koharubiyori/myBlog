@@ -23,6 +23,7 @@ function SidebarRightArticleBox(props: PropsWithChildren<FinalProps>){
       className={c(classes.container, flex.row)} 
       style={{ overflow: 'hidden' }}
       onClick={() => props.onClick && props.onClick()}
+      title={props.articleData.title}
     >
       <div className={c(flex.row, flex.center)} style={{ width: 50, marginRight: 10 }}>
         <img src={randomIcon.current} className={classes.icon} alt="icon" />

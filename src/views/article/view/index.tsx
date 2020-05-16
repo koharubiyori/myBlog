@@ -230,7 +230,12 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
         {visible ? 
           <main>
             <Box boxShadow={2} className={classes.container}>
-              <img src={articleData.headImg} className={classes.headImg} alt="headImg" />
+              <img 
+                src={articleData.headImg} 
+                className={classes.headImg} 
+                style={{ objectPosition: articleData.headImgPosition.map(item => item + '%').join(' ') }} 
+                alt="headImg" 
+              />
               <div className={classes.content}>
                 <div className={classes.profile}>{articleData.profile}</div>
                 <div ref={refs.editor as any} className={c(articleContentClasses.main)} />

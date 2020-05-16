@@ -42,7 +42,12 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
       data-top={props.top}
     >
       {/* width: props.top ? '9em' : '18em', */}
-      <img alt="articleBoxBg" src={articleData.headImg} className="bgImg" />
+      <img 
+        alt="articleBoxBg" 
+        src={articleData.headImg} 
+        style={{ objectPosition: articleData.headImgPosition.map(item => item + '%').join(' ') }} 
+        className="bgImg" 
+      />
       <big className="title">
         <span style={{ ...styleVars.textLimit }}>{articleData.title}</span>
       </big>

@@ -102,6 +102,7 @@ function ArticleContents(props: PropsWithChildren<FinalProps>){
     return windowScrollY > titleOffset && windowScrollY < nextTitleOffset
   }
 
+  if (titlesWithOffset.length === 0) return null
   return (
     <div className={classes.container}>
       <p style={{ fontSize: 22 }}>目录</p>

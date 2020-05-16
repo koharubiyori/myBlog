@@ -73,6 +73,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
           setTitle(data.title)
           setProfile(data.profile)
           setHeadImg(data.headImg)
+          setHeadImgPosition(data.headImgPosition)
           setIsTop(data.isTop)
           setHeadImgStatus(3)
           getTags().then(tagList =>{
@@ -81,6 +82,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
           editor.current!.setMarkdown(data.content)
           editor.current!.moveCursorToStart()
+          window.scrollTo(0, 0)
         })
     }
   }, [])
@@ -211,6 +213,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     })
   }
 
+  console.log(headImgPosition)
   return (
     <div>
       <BgImg hidden />
@@ -258,7 +261,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         <div className={c(flex.row, flex.around, flex.crossCenter)} style={{ margin: '20px 0' }}>
           <div style={{ width: 400 }}>
             <Slider
-              defaultValue={headImgPosition[0]}
+              value={headImgPosition[0]}
               valueLabelDisplay="auto"
               marks={[
                 { value: 0, label: 'top' },
@@ -270,7 +273,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
           </div>
           <div style={{ width: 400 }}>
             <Slider
-              defaultValue={headImgPosition[1]}
+              value={headImgPosition[1]}
               valueLabelDisplay="auto"
               marks={[
                 { value: 0, label: 'left' },

@@ -31,7 +31,7 @@ function ArticleBox(props: PropsWithChildren<FinalProps>){
   return (
     <Box boxShadow={1} className={classes.container} onClick={props.onClick}>
       <div className="headImgWrap">
-        <img alt="articleBoxBg" src={articleData.headImg} />
+        <img alt="articleBoxBg" src={articleData.headImg} style={{ objectPosition: articleData.headImgPosition.map(item => item + '%').join(' ') }} />
       </div>
       <main>
         <div className="title">{articleData.title}</div>

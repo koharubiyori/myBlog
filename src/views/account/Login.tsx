@@ -10,6 +10,7 @@ import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
 import getNotify from '~/externalContexts/notify'
 import useSEO from '~/hooks/useSEO'
+import groupTrim from '~/utils/trimmer'
 
 export interface Props {
   
@@ -29,12 +30,17 @@ function Login(props: PropsWithChildren<FinalProps>){
   useSEO(setTitle => setTitle('登录'))
 
   function login(): void{
-    if(!accountOrName) return notify('帐号或昵称不能为空')
-    if(!password) return notify('密码不能为空')
+    let trimmed = groupTrim({ accountOrName, password })
+    
+    if(!trimmed.accountOrName) return notify('帐号或昵称不能为空')
+    if(!trimmed.password) return notify('密码不能为空')
 
     controlReqStatus(
       setLoginStatus, 
-      user.login({ accountOrName, password: md5(password) })
+      user.login({ 
+        accountOrName: trimmed.accountOrName, 
+        password: md5(trimmed.password) 
+      })
     )
       .then(data =>{
         notify.success('登录成功')
@@ -55,7 +61,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         label="帐号或昵称" 
         variant="outlined" 
         value={accountOrName} 
-        onChange={e => setAccountOrName(e.target.value.trim())}
+        onChange={e => setAccountOrName(e.target.value)}
       />
       
       <TextField fullWidth 
@@ -65,7 +71,7 @@ function Login(props: PropsWithChildren<FinalProps>){
         variant="outlined" 
         type="password" 
         value={password} 
-        onChange={e => setPassword(e.target.value.trim())}
+        onChange={e => setPassword(e.target.value)}
         onKeyDown={e => e.keyCode === 13 && login()}
       />
 

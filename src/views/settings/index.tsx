@@ -152,14 +152,14 @@ function Settings(props: PropsWithChildren<FinalProps>){
         label="首页标题" 
         variant="outlined" 
         value={title}
-        onChange={e => setTitle(e.target.value.trim())}
+        onChange={e => setTitle(e.target.value)}
       />
 
       <TextField fullWidth 
         label="首页副标题" 
         variant="outlined" 
         value={subtitle}
-        onChange={e => setSubtitle(e.target.value.trim())}
+        onChange={e => setSubtitle(e.target.value)}
       />
 
       <div style={{ margin: '40px auto', maxWidth: 800 }}>           

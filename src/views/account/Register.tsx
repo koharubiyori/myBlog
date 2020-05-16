@@ -9,6 +9,7 @@ import BgImg from '~/components/BgImg'
 import controlReqStatus from '~/utils/controlReqStatus'
 import getNotify from '~/externalContexts/notify'
 import useSEO from '~/hooks/useSEO'
+import groupTrim from '~/utils/trimmer'
 
 export interface Props {
   
@@ -45,18 +46,22 @@ function Register(props: PropsWithChildren<FinalProps>){
   function register (): void{
     let code = RSCode
 
-    if(!account) return notify('帐号不能为空')
-    if(!name) return notify('昵称不能为空')
-    if(!password) return notify('密码不能为空')
-    if(!code) return notify('验证码不能为空')
+    let trimmed = groupTrim({ account, name, password, code })
 
-    if(!textChecker.account(account)) return notify('帐号中包含非法字符')
-    if(!textChecker.name(name)) return notify('昵称中包含非法字符')
-    if(!textChecker.password(password)) return notify('密码中包含非法字符')
+    if(!trimmed.account) return notify('帐号不能为空')
+    if(!trimmed.name) return notify('昵称不能为空')
+    if(!trimmed.password) return notify('密码不能为空')
+    if(!trimmed.code) return notify('验证码不能为空')
+
+    if(!textChecker.account(trimmed.account)) return notify('帐号中包含非法字符')
+    if(!textChecker.name(trimmed.name)) return notify('昵称中包含非法字符')
+    if(!textChecker.password(trimmed.password)) return notify('密码中包含非法字符')
+
+    trimmed.password = md5(trimmed.password)
 
     controlReqStatus(
       setRegisterStatus,
-      user.register({ account, name, password: md5(password), code })
+      user.register(trimmed)
     )
       .then(() =>{
         notify.success('注册成功，即将前往登录')
@@ -78,7 +83,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         placeholder="8-16位的字母、数字、下划线"
         variant="outlined" 
         value={account} 
-        onChange={e => setAccount(e.target.value.trim())}
+        onChange={e => setAccount(e.target.value)}
       />
 
       <TextField fullWidth 
@@ -87,7 +92,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         placeholder="奇怪的颜文字是不行的哦_(:з」∠)_"
         variant="outlined" 
         value={name} 
-        onChange={e => setName(e.target.value.trim())}
+        onChange={e => setName(e.target.value)}
       />
       
       <TextField fullWidth 
@@ -98,7 +103,7 @@ function Register(props: PropsWithChildren<FinalProps>){
         variant="outlined" 
         type="password" 
         value={password} 
-        onChange={e => setPassword(e.target.value.trim())}
+        onChange={e => setPassword(e.target.value)}
       />
 
       <div className={c(flex.row, flex.between, flex.crossEnd)} style={{ marginTop: 40 }}>
@@ -106,7 +111,7 @@ function Register(props: PropsWithChildren<FinalProps>){
           label="验证码" 
           variant="filled" 
           value={RSCode}
-          onChange={e => setRSCode(e.target.value.trim())}
+          onChange={e => setRSCode(e.target.value)}
           onKeyDown={e => e.keyCode === 13 && register()}
         />
 

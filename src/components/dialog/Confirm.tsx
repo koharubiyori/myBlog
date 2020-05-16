@@ -79,7 +79,7 @@ function MyConfirm(props: PropsWithChildren<FinalProps>){
             margin="dense"
             label={params.inputLabel}
             value={inputValue}
-            onChange={e => setInputValue(e.target.value.trim())}
+            onChange={e => setInputValue(e.target.value)}
             onKeyDown={e => e.keyCode === 13 && handlerCheck()}
             ref={test}
           />

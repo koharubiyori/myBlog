@@ -25,7 +25,7 @@ function CommentEditor(props: PropsWithChildren<FinalProps>){
         rows={3} 
         inputProps={{ maxLength: 500 }}
         value={props.value}
-        onChange={e => props.onChangeText && props.onChangeText(e.target.value.trim())}
+        onChange={e => props.onChangeText && props.onChangeText(e.target.value)}
       />
 
       <footer style={{ marginTop: 10 }}>

@@ -48,8 +48,10 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
 
   function pressEnterToSearch(keyCode: number){
     if(keyCode !== 13){ return }
-    if(searchInput === '') return notify('搜索关键词不能为空')
-    router.push('/search', { search: { keyword: searchInput } })
+    let trimmedSearchInput = searchInput.trim()
+    
+    if(trimmedSearchInput === '') return notify('搜索关键词不能为空')
+    router.push('/search', { search: { keyword: trimmedSearchInput } })
   }
 
   function logout(){
@@ -81,7 +83,7 @@ function MyAppBar(props: PropsWithChildren<FinalProps>){
           placeholder="搜索..."
           startAdornment={<SearchIcon style={{ marginRight: 20 }} />}
           value={searchInput}
-          onChange={e => setSearchInput(e.target.value.trim())}
+          onChange={e => setSearchInput(e.target.value)}
           onKeyDown={e => pressEnterToSearch(e.keyCode)}
         />
         

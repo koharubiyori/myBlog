@@ -25,6 +25,7 @@ import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
 import useArticleContentClasses from '../styles/articleContent'
 import TagInput from './components/TagInput'
+import groupTrim from '~/utils/trimmer'
 
 export interface Props {
   
@@ -146,10 +147,11 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
 
   function publish(){
     let content = editor.current!.getMarkdown()
+    let trimmed = groupTrim({ title, profile, content })
 
-    if(!title) return notify('标题不能为空')
-    if(!profile) return notify('简介不能为空')
-    if(!content) return notify('内容不能为空')
+    if(!trimmed.title) return notify('标题不能为空')
+    if(!trimmed.profile) return notify('简介不能为空')
+    if(!trimmed.content) return notify('内容不能为空')
     if(!tags.length) return notify('至少需要一个标签')
     if(!headImg) return notify('头图不能为空')
 
@@ -181,7 +183,8 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
       })
       .then(tagIds =>{
         return article.publish({
-          title, profile, content, headImg, isTop,
+          ...trimmed,
+          headImg, isTop,
           tags: tagIds as string[],
           ...(type === 1 ? { articleId: router.params.state.articleId } : {})
         })
@@ -217,7 +220,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
             placeholder="文章标题"
             variant="outlined" 
             value={title}
-            onChange={e => setTitle(e.target.value.trim())}
+            onChange={e => setTitle(e.target.value)}
           />
 
           <Button style={{ marginLeft: 30 }} variant="contained" color="primary" size="large" onClick={publish}>{type === 0 ? '发布' : '保存'}</Button>
@@ -231,11 +234,11 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
           rows={3} 
           style={{ margin: '20px 0' }} 
           value={profile}
-          onChange={e => setProfile(e.target.value.trim())}
+          onChange={e => setProfile(e.target.value)}
         />
 
         <TagInput
-          value={tagInput.trim()}
+          value={tagInput}
           tags={tags}
           onChange={e => setTagInput(e.target.value)}
           onSelectHint={name =>{ setTags(prevVal => prevVal.concat([name])); setTagInput('') }}

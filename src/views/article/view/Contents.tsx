@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core'
 import styleVars from '~/styles/styleVars'
 import animatedScrollTo from 'animated-scroll-to'
 
-const marginTopForAppBar = 70   // 让出绝对定位的头部appBar高度
+const marginTopForAppBar = 90   // 让出绝对定位的头部appBar高度
 const marginTopForScrollTo = 10   // 每个标题的判定位置都向后减少该数值，确保点击目录标题跳转后，虽然还没划过标题，但依然显示点击的标题为当前选中标题
 
 export interface Title{

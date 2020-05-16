@@ -110,7 +110,7 @@ function ArticleView(props: PropsWithChildren<FinalProps>){
       })
     }else{
       setVisible(false)
-      article.get({ articleId })
+      article.get({ articleId, noCount: process.env.NODE_ENV === 'development' })
         .then(data =>{
           writeContent(data)
           setVisible(true)

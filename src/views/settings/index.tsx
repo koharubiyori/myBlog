@@ -281,7 +281,7 @@ const useStyles = makeStyles({
   
     '&[data-status="3"]': {
       '&::before': {  
-        content: '"更换头图"',
+        content: '"更换背景图"',
         textDcoration: 'underline',
         position: 'absolute',
         top: 0,

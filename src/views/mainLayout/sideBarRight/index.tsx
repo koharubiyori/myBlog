@@ -13,7 +13,7 @@ import katakoto from '~/api/katakoto'
 import idToMoment from '~/utils/idToMoment'
 import animateScrollTo from 'animated-scroll-to'
 
-export const sidebarRightWidth = 240
+export const sidebarRightWidth = 280
 
 export interface Props {
   getRef?: React.MutableRefObject<any>
@@ -212,6 +212,7 @@ const useStyles = makeStyles({
   },
 
   tags: {
+    width: 'auto !important',
     fontSize: 12,
     margin: 10,
     marginTop: 0,
@@ -221,7 +222,7 @@ const useStyles = makeStyles({
       borderRadius: 5,
       padding: 5,
       marginTop: 5,
-      marginRight: 10,
+      marginRight: 5,
       backgroundColor: styleVars.main,
       fill: 'white',
       color: 'white',

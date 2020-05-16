@@ -6,6 +6,7 @@ export namespace Api {
     content: string
     tags: string[]
     headImg: string
+    headImgPosition: number[]
     isTop: boolean
   }
 

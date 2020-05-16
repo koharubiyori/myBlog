@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControlLabel, makeStyles, TextField } from '@material-ui/core'
+import { Button, Checkbox, FormControlLabel, Grid, makeStyles, Slider, TextField } from '@material-ui/core'
 import ImageIcon from '@material-ui/icons/Image'
 import 'codemirror/lib/codemirror.css' // codemirror
 import 'highlight.js/styles/github.css' // code block highlight
@@ -11,8 +11,8 @@ import 'tui-editor/dist/tui-editor-extColorSyntax'
 import 'tui-editor/dist/tui-editor-extScrollSync'
 import 'tui-editor/dist/tui-editor.css' // editor's ui
 import article from '~/api/article'
-import tagApis from '~/api/tag'
 import common from '~/api/common'
+import tagApis from '~/api/tag'
 import BgImg from '~/components/BgImg'
 import getConfirm from '~/externalContexts/confirm'
 import getNotify from '~/externalContexts/notify'
@@ -23,9 +23,9 @@ import { getTags } from '~/redux/data/HOC'
 import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
 import createRouter from '~/utils/createRouter'
+import groupTrim from '~/utils/trimmer'
 import useArticleContentClasses from '../styles/articleContent'
 import TagInput from './components/TagInput'
-import groupTrim from '~/utils/trimmer'
 
 export interface Props {
   
@@ -49,6 +49,7 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
     [tags, setTags] = useState<string[]>([]),
     [tagInput, setTagInput] = useState(''),
     [headImg, setHeadImg] = useState(''),
+    [headImgPosition, setHeadImgPosition] = useState([50, 50]),
     [isTop, setIsTop] = useState(false),
     [headImgStatus, setHeadImgStatus] = useState(1),
     [submitted, setSubmitted] = useState(false),
@@ -184,7 +185,9 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
       .then(tagIds =>{
         return article.publish({
           ...trimmed,
-          headImg, isTop,
+          headImg, 
+          headImgPosition,
+          isTop,
           tags: tagIds as string[],
           ...(type === 1 ? { articleId: router.params.state.articleId } : {})
         })
@@ -199,6 +202,13 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
         console.log(e)
         notify.error('网络错误')
       })
+  }
+
+  const setHeadImgPositionItem = (position: 'vertical' | 'horizontal', value: number) => {
+    setHeadImgPosition(prevVal => {
+      prevVal[position === 'vertical' ? 0 : 1] = value
+      return prevVal.concat([])
+    })
   }
 
   return (
@@ -245,10 +255,37 @@ function ArticleEdit(props: PropsWithChildren<FinalProps>){
           onRemoveTag={removeTag}
         />
 
-        <div style={{ margin: '20px auto', maxWidth: 800 }}>           
+        <div className={c(flex.row, flex.around, flex.crossCenter)} style={{ margin: '20px 0' }}>
+          <div style={{ width: 400 }}>
+            <Slider
+              defaultValue={headImgPosition[0]}
+              valueLabelDisplay="auto"
+              marks={[
+                { value: 0, label: 'top' },
+                { value: 50, label: 'center' },
+                { value: 100, label: 'bottom' }
+              ]}
+              onChangeCommitted={(e, newVal) => setHeadImgPositionItem('vertical', newVal as number)}
+            />
+          </div>
+          <div style={{ width: 400 }}>
+            <Slider
+              defaultValue={headImgPosition[1]}
+              valueLabelDisplay="auto"
+              marks={[
+                { value: 0, label: 'left' },
+                { value: 50, label: 'center' },
+                { value: 100, label: 'right' }
+              ]}
+              onChangeCommitted={(e, newVal) => setHeadImgPositionItem('horizontal', newVal as number)}
+            />
+          </div>
+        </div>
+
+        <div style={{ margin: '20px auto', width: 800 }}>           
           <label className={classes.upload} data-status={headImgStatus}>
             {headImgStatus === 3 ?
-              <img alt="headImg" src={headImg} />
+              <img alt="headImg" src={headImg} style={{ objectPosition: headImgPosition.map(item => item + '%').join(' ') }} />
             :
               <div className="hint">
                 <ImageIcon fontSize="large" />

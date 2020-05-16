@@ -21,6 +21,7 @@ declare namespace ApiData {
     tags: string[]
     updatedAt: Date
     headImg: string
+    headImgPosition: number[]
     readNum: number
     deleted: boolean
     createdYear: number

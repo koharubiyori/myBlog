@@ -68,7 +68,6 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
 
   useEffect(() =>{
     const key = setInterval(() =>{
-      console.log(katakotoList.list.length, katakotoCursor, katakotoList)
       if (katakotoList.list.length - katakotoCursor < 3) katakotoList.loadNext()
 
       setKatakotoCursor(prevVal => prevVal + 1 === katakotoList.list.length ? 0 : prevVal + 1)

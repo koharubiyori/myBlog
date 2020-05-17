@@ -30,7 +30,6 @@ function KatakotoSettings(props: PropsWithChildren<FinalProps>) {
   useWindowReachBottom(() => katakotoList.loadNext())
 
   function load(page: number){
-    console.log(page)
     return katakoto.load({ page, limit: 20 })
       .then(data => {
         return {

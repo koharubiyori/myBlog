@@ -21,6 +21,8 @@ export const routeMaps = {
   '/search/byTag': l('search/byTag'),
   
   '/settings': l('settings', { role: ['admin'] }),
+  '/settings/katakoto': l('settings/katakoto', { role: ['admin'] }),
+  
   '/notification': l('notification', { role: ['admin', 'user'] }),
   '/collectList': l('collectList', { role: ['admin', 'user'] }),
   '/aboutMe': l('aboutMe')

@@ -160,13 +160,13 @@ function ActionsButton(props: PropsWithChildren<FinalProps>){
         confirm({
           input: true,
           disabledAutoHide: true,
-          title: '新建只言片语',
+          title: '添加只言片语',
           inputLabel: '内容',
           onCheck (inputValue){
             if(inputValue!.length === 0) return notify('内容不能为空')
             katakoto.add({ content: inputValue! })
               .then(() =>{
-                notify('提交成功')
+                notify.success('添加成功')
                 confirm.hide()
               })
           },

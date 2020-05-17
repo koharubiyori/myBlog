@@ -41,7 +41,6 @@ function MainLayout(props: PropsWithChildren<FinalProps>){
 
     useEffect(() =>{
       common.getTheme().then(setTheme)
-      router.push('/')  // 迷之原因第一次进入的home没有压进栈中，这里只好手动push一个
     }, [])
 
     useEffect(() =>{

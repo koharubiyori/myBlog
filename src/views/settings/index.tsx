@@ -14,6 +14,7 @@ import { ReactComponent as TagIcon } from '~/images/sub/tag.svg'
 import { DataConnectedProps, dataHOC } from '~/redux/data/HOC'
 import { com, flex } from '~/styles'
 import styleVars from '~/styles/styleVars'
+import createRouter from '~/utils/createRouter'
 
 export interface Props {
   
@@ -24,6 +25,7 @@ type FinalProps = Props & DataConnectedProps
 function Settings(props: PropsWithChildren<FinalProps>){
   const
     classes = useStyles(),
+    router = createRouter(),
     notify = getNotify(),
     confirm = getConfirm(),
     [title, setTitle] = useState(''),
@@ -208,6 +210,16 @@ function Settings(props: PropsWithChildren<FinalProps>){
             </div>  
           </Tooltip>
         )}</div>
+      </div>
+
+      <div>
+        <h3 style={{ fontWeight: 'initial', marginBottom: 0 }}>只言片语管理</h3>
+        <Button 
+          variant="outlined" 
+          color="primary" 
+          style={{ marginTop: 20 }}
+          onClick={() => router.push('/settings/katakoto')}
+        >进入只言片语列表页面</Button>
       </div>
     </div>
   )

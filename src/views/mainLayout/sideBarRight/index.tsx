@@ -12,6 +12,7 @@ import styleVars from '~/styles/styleVars'
 import katakoto from '~/api/katakoto'
 import idToMoment from '~/utils/idToMoment'
 import animateScrollTo from 'animated-scroll-to'
+import useInfiniteListData from '~/hooks/useInfiniteListData'
 
 export const sidebarRightWidth = 280
 
@@ -36,7 +37,7 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
     [activeTab, setActiveTab] = useState(0),
     [randomArticles, setRandomArticles] = useState<ApiData.SearchResult[]>([]),
     [hotArticles, setHotArticles] = useState<ApiData.SearchResult[]>([]),
-    [katakotos, setKatakotos] = useState<ApiData.Katakoto[]>([]),
+    katakotoList = useInfiniteListData<ApiData.Katakoto>(loadKatakotoList),
     [katakotoCursor, setKatakotoCursor] = useState(0),
     refs = {
       katakotos: useRef<HTMLDivElement>(null)
@@ -62,17 +63,18 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
   useEffect(() =>{
     getRandomArticles()
     getHotArticles()
-    getKatakotos()
+    katakotoList.loadNext()
   }, [])
 
   useEffect(() =>{
     const key = setInterval(() =>{
-      let katakotos: ApiData.Katakoto[]
-      setKatakotos(prevVal => katakotos = prevVal)
-      setKatakotoCursor(prevVal => prevVal + 1 === katakotos.length ? 0 : prevVal + 1)
+      console.log(katakotoList.list.length, katakotoCursor, katakotoList)
+      if (katakotoList.list.length - katakotoCursor < 3) katakotoList.loadNext()
+
+      setKatakotoCursor(prevVal => prevVal + 1 === katakotoList.list.length ? 0 : prevVal + 1)
     }, 7000)
     return () => clearInterval(key) 
-  }, [])
+  }, [katakotoList])
 
   useEffect(() =>{
     refs.katakotos.current && animateScrollTo([(sidebarRightWidth - 20) * katakotoCursor, null], { 
@@ -92,9 +94,15 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
     article.searchHot().then(setHotArticles)
   }
 
-  function getKatakotos(){
-    katakoto.load({ limit: 20 })
-      .then(data => setKatakotos(data.list))
+  function loadKatakotoList(page: number){
+    return katakoto.load({ page, limit: 20 })
+      .then(data => {
+        return {
+          list: data.list,
+          currentPage: data.currentPage,
+          totalPage: data.pageTotal
+        }
+      })
   }
 
   if(!props.state.data.tags) return <div />
@@ -139,7 +147,7 @@ function SidebarRight(props: PropsWithChildren<FinalProps>){
           <h4 style={{ fontWeight: 'initial', textIndent: 10 }}>只言片语</h4>
           <div className={classes.katakotos} ref={refs.katakotos}>
             <div className="container">
-              {katakotos.map(item =>
+              {katakotoList.list.map(item =>
                 <div key={item._id} className="item">
                   <div style={{ fontSize: 14, marginLeft: 10 }}>{item.content}</div>
                   <div style={{ textAlign: 'right', fontSize: 13, marginTop: 10 }}>

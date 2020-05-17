@@ -47,11 +47,11 @@ export default function App(){
     init()
   }, [])
 
-  useEffect(() =>{
-    if(window.location.pathname === '/'){
-      router.replace('/')
-    }
-  }, [])
+  // useEffect(() =>{
+  //   if(window.location.pathname === '/'){
+  //     router.replace('/')
+  //   }
+  // }, [])
 
   return (
     <StylesProvider generateClassName={generateClassName}>

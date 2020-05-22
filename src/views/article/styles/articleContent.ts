@@ -48,6 +48,14 @@ export default makeStyles({
               fontStyle: 'initial'
             },
             
+            '.hljs-title': {
+              color: '#DCDCAA',
+            },
+
+            'hljs-subst': {
+              color: '#2566CA'
+            },
+
             '.hljs-tag': {
               color: '#569CD6',
 

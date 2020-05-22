@@ -147,10 +147,9 @@ const useStyles = makeStyles({
   },
 
   title: {
-    maxWidth: 200,
     ...styleVars.textLimit,
+    textIndent: 5,
     transition: 'all 0.2s',
-    display: 'table',
     borderBottom: '3px transparent solid',
     paddingBottom: 2,
     margin: '2px 0',

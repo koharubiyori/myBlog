@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core'
+import styleVars from '~/styles/styleVars'
 
 export default makeStyles({
   main: {
@@ -19,7 +20,7 @@ export default makeStyles({
         blockquote: {
           borderWidth: 7,
           backgroundColor: '#eee',
-          borderLeftColor: '#ccc',
+          borderLeftColor: styleVars.main,
           padding: 10
         },
 
